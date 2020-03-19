@@ -30,6 +30,7 @@ export default class App extends Component {
     return (
       <ThemeProvider theme={theme}>
         <Router history={browserHistory}>
+          fd
           <Professor />
           <Student />
         </Router>

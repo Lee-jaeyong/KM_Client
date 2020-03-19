@@ -31,6 +31,7 @@ export default class App extends Component {
       <ThemeProvider theme={theme}>
         <Router history={browserHistory}>
           <Professor />
+          mkm
           <Student />
         </Router>
       </ThemeProvider>

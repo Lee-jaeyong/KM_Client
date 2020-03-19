@@ -22,8 +22,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const Profile = props => {
-  const { className, ...rest } = props;
-
+  const { className, userInfo,...rest } = props;
   const classes = useStyles();
 
   const user = {
@@ -48,9 +47,9 @@ const Profile = props => {
         className={classes.name}
         variant="h4"
       >
-        {user.name}
+        {userInfo.name}
       </Typography>
-      <Typography variant="body2">{user.bio}</Typography>
+      <Typography variant="body2">{userInfo.subject}</Typography>
     </div>
   );
 };

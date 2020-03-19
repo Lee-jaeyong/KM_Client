@@ -1,18 +1,12 @@
-import React from 'react';
+import React,{useState} from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/styles';
 import { Divider, Drawer } from '@material-ui/core';
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import PeopleIcon from '@material-ui/icons/People';
-import ShoppingBasketIcon from '@material-ui/icons/ShoppingBasket';
-import TextFieldsIcon from '@material-ui/icons/TextFields';
-import ImageIcon from '@material-ui/icons/Image';
-import AccountBoxIcon from '@material-ui/icons/AccountBox';
-import SettingsIcon from '@material-ui/icons/Settings';
-import LockOpenIcon from '@material-ui/icons/LockOpen';
 
-import { Profile, SidebarNav, UpgradePlan } from './components';
+import { Profile, SidebarNav } from './components';
 
 const useStyles = makeStyles(theme => ({
   drawer: {
@@ -42,48 +36,45 @@ const Sidebar = props => {
 
   const classes = useStyles();
 
-  const pages = [
-    {
-      title: 'Dashboard',
-      href: '/dashboard',
-      icon: <DashboardIcon />
-    },
-    {
-      title: 'Users',
-      href: '/users',
-      icon: <PeopleIcon />
-    },
-    {
-      title: 'Products',
-      href: '/products',
-      icon: <ShoppingBasketIcon />
-    },
-    {
-      title: 'Authentication',
-      href: '/sign-in',
-      icon: <LockOpenIcon />
-    },
-    {
-      title: 'Typography',
-      href: '/typography',
-      icon: <TextFieldsIcon />
-    },
-    {
-      title: 'Icons',
-      href: '/icons',
-      icon: <ImageIcon />
-    },
-    {
-      title: 'Account',
-      href: '/account',
-      icon: <AccountBoxIcon />
-    },
-    {
-      title: 'Settings',
-      href: '/settings',
-      icon: <SettingsIcon />
-    }
-  ];
+  const [userInfo,setUserInfo] = useState({
+    name : '이재용',
+    subject : '융합소프트웨어'
+  });
+
+  const [classList,setClassList] = useState(
+    [
+      {
+        title: '자바',
+        pageList : [
+          {pageName:"과제 등록",href:"/icons/7"},
+          {pageName:"과제 목록",href:"/icons/8"},
+          {pageName:"Q/A",href:"/icons/9"}
+        ]
+      },
+      {
+        title: '자바(학생)',
+        pageList : [
+          {pageName:"과제 목록",href:"/naver"},
+          {pageName:"참고자료 목록",href:"/idaum"},
+          {pageName:"질문하기",href:"/kakao"},
+          {pageName:"Q/A",href:"/dlwodyd"},
+        ]
+      },
+    ]
+  );
+
+  const [otherPage,setOtherPage] = useState(
+    [
+      {
+        title: '수업 등록',
+        href:'/class/add'
+      },
+      {
+        title: '설정',
+        href:'/bbb'
+      },
+    ]
+  );
 
   return (
     <Drawer
@@ -97,13 +88,18 @@ const Sidebar = props => {
         {...rest}
         className={clsx(classes.root, className)}
       >
-        <Profile />
+        <Profile userInfo={userInfo}/>
         <Divider className={classes.divider} />
         <SidebarNav
           className={classes.nav}
-          pages={pages}
+          pages={classList}
+          dropDown
         />
-        <UpgradePlan />
+        <Divider className={classes.divider} />
+        <SidebarNav
+          className={classes.nav}
+          pages={otherPage}
+        />
       </div>
     </Drawer>
   );

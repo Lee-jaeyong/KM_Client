@@ -35,7 +35,7 @@ const Professor = () => {
           component={ProductListView}
           exact
           layout={MainLayout}
-          path="/products"
+          path="/class/add"
       />
       <ProfessorRoute
           component={TypographyView}
@@ -48,6 +48,12 @@ const Professor = () => {
           exact
           layout={MainLayout}
           path="/icons"
+      />
+      <ProfessorRoute
+          component={IconsView}
+          exact
+          layout={MainLayout}
+          path="/icons/:id"
       />
       <ProfessorRoute
           component={AccountView}

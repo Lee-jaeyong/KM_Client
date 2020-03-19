@@ -1,11 +1,13 @@
 /* eslint-disable react/no-multi-comp */
 /* eslint-disable react/display-name */
-import React, { forwardRef } from 'react';
+import React, { forwardRef,useState, useEffect } from 'react';
 import { NavLink as RouterLink } from 'react-router-dom';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/styles';
 import { List, ListItem, Button, colors } from '@material-ui/core';
+
+import {DropDownPanel} from '@common/component';
 
 const useStyles = makeStyles(theme => ({
   root: {},
@@ -53,28 +55,18 @@ const SidebarNav = props => {
   const { pages, className, ...rest } = props;
 
   const classes = useStyles();
-
   return (
     <List
       {...rest}
       className={clsx(classes.root, className)}
     >
-      {pages.map(page => (
-        <ListItem
-          className={classes.item}
-          disableGutters
+      {pages.map((page) => (
+        <DropDownPanel
+          className={page.title}
+          page={page}
           key={page.title}
-        >
-          <Button
-            activeClassName={classes.active}
-            className={classes.button}
-            component={CustomRouterLink}
-            to={page.href}
-          >
-            <div className={classes.icon}>{page.icon}</div>
-            {page.title}
-          </Button>
-        </ListItem>
+          {...rest}
+          />
       ))}
     </List>
   );

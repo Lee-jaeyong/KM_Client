@@ -40,7 +40,6 @@ const Dashboard = () => {
   useEffect(()=>{
     if(prevStoreData !== storeData)
     {
-      alert(JSON.stringify(storeData));
       setPrevStoreData(storeData);
     }
   },[storeData]);

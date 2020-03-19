@@ -14,7 +14,7 @@ import {
   NotFound as NotFoundView,
 } from '../views/Student';
 
-import { Main as MainLayout, Minimal as MinimalLayout } from '../layouts';
+import { StudentMain as MainLayout, Minimal as MinimalLayout } from '../layouts';
 
 const Student = () => {
   return (

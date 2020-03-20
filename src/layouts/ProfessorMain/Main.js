@@ -60,6 +60,7 @@ const Main = props => {
         {children}
         <Footer />
       </main>
+      
     </div>
   );
 };

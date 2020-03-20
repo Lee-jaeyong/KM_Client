@@ -8,8 +8,6 @@ import {
   Card,
   CardActions,
   CardContent,
-  Avatar,
-  Checkbox,
   Table,
   TableBody,
   TableCell,
@@ -41,14 +39,63 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const UsersTable = props => {
-  const { className, users, ...rest } = props;
+function getJSONKeyList(jsonData){
+  let jsonKeyList = new Array();
+  for(let key in jsonData[0]){
+    jsonKeyList.push(key);
+  }
+  return jsonKeyList;
+}
+
+const CustomTable = props => {
+  const { tableDataList, tableHeaderList, ...rest } = props;
+
+  // const [tableHeader,setTableHeader] = useState([<input type="checkBox"/>,"과제 번호","과제 코드","과제명","과제 시작일","과제 종료일","조회수"]);
+  // const [tableData,setTableData] = useState([
+  //   {checkBox:<input type="checkBox"/>, reportIdx:"23" , reportCode:"C3523",reportTitle:"C언어-별짓기",reportStartDate:"2020-03-20",reportEndDate:"2020-07-17",reportHit:"343"},
+  //   {checkBox:<input type="checkBox"/>, reportIdx:"24" , reportCode:"C3524",reportTitle:"자바-별짓기",reportStartDate:"2020-03-20",reportEndDate:"2020-07-17",reportHit:"343"},
+  //   {checkBox:<input type="checkBox"/>, reportIdx:"25" , reportCode:"C3525",reportTitle:"파이썬-별짓기",reportStartDate:"2020-03-20",reportEndDate:"2020-07-17",reportHit:"343"},
+  //   {checkBox:<input type="checkBox"/>, reportIdx:"26" , reportCode:"C3526",reportTitle:"JPA",reportStartDate:"2020-03-20",reportEndDate:"2020-07-17",reportHit:"343"},
+  //   {checkBox:<input type="checkBox"/>, reportIdx:"27" , reportCode:"C3527",reportTitle:"스프링 프레임워크",reportStartDate:"2020-03-20",reportEndDate:"2020-07-17",reportHit:"343"},
+  //   {checkBox:<input type="checkBox"/>, reportIdx:"28" , reportCode:"C3528",reportTitle:"RESTAPI",reportStartDate:"2020-03-20",reportEndDate:"2020-07-17",reportHit:"343"},
+  // ]);
+  
+  const [tableHeader,setTableHeader] = useState(tableHeaderList);
+  const [tableData,setTableData] = useState(tableDataList);
+
+  const [jsonDataKeyList,setJsonDataKeyList] = useState(getJSONKeyList(tableData));
 
   const classes = useStyles();
 
   const [selectedUsers, setSelectedUsers] = useState([]);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [page, setPage] = useState(0);
+
+  const getTableHeader = (headerList) => {
+    return (
+      <TableRow>
+        {headerList.map((title,idx)=>{
+          return (
+            <TableCell>{title}</TableCell>
+          );
+        })}
+      </TableRow>
+    );
+  }
+
+  const getTableBody = (data,jsonKeyList) => {
+    return (
+      <TableRow>
+        {
+          jsonKeyList.map((key,idx)=>{
+            return (
+              <TableCell>{data[key]}</TableCell>
+            ) 
+          })
+        }
+      </TableRow>
+    );
+  }
 
   const handleSelectAll = event => {
     const { users } = props;
@@ -80,7 +127,6 @@ const UsersTable = props => {
         selectedUsers.slice(selectedIndex + 1)
       );
     }
-
     setSelectedUsers(newSelectedUsers);
   };
 
@@ -95,70 +141,22 @@ const UsersTable = props => {
   return (
     <Card
       {...rest}
-      className={clsx(classes.root, className)}
     >
       <CardContent className={classes.content}>
         <PerfectScrollbar>
           <div className={classes.inner}>
             <Table>
               <TableHead>
-                <TableRow>
-                  <TableCell padding="checkbox">
-                    <Checkbox
-                      checked={selectedUsers.length === users.length}
-                      color="primary"
-                      indeterminate={
-                        selectedUsers.length > 0 &&
-                        selectedUsers.length < users.length
-                      }
-                      onChange={handleSelectAll}
-                    />
-                  </TableCell>
-                  <TableCell>Name</TableCell>
-                  <TableCell>Email</TableCell>
-                  <TableCell>Location</TableCell>
-                  <TableCell>Phone</TableCell>
-                  <TableCell>Registration date</TableCell>
-                </TableRow>
+              {
+                getTableHeader(tableHeader)
+              }
               </TableHead>
               <TableBody>
-                {users.slice(0, rowsPerPage).map(user => (
-                  <TableRow
-                    className={classes.tableRow}
-                    hover
-                    key={user.id}
-                    selected={selectedUsers.indexOf(user.id) !== -1}
-                  >
-                    <TableCell padding="checkbox">
-                      <Checkbox
-                        checked={selectedUsers.indexOf(user.id) !== -1}
-                        color="primary"
-                        onChange={event => handleSelectOne(event, user.id)}
-                        value="true"
-                      />
-                    </TableCell>
-                    <TableCell>
-                      <div className={classes.nameContainer}>
-                        <Avatar
-                          className={classes.avatar}
-                          src={user.avatarUrl}
-                        >
-                          {getInitials(user.name)}
-                        </Avatar>
-                        <Typography variant="body1">{user.name}</Typography>
-                      </div>
-                    </TableCell>
-                    <TableCell>{user.email}</TableCell>
-                    <TableCell>
-                      {user.address.city}, {user.address.state},{' '}
-                      {user.address.country}
-                    </TableCell>
-                    <TableCell>{user.phone}</TableCell>
-                    <TableCell>
-                      {moment(user.createdAt).format('DD/MM/YYYY')}
-                    </TableCell>
-                  </TableRow>
-                ))}
+              {
+                tableData.map((data,idx)=>{
+                  return getTableBody(data,jsonDataKeyList) 
+                })
+              }
               </TableBody>
             </Table>
           </div>
@@ -167,7 +165,7 @@ const UsersTable = props => {
       <CardActions className={classes.actions}>
         <TablePagination
           component="div"
-          count={users.length}
+          count={tableData.length}
           onChangePage={handlePageChange}
           onChangeRowsPerPage={handleRowsPerPageChange}
           page={page}
@@ -179,9 +177,9 @@ const UsersTable = props => {
   );
 };
 
-UsersTable.propTypes = {
-  className: PropTypes.string,
-  users: PropTypes.array.isRequired
+CustomTable.propTypes = {
+  tableDataList:PropTypes.array.isRequired,
+  tableHeaderList:PropTypes.array.isRequired
 };
 
-export default UsersTable;
+export default CustomTable;

@@ -32,15 +32,26 @@ const ExpansionPanel = withStyles({
   expanded: {},
 })(MuiExpansionPanel);
 
-const ExpansionPanelSummary = withStyles({
+const ExpansionPanelSummary_color_Gray = withStyles({
   root: {
     backgroundColor: 'rgba(0, 0, 0, .03)',
     borderBottom: '1px solid rgba(0, 0, 0, .125)',
     marginBottom: -1,
-    minHeight: 56,
+    height:60
+  },
+  content: {
     '&$expanded': {
-      minHeight: 56,
+      margin: '12px 0',
     },
+  },
+  expanded: {},
+})(MuiExpansionPanelSummary);
+
+const ExpansionPanelSummary_color_White = withStyles({
+  root: {
+    borderBottom: '1px solid rgba(0, 0, 0, .125)',
+    marginBottom: -1,
+    height:60
   },
   content: {
     '&$expanded': {
@@ -69,42 +80,79 @@ export default function CustomizedExpansionPanels(props) {
   const {className,page,...rest} = props;
   
   const [openPanelState,setOpenPanelState] = useState(false);
+  const [chageColorState,setChangeColorState] = useState(false);
+
   const handleChange = () => {
     setOpenPanelState(!openPanelState);
   };
+
   return (
     rest['dropDown'] ? 
-    <ExpansionPanel square expanded={openPanelState} onChange={()=>handleChange()}>
-        <ExpansionPanelSummary aria-controls="panel1d-content">
-        <Typography>
-        <table>
-          <tr>
-            <td style={{width:100}}>{className}</td>
-            <td>
-            {openPanelState ? <img src={"/images/arrow_down.png"}/> : <img src={"/images/arrow_up.png"}/>}
-            </td>
-          </tr>
-        </table>
-        </Typography>
-        </ExpansionPanelSummary>
-        <ExpansionPanelDetails>
+    <div onMouseOver={()=>setChangeColorState(true)} onMouseLeave={()=>setChangeColorState(false)}>
+      {chageColorState ? 
+      (
+        <ExpansionPanel square expanded={openPanelState} onChange={()=>handleChange()}>
+            <ExpansionPanelSummary_color_Gray aria-controls="panel1d-content">
             <Typography>
-            {page['pageList'].map((pageInfo,idx)=>
-                <Link to={pageInfo['href']}>
-                    <ExpansionPanelList>
-                        <Typography>{pageInfo.pageName}</Typography>
-                    </ExpansionPanelList>
-                </Link>
-            )}
+            <table>
+              <tr>
+                <td style={{width:100}}><h4>- {className}</h4></td>
+                <td>
+                {openPanelState ? <img src={"/images/arrow_down.png"}/> : <img src={"/images/arrow_up.png"}/>}
+                </td>
+              </tr>
+            </table>
             </Typography>
-        </ExpansionPanelDetails>
-    </ExpansionPanel>
+            </ExpansionPanelSummary_color_Gray>
+            <ExpansionPanelDetails>
+                <Typography>
+                {page['pageList'].map((pageInfo,idx)=>
+                    <Link to={pageInfo['href']}>
+                        <ExpansionPanelList>
+                            <Typography>{pageInfo.pageName}</Typography>
+                        </ExpansionPanelList>
+                    </Link>
+                )}
+                </Typography>
+            </ExpansionPanelDetails>
+        </ExpansionPanel>
+      )
+      :
+      (
+        <ExpansionPanel square expanded={openPanelState} onChange={()=>handleChange()}>
+            <ExpansionPanelSummary_color_White aria-controls="panel1d-content">
+            <Typography>
+            <table>
+              <tr>
+                <td style={{width:100}}><h4>- {className}</h4></td>
+                <td>
+                {openPanelState ? <img src={"/images/arrow_down.png"}/> : <img src={"/images/arrow_up.png"}/>}
+                </td>
+              </tr>
+            </table>
+            </Typography>
+            </ExpansionPanelSummary_color_White>
+            <ExpansionPanelDetails>
+                <Typography>
+                {page['pageList'].map((pageInfo,idx)=>
+                    <Link to={pageInfo['href']}>
+                        <ExpansionPanelList>
+                            <Typography>{pageInfo.pageName}</Typography>
+                        </ExpansionPanelList>
+                    </Link>
+                )}
+                </Typography>
+            </ExpansionPanelDetails>
+        </ExpansionPanel>
+      )
+      }
+    </div>
     :
     <ExpansionPanel square expanded={openPanelState} onChange={()=>handleChange()}>
         <Link to={page['href']}>
-          <ExpansionPanelSummary aria-controls="panel1d-content">
+          <ExpansionPanelSummary_color_Gray aria-controls="panel1d-content">
             <Typography>{page['title']}</Typography>
-          </ExpansionPanelSummary>
+          </ExpansionPanelSummary_color_Gray>
         </Link>
     </ExpansionPanel>
   );

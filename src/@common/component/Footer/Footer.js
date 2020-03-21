@@ -24,16 +24,16 @@ const Footer = props => {
         &copy;{' '}
         <Link
           component="a"
-          href="https://devias.io/"
+          href="http://www.kyungmin.ac.kr/site/kmc/main.do"
           target="_blank"
         >
-          Devias IO
+          경민대학교
         </Link>
-        . 2019
+        . KM
       </Typography>
       <Typography variant="caption">
-        Created with love for the environment. By designers and developers who
-        love to work together in offices!
+        (11618)경기도 의정부시 서부로 545   대표 : 031-828-7700 입시 : 031-828-7722
+        COPYRIGHT(C) 2013 KYUNGMIN UNIVERSITY. ALL RIGHTS RESERVED
       </Typography>
     </div>
   );

@@ -5,15 +5,9 @@ import MuiExpansionPanel from '@material-ui/core/ExpansionPanel';
 import MuiExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import MuiExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import Typography from '@material-ui/core/Typography';
-import SvgIcon from '@material-ui/core/SvgIcon';
-
-function HomeIcon(props) {
-  return (
-    <SvgIcon {...props}>
-      <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" />
-    </SvgIcon>
-  );
-}
+import { useDispatch } from 'react-redux';
+import * as RedirectActions from '@store/actions/RedirectActions';
+import * as SelectActions from '@store/actions/SelectActions';
 
 const ExpansionPanel = withStyles({
   root: {
@@ -78,12 +72,19 @@ const ExpansionPanelDetails = withStyles(theme => ({
 
 export default function CustomizedExpansionPanels(props) {
   const {className,page,...rest} = props;
-  
+   
   const [openPanelState,setOpenPanelState] = useState(false);
   const [chageColorState,setChangeColorState] = useState(false);
-
-  const handleChange = () => {
+  
+  const dispatch = useDispatch();
+  const selectClassHandleChange = () => {
+    dispatch(RedirectActions.isRedirect(true,"/class/"+page['classIdx']));
+    dispatch(SelectActions.selectClass(page['classIdx']));
     setOpenPanelState(!openPanelState);
+  };
+
+  const pageHandleChange = () => {
+    dispatch(SelectActions.selectClass(-1));
   };
 
   return (
@@ -91,7 +92,7 @@ export default function CustomizedExpansionPanels(props) {
     <div onMouseOver={()=>setChangeColorState(true)} onMouseLeave={()=>setChangeColorState(false)}>
       {chageColorState ? 
       (
-        <ExpansionPanel square expanded={openPanelState} onChange={()=>handleChange()}>
+        <ExpansionPanel square expanded={openPanelState} onChange={()=>selectClassHandleChange()}>
             <ExpansionPanelSummary_color_Gray aria-controls="panel1d-content">
             <Typography>
             <table>
@@ -119,7 +120,7 @@ export default function CustomizedExpansionPanels(props) {
       )
       :
       (
-        <ExpansionPanel square expanded={openPanelState} onChange={()=>handleChange()}>
+        <ExpansionPanel square expanded={openPanelState} onChange={()=>selectClassHandleChange()}>
             <ExpansionPanelSummary_color_White aria-controls="panel1d-content">
             <Typography>
             <table>
@@ -148,7 +149,7 @@ export default function CustomizedExpansionPanels(props) {
       }
     </div>
     :
-    <ExpansionPanel square expanded={openPanelState} onChange={()=>handleChange()}>
+    <ExpansionPanel square onClick={()=>pageHandleChange()}>
         <Link to={page['href']}>
           <ExpansionPanelSummary_color_Gray aria-controls="panel1d-content">
             <Typography>{page['title']}</Typography>

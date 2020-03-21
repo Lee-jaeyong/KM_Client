@@ -40,7 +40,7 @@ function createButton(iconClassName) {
   return button;
 }
 
-const AddClass = () => {
+const AddReport = () => {
   const classes = useStyles();
   const [state, setState] = React.useState({
     checkedA: true,
@@ -97,102 +97,70 @@ const AddClass = () => {
             <Table aria-label="simple table">
               <TableHead>
                 <TableRow>
-                  <TableCell colSpan="4" align="center"><h1>* 수 업 등 록</h1><span className={classes.requireFont}>*5분마다 자동으로 임시저장 됩니다.</span></TableCell>
+                  <TableCell colSpan="4" align="center"><h1>* 과 제 등 록</h1><span className={classes.requireFont}>*5분마다 자동으로 임시저장 됩니다.</span></TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
                 <TableRow>
-                  <TableCell align="center"><h2>수업명</h2><span className={classes.requireFont}>*필수 입력 값입니다</span></TableCell>
+                  <TableCell align="center"><h2>수업명</h2></TableCell>
                   <TableCell colSpan="3" align="left"><TextField fullWidth variant="outlined" /></TableCell>
                 </TableRow>
                 <TableRow>
-                  <TableCell align="center"><h2>수업 시작일</h2><span className={classes.requireFont}>*필수 입력 값입니다</span></TableCell>
+                  <TableCell align="center"><h2>과제명</h2><span className={classes.requireFont}>*필수 입력 값입니다</span></TableCell>
+                  <TableCell colSpan="3" align="left"><TextField fullWidth variant="outlined" /></TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell align="center"><h2>과제 시작일</h2><span className={classes.requireFont}>*필수 입력 값입니다</span></TableCell>
                   <TableCell align="left"><TextField fullWidth type="date" variant="outlined" /></TableCell>
-                  <TableCell align="center"><h2>수업 종료일</h2><span className={classes.requireFont}>*필수 입력 값입니다</span></TableCell>
+                  <TableCell align="center"><h2>과제 마감일</h2><span className={classes.requireFont}>*필수 입력 값입니다</span></TableCell>
                   <TableCell align="left"><TextField fullWidth type="date" variant="outlined" /></TableCell>
                 </TableRow>
                 <TableRow>
-                  <TableCell align="center"><h2>강의계획서 등록</h2><br/>
-                  <Button variant="contained" color="secondary">계획서 양식 다운로드</Button>
+                  <TableCell align="center"><h2>참고 이미지 등록</h2><br/>
                   </TableCell>
                   <TableCell colSpan="3" align="left"><input type="file"/></TableCell>
                 </TableRow>
                 <TableRow>
-                  <TableCell align="center"><h2>수업 타입</h2></TableCell>
+                  <TableCell align="center"><h2>참고 파일 등록</h2><br/>
+                  </TableCell>
+                  <TableCell colSpan="3" align="left"><input type="file"/></TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell align="center"><h2>마감 이후 제출 가능 여부</h2></TableCell>
                   <TableCell colSpan="3" align="left">
                     <RadioGroup row aria-label="position">
                       <FormControlLabel
-                        value="전공"
+                        value="가능"
                         control={<Radio color="primary" checked/>}
-                        label="전공"
+                        label="가능"
                       />
                       <FormControlLabel
-                        value="교양"
+                        value="불가"
                         control={<Radio color="primary" />}
-                        label="교양"
+                        label="불가"
                       />
                     </RadioGroup>
                   </TableCell>
                 </TableRow>
                 <TableRow>
-                  <TableCell align="center"><h2>수업 내용</h2></TableCell>
+                  <TableCell align="center"><h2>과제 내용</h2></TableCell>
                   <TableCell colSpan="3" align="center">
                     <div id="editorSection"></div>
                   </TableCell>
                 </TableRow>
                 <TableRow>
-                  <TableCell align="center"><h2>댓글 사용 여부</h2></TableCell>
+                  <TableCell align="center"><h2>학생 제출 과제 공개 상태</h2></TableCell>
                   <TableCell colSpan="3" align="left">
                     <RadioGroup row aria-label="position">
                       <FormControlLabel
-                        value="허용"
+                        value="공개"
                         control={<Radio color="primary" checked/>}
-                        label="허용"
+                        label="공개"
                       />
                       <FormControlLabel
-                        value="미허용"
+                        value="미공개"
                         control={<Radio color="primary" />}
-                        label="미허용"
-                      />
-                    </RadioGroup>
-                  </TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell align="center"><h2>메뉴 종류</h2></TableCell>
-                  <TableCell colSpan="3" align="left">
-                    <FormGroup row>
-                      <FormControlLabel
-                        control={<Checkbox checked={state.checkedA} onChange={handleChange} name="checkedA" disabled/>}
-                        label="과 제"
-                      />
-                      <FormControlLabel
-                        control={<Checkbox checked={state.checkedB} onChange={handleChange} name="checkedB" />}
-                        label="공지사항"
-                      />
-                      <FormControlLabel
-                        control={<Checkbox checked={state.checkedC} onChange={handleChange} name="checkedC" />}
-                        label="참고자료"
-                      />
-                      <FormControlLabel
-                        control={<Checkbox checked={state.checkedD} onChange={handleChange} name="checkedD" />}
-                        label="Q/A"
-                      />
-                    </FormGroup>
-                  </TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell align="center"><h2>수업 개시 여부</h2></TableCell>
-                  <TableCell colSpan="3" align="left">
-                    <RadioGroup row aria-label="position">
-                      <FormControlLabel
-                        value="개시"
-                        control={<Radio color="primary" checked/>}
-                        label="개시"
-                      />
-                      <FormControlLabel
-                        value="미개시"
-                        control={<Radio color="primary" />}
-                        label="미개시"
+                        label="미공개"
                       />
                     </RadioGroup>
                   </TableCell>
@@ -201,7 +169,7 @@ const AddClass = () => {
                   <TableCell colSpan="4" align="center">
                     <FormControlLabel
                       control={<Checkbox checked={state.submitCheck} onChange={handleChange} name="submitCheck" />}
-                      label="입력한 대로 수업을 등록합니다."
+                      label="입력한 대로 과제를 등록합니다."
                     />
                   </TableCell>
                 </TableRow>
@@ -215,7 +183,7 @@ const AddClass = () => {
                 <TableRow>
                   <TableCell colSpan="4" align="right">
                     <Button variant="contained" color="primary" fullWidth style={{minHeight:70}}>
-                      수업 등록
+                      과제 등록
                     </Button>
                   </TableCell>
                 </TableRow>
@@ -227,4 +195,4 @@ const AddClass = () => {
   );
 };
 
-export default AddClass;
+export default AddReport;

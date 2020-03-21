@@ -10,17 +10,10 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Radio from '@material-ui/core/Radio';
-import RadioGroup from '@material-ui/core/RadioGroup';
-import Checkbox from '@material-ui/core/Checkbox';
+import {useSelector} from 'react-redux';
 
-import Editor from 'tui-editor'; /* ES6 */
-import 'tui-editor/dist/tui-editor.css'; // editor's ui
-import 'tui-editor/dist/tui-editor-contents.css'; // editor's content
-import 'codemirror/lib/codemirror.css'; // codemirror
-import 'highlight.js/styles/github.css'; // code block highlight
 import CustomTable from '@common/component/CustomTable';
+import CustomConfirmDialog from '@common/component/CustomConfirmDialog';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -31,32 +24,23 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-function createButton(iconClassName) {
-  const button = document.createElement('button');
-
-  button.className = 'custom-button';
-  button.innerHTML = `<i class="${iconClassName}"></i>`;
-
-  return button;
-}
-
 const ClassInfo = () => {
   const classes = useStyles();
-  const [state, setState] = React.useState({
-    checkedA: true,
-    checkedB: false,
-    checkedC: false,
-    checkedD: false,
-    submitCheck: false
-  });
+  const [confirmDialog,setConfirmDialog] = useState(false);
+  const selectClassIdx = useSelector(state=>state['SelectUtil']['selectClass']['classIdx']);
 
-  const handleChange = event => {
-    setState({ ...state, [event.target.name]: event.target.checked });
-  };
+  useEffect(()=>{
+  },[selectClassIdx]);
 
   return (
     <div className={classes.root}>
       <Grid container spacing={3}>
+        <CustomConfirmDialog
+          open={confirmDialog}
+          closeHandle={()=>setConfirmDialog(false)}
+          title={"수업 삭제"}
+          content={"수업 삭제시 일주일(7일)간 보관됩니다. 정말 삭제하시겠습니까?"}  
+        />
         <Grid item lg={8} md={8} xl={8} xs={8}>
           <TableContainer component={Paper}>
             <Table aria-label="simple table">
@@ -115,7 +99,7 @@ const ClassInfo = () => {
                     </Button>
                   </TableCell>
                   <TableCell colSpan="2">
-                    <Button variant="contained" color="secondary" fullWidth>
+                    <Button variant="contained" color="secondary" fullWidth onClick={()=>setConfirmDialog(true)}>
                       수업 삭제
                     </Button>
                   </TableCell>

@@ -4,7 +4,7 @@ const initialState = {
   messageState : {
     content:'',
     level:'',
-    visible:false
+    visible:false,
   }
 };
 

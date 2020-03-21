@@ -10,3 +10,4 @@ export { default as Typography } from './Typography';
 export { default as UserList } from './UserList';
 export { default as AddClass } from './AddClass';
 export { default as ClassInfo } from './ClassInfo';
+export { default as AddReport } from './AddReport';

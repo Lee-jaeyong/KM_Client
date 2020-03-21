@@ -36,46 +36,6 @@ const Sidebar = props => {
 
   const classes = useStyles();
 
-  const [userInfo,setUserInfo] = useState({
-    name : '이재용',
-    subject : '융합소프트웨어'
-  });
-
-  const [classList,setClassList] = useState(
-    [
-      {
-        title: '자바',
-        pageList : [
-          {pageName:"과제 등록",href:"/icons/7"},
-          {pageName:"과제 목록",href:"/icons/8"},
-          {pageName:"Q/A",href:"/icons/9"}
-        ]
-      },
-      {
-        title: '자바(학생)',
-        pageList : [
-          {pageName:"과제 목록",href:"/naver"},
-          {pageName:"참고자료 목록",href:"/idaum"},
-          {pageName:"질문하기",href:"/kakao"},
-          {pageName:"Q/A",href:"/dlwodyd"},
-        ]
-      },
-    ]
-  );
-
-  const [otherPage,setOtherPage] = useState(
-    [
-      {
-        title: '수업 등록',
-        href:'/class/add'
-      },
-      {
-        title: '설정',
-        href:'/bbb'
-      },
-    ]
-  );
-
   return (
     <Drawer
       anchor="left"
@@ -88,17 +48,18 @@ const Sidebar = props => {
         {...rest}
         className={clsx(classes.root, className)}
       >
-        <Profile userInfo={userInfo}/>
+        <Profile userInfo={props.userInfo}/>
         <Divider className={classes.divider} />
         <SidebarNav
+          classIdx={props.classIdx}
           className={classes.nav}
-          pages={classList}
+          pages={props.classList}
           dropDown
         />
         <Divider className={classes.divider} />
         <SidebarNav
           className={classes.nav}
-          pages={otherPage}
+          pages={props.otherPage}
         />
       </div>
     </Drawer>

@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 import App from './App';
-import rootReducer from './@store/MessageBox_state';
+import rootReducer from './@store/';
 import { createStore } from 'redux';
 import { Provider } from 'react-redux';
 

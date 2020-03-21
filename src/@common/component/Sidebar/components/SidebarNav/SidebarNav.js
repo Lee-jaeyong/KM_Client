@@ -62,6 +62,7 @@ const SidebarNav = props => {
     >
       {pages.map((page) => (
         <DropDownPanel
+          classIdx={page.classIdx}
           className={page.title}
           page={page}
           key={page.title}

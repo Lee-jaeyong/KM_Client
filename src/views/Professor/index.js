@@ -20,3 +20,4 @@ export { default as ReportInfo } from './ReportInfo';
 export { default as ReferenceDataInfo } from './ReferenceDataInfo';
 export { default as UpdateRefereceData } from './UpdateRefereceData';
 export { default as UpdateReport } from './UpdateReport';
+export { default as NoticeInfo } from './NoticeInfo';

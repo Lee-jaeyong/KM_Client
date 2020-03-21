@@ -20,7 +20,10 @@ import {
   AddNotice as AddNoticeView,
   NoticeList as NoticeListView,
   UpdateClass as UpdateClassView,
-  ReportInfo as ReportInfoView
+  ReportInfo as ReportInfoView,
+  ReferenceDataInfo as ReferenceDataInfoView,
+  UpdateRefereceData as UpdateRefereceDataView,
+  UpdateReport as UpdateReportView
 } from '../views/Professor';
 
 import { ProfessorMain as MainLayout, Minimal as MinimalLayout } from '../layouts';
@@ -47,6 +50,12 @@ const Professor = () => {
           path="/class/:idx/report/add"
       />
       <ProfessorRoute
+          component={UpdateReportView}
+          exact
+          layout={MainLayout}
+          path="/class/:idx/report/update"
+      />
+      <ProfessorRoute
           component={ReportInfoView}
           exact
           layout={MainLayout}
@@ -71,10 +80,22 @@ const Professor = () => {
           path="/class/:idx"
       />
       <ProfessorRoute
+          component={ReferenceDataInfoView}
+          exact
+          layout={MainLayout}
+          path="/class/referenceData/:idx"
+      />
+      <ProfessorRoute
           component={AddRefereceDataView}
           exact
           layout={MainLayout}
           path="/class/:idx/referenceData/add"
+      />
+      <ProfessorRoute
+          component={UpdateRefereceDataView}
+          exact
+          layout={MainLayout}
+          path="/class/:idx/referenceData/update"
       />
       <ProfessorRoute
           component={ReferenceDataListView}

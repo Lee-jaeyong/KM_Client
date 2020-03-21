@@ -35,6 +35,10 @@ const ClassInfo = () => {
     dispatch(RedirectActions.isRedirect(true,"/class/"+selectClassIdx+"/update"));
   }
 
+  const rowClickHandle = (idx) => {
+    dispatch(RedirectActions.isRedirect(true,"/class/report/"+idx));
+  }
+
   useEffect(()=>{
   },[selectClassIdx]);
 
@@ -116,14 +120,14 @@ const ClassInfo = () => {
         </Grid>
         <Grid item lg={4} md={4} xl={4} xs={4}>
           <TableContainer component={Paper}>
-            <CustomTable />
+            <CustomTable rowClickHandle={()=>{}}/>
           </TableContainer>
         </Grid>
       </Grid>
       <br/>
       <Grid item lg={12} md={12} xl={12} xs={12}>
           <TableContainer component={Paper}>
-            <CustomTable />
+            <CustomTable rowClickHandle={rowClickHandle}/>
           </TableContainer>
         </Grid>
     </div>

@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/styles';
+import { useDispatch } from 'react-redux';
 
 import CustomSearchHeader from '@common/component/CustomSearchHeader';
 import CustomTable from '@common/component/CustomTable';
+import * as RedirectActions from '@store/actions/RedirectActions';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -22,6 +24,12 @@ const useStyles = makeStyles(theme => ({
 
 const ReferenceDataList = () => {
   const classes = useStyles();
+  const dispatch = useDispatch();
+
+  const rowClickHandle = (idx) => {
+    dispatch(RedirectActions.isRedirect(true,"/class/referenceData/"+idx));
+  }
+
   return (
     <div className={classes.root}>
       <br></br>
@@ -30,7 +38,7 @@ const ReferenceDataList = () => {
         <br></br>
         <br></br>
       </div>
-      <CustomTable/>
+      <CustomTable rowClickHandle={rowClickHandle}/>
     </div>
   );
 };

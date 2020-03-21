@@ -25,14 +25,13 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const ReportInfo = (props) => {
+const ReferenceDataInfo = (props) => {
   const classes = useStyles();
   const [confirmDialog,setConfirmDialog] = useState(false);
   const selectClassIdx = useSelector(state=>state['SelectUtil']['selectClass']['classIdx']);
   const dispatch = useDispatch();
-
   const redirectPage_updateClass = () => {
-    dispatch(RedirectActions.isRedirect(true,"/class/"+props.match.params.idx+"/report/update"));
+    dispatch(RedirectActions.isRedirect(true,"/class/"+props.match.params.idx+"/referenceData/update"));
   }
 
   useEffect(()=>{
@@ -44,8 +43,8 @@ const ReportInfo = (props) => {
         <CustomConfirmDialog
           open={confirmDialog}
           closeHandle={()=>setConfirmDialog(false)}
-          title={"과제 삭제"}
-          content={"과제 삭제시 일주일(7일)간 보관됩니다. 정말 삭제하시겠습니까?"}  
+          title={"참고자료 삭제"}
+          content={"참고자료 삭제시 일주일(7일)간 보관됩니다. 정말 삭제하시겠습니까?"}  
         />
         <Grid item lg={12} md={12} xl={12} xs={12}>
           <TableContainer component={Paper}>
@@ -53,14 +52,14 @@ const ReportInfo = (props) => {
               <TableHead>
                 <TableRow>
                   <TableCell colSpan="4" align="center">
-                    <h2>* 과제 정보</h2>
+                    <h2>* 참고자료 정보</h2>
                   </TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
                 <TableRow>
                   <TableCell align="center">
-                    <h2>과제명</h2>
+                    <h2>제 목</h2>
                   </TableCell>
                   <TableCell colSpan="3" align="left">
                     <TextField fullWidth variant="outlined" disabled/>
@@ -68,30 +67,15 @@ const ReportInfo = (props) => {
                 </TableRow>
                 <TableRow>
                   <TableCell align="center">
-                    <h2>과제 시작일</h2>
-                  </TableCell>
-                  <TableCell align="left">
-                    <TextField type="date" fullWidth variant="outlined" disabled/>
-                  </TableCell>
-                  <TableCell align="center">
-                    <h2>과제 종료일</h2>
-                  </TableCell>
-                  <TableCell align="left">
-                    <TextField type="date" fullWidth variant="outlined" disabled/>
-                  </TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell align="center">
-                    <h2>과제 내용</h2>
+                    <h2>내 용</h2>
                     <br />
                   </TableCell>
                   <TableCell colSpan="3" align="left">
-                    
                   </TableCell>
                 </TableRow>
                 <TableRow>
                   <TableCell align="center">
-                    <h2>과제 이미지</h2>
+                    <h2>참고 이미지</h2>
                   </TableCell>
                   <TableCell colSpan="3" align="left">
                     
@@ -99,7 +83,7 @@ const ReportInfo = (props) => {
                 </TableRow>
                 <TableRow>
                   <TableCell align="center">
-                    <h2>과제 파일</h2>
+                    <h2>참고 파일</h2>
                   </TableCell>
                   <TableCell colSpan="3" align="left">
                     
@@ -108,12 +92,12 @@ const ReportInfo = (props) => {
                 <TableRow>
                   <TableCell colSpan="2">
                     <Button variant="contained" color="primary" fullWidth onClick={()=>redirectPage_updateClass()}>
-                      과제 수정
+                      참고자료 수정
                     </Button>
                   </TableCell>
                   <TableCell colSpan="2">
                     <Button variant="contained" color="secondary" fullWidth onClick={()=>setConfirmDialog(true)}>
-                      과제 삭제
+                      참고자료 삭제
                     </Button>
                   </TableCell>
                 </TableRow>
@@ -122,14 +106,8 @@ const ReportInfo = (props) => {
           </TableContainer>
         </Grid>
       </Grid>
-      <br/>
-      <Grid item lg={12} md={12} xl={12} xs={12}>
-          <TableContainer component={Paper}>
-            <CustomTable />
-          </TableContainer>
-        </Grid>
     </div>
   );
 };
 
-export default ReportInfo;
+export default ReferenceDataInfo;

@@ -19,7 +19,8 @@ import {
   ReferenceDataList as ReferenceDataListView,
   AddNotice as AddNoticeView,
   NoticeList as NoticeListView,
-  UpdateClass as UpdateClassView
+  UpdateClass as UpdateClassView,
+  ReportInfo as ReportInfoView
 } from '../views/Professor';
 
 import { ProfessorMain as MainLayout, Minimal as MinimalLayout } from '../layouts';
@@ -44,6 +45,12 @@ const Professor = () => {
           exact
           layout={MainLayout}
           path="/class/:idx/report/add"
+      />
+      <ProfessorRoute
+          component={ReportInfoView}
+          exact
+          layout={MainLayout}
+          path="/class/report/:idx"
       />
       <ProfessorRoute
           component={ReportListView}

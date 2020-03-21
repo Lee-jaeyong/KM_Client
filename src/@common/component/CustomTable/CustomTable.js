@@ -83,14 +83,17 @@ const CustomTable = props => {
     );
   }
 
-  const getTableBody = (data,jsonKeyList) => {
+  const getTableBody = (data,jsonKeyList,props) => {
+    function tableCellClickHandle(){
+      props.rowClickHandle(data['reportIdx']);
+    }
     return (
       <TableRow hover>
         {
           jsonKeyList.map((key,idx)=>{
             if(idx !== 0)
               return (
-                <TableCell style={{cursor:'pointer'}} onClick={()=>alert('fds')}>{data[key]}</TableCell>
+                <TableCell style={{cursor:'pointer'}} onClick={()=>tableCellClickHandle()}>{data[key]}</TableCell>
               )
             else
               return (
@@ -159,7 +162,7 @@ const CustomTable = props => {
               <TableBody>
               {
                 tableData.map((data,idx)=>{
-                  return getTableBody(data,jsonDataKeyList) 
+                  return getTableBody(data,jsonDataKeyList,props) 
                 })
               }
               </TableBody>

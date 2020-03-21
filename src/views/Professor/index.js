@@ -16,3 +16,4 @@ export { default as ReferenceDataList } from './ReferenceDataList';
 export { default as AddNotice } from './AddNotice';
 export { default as NoticeList } from './NoticeList';
 export { default as UpdateClass } from './UpdateClass';
+export { default as ReportInfo } from './ReportInfo';

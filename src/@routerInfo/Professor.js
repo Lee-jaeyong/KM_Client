@@ -12,6 +12,7 @@ import {
   SignUp as SignUpView,
   SignIn as SignInView,
   NotFound as NotFoundView,
+  AddClass as AddClassView
 } from '../views/Professor';
 
 import { ProfessorMain as MainLayout, Minimal as MinimalLayout } from '../layouts';
@@ -38,10 +39,10 @@ const Professor = () => {
           path="/reportList/:idx"
       />
       <ProfessorRoute
-          component={TypographyView}
+          component={AddClassView}
           exact
           layout={MainLayout}
-          path="/typography"
+          path="/class/add"
       />
       <ProfessorRoute
           component={IconsView}

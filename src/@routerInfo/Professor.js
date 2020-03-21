@@ -3,7 +3,7 @@ import { Switch,Redirect } from 'react-router-dom';
 import { ProfessorRoute } from './ProfessorRoute';
 import {
   Dashboard as DashboardView,
-  ProductList as ProductListView,
+  ReportList as ReportListView,
   UserList as UserListView,
   Typography as TypographyView,
   Icons as IconsView,
@@ -14,7 +14,12 @@ import {
   NotFound as NotFoundView,
   AddClass as AddClassView,
   ClassInfo as ClassInfoView,
-  AddReport as AddReportView
+  AddReport as AddReportView,
+  AddRefereceData as AddRefereceDataView,
+  ReferenceDataList as ReferenceDataListView,
+  AddNotice as AddNoticeView,
+  NoticeList as NoticeListView,
+  UpdateClass as UpdateClassView
 } from '../views/Professor';
 
 import { ProfessorMain as MainLayout, Minimal as MinimalLayout } from '../layouts';
@@ -41,7 +46,7 @@ const Professor = () => {
           path="/class/:idx/report/add"
       />
       <ProfessorRoute
-          component={ProductListView}
+          component={ReportListView}
           exact
           layout={MainLayout}
           path="/class/:idx/reportList"
@@ -57,6 +62,42 @@ const Professor = () => {
           exact
           layout={MainLayout}
           path="/class/:idx"
+      />
+      <ProfessorRoute
+          component={AddRefereceDataView}
+          exact
+          layout={MainLayout}
+          path="/class/:idx/referenceData/add"
+      />
+      <ProfessorRoute
+          component={ReferenceDataListView}
+          exact
+          layout={MainLayout}
+          path="/class/:idx/referenceDataList"
+      />
+      <ProfessorRoute
+          component={AddNoticeView}
+          exact
+          layout={MainLayout}
+          path="/class/:idx/notice/add"
+      />
+      <ProfessorRoute
+          component={NoticeListView}
+          exact
+          layout={MainLayout}
+          path="/class/:idx/noticeList"
+      />
+      <ProfessorRoute
+          component={NoticeListView}
+          exact
+          layout={MainLayout}
+          path="/class/:idx/QnA"
+      />
+      <ProfessorRoute
+          component={UpdateClassView}
+          exact
+          layout={MainLayout}
+          path="/class/:idx/update"
       />
       <ProfessorRoute
           component={IconsView}

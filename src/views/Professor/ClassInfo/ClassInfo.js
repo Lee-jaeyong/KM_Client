@@ -10,10 +10,11 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
-import {useSelector} from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
 
 import CustomTable from '@common/component/CustomTable';
 import CustomConfirmDialog from '@common/component/CustomConfirmDialog';
+import * as RedirectActions from '@store/actions/RedirectActions';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -28,6 +29,11 @@ const ClassInfo = () => {
   const classes = useStyles();
   const [confirmDialog,setConfirmDialog] = useState(false);
   const selectClassIdx = useSelector(state=>state['SelectUtil']['selectClass']['classIdx']);
+  const dispatch = useDispatch();
+
+  const redirectPage_updateClass = () => {
+    dispatch(RedirectActions.isRedirect(true,"/class/"+selectClassIdx+"/update"));
+  }
 
   useEffect(()=>{
   },[selectClassIdx]);
@@ -57,7 +63,7 @@ const ClassInfo = () => {
                     <h2>수업명</h2>
                   </TableCell>
                   <TableCell colSpan="3" align="left">
-                    <TextField fullWidth variant="outlined" />
+                    <TextField fullWidth variant="outlined" disabled/>
                   </TableCell>
                 </TableRow>
                 <TableRow>
@@ -65,13 +71,13 @@ const ClassInfo = () => {
                     <h2>수업 시작일</h2>
                   </TableCell>
                   <TableCell align="left">
-                    <TextField fullWidth variant="outlined" />
+                    <TextField type="date" fullWidth variant="outlined" disabled/>
                   </TableCell>
                   <TableCell align="center">
                     <h2>수업 종료일</h2>
                   </TableCell>
                   <TableCell align="left">
-                    <TextField fullWidth variant="outlined" />
+                    <TextField type="date" fullWidth variant="outlined" disabled/>
                   </TableCell>
                 </TableRow>
                 <TableRow>
@@ -94,7 +100,7 @@ const ClassInfo = () => {
                 </TableRow>
                 <TableRow>
                   <TableCell colSpan="2">
-                    <Button variant="contained" color="primary" fullWidth>
+                    <Button variant="contained" color="primary" fullWidth onClick={()=>redirectPage_updateClass()}>
                       수업 수정
                     </Button>
                   </TableCell>

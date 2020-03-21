@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/styles';
 
-import mockData from './data';
-
 import CustomSearchHeader from '@common/component/CustomSearchHeader';
 import CustomTable from '@common/component/CustomTable';
 
@@ -22,14 +20,12 @@ const useStyles = makeStyles(theme => ({
 }));
 
 
-const ProductList = () => {
+const ReferenceDataList = () => {
   const classes = useStyles();
   return (
     <div className={classes.root}>
-      <h3>과제 목록</h3><br/>
-      <hr/>
       <br></br>
-      <CustomSearchHeader/>
+      <CustomSearchHeader title="참고자료 검색"/>
       <div>
         <br></br>
         <br></br>
@@ -39,4 +35,4 @@ const ProductList = () => {
   );
 };
 
-export default ProductList;
+export default ReferenceDataList;

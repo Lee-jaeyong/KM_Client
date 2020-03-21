@@ -104,7 +104,7 @@ const CustomSearchHeader = props => {
       <ExpansionPanelSummary
         aria-controls="panel1d-content"
         id="panel1d-header">
-        <Typography><h3>- 과제 검색</h3></Typography>
+        <Typography><h3>== {props.title} == </h3></Typography>
       </ExpansionPanelSummary>
       <ExpansionPanelDetails>
         <Typography>

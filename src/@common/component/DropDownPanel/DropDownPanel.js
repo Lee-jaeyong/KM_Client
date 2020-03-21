@@ -78,12 +78,14 @@ export default function CustomizedExpansionPanels(props) {
   
   const dispatch = useDispatch();
   const selectClassHandleChange = () => {
+    window.scrollTo(0,0);
     dispatch(RedirectActions.isRedirect(true,"/class/"+page['classIdx']));
     dispatch(SelectActions.selectClass(page['classIdx']));
     setOpenPanelState(!openPanelState);
   };
 
   const pageHandleChange = () => {
+    window.scrollTo(0,0);
     dispatch(SelectActions.selectClass(-1));
   };
 
@@ -99,18 +101,18 @@ export default function CustomizedExpansionPanels(props) {
               <tr>
                 <td style={{width:100}}><h4>- {className}</h4></td>
                 <td>
-                {openPanelState ? <img src={"/images/arrow_down.png"}/> : <img src={"/images/arrow_up.png"}/>}
+                {openPanelState ? <img src={"/images/arrow_up.png"}/> : <img src={"/images/arrow_down.png"}/>}
                 </td>
               </tr>
             </table>
             </Typography>
             </ExpansionPanelSummary_color_Gray>
-            <ExpansionPanelDetails>
+            <ExpansionPanelDetails style={{marginLeft:-20}}>
                 <Typography>
                 {page['pageList'].map((pageInfo,idx)=>
                     <Link to={pageInfo['href']}>
-                        <ExpansionPanelList>
-                            <Typography>{pageInfo.pageName}</Typography>
+                        <ExpansionPanelList onClick={()=>window.scrollTo(0,0)}>
+                            <Typography>- {pageInfo.pageName}</Typography>
                         </ExpansionPanelList>
                     </Link>
                 )}
@@ -127,18 +129,18 @@ export default function CustomizedExpansionPanels(props) {
               <tr>
                 <td style={{width:100}}><h4>- {className}</h4></td>
                 <td>
-                {openPanelState ? <img src={"/images/arrow_down.png"}/> : <img src={"/images/arrow_up.png"}/>}
+                {openPanelState ? <img src={"/images/arrow_up.png"}/> : <img src={"/images/arrow_down.png"}/>}
                 </td>
               </tr>
             </table>
             </Typography>
             </ExpansionPanelSummary_color_White>
-            <ExpansionPanelDetails>
+            <ExpansionPanelDetails style={{marginLeft:-20}}>
                 <Typography>
                 {page['pageList'].map((pageInfo,idx)=>
                     <Link to={pageInfo['href']}>
                         <ExpansionPanelList>
-                            <Typography>{pageInfo.pageName}</Typography>
+                            <Typography>- {pageInfo.pageName}</Typography>
                         </ExpansionPanelList>
                     </Link>
                 )}

@@ -31,12 +31,15 @@ const Topbar = props => {
     <AppBar
       {...rest}
       className={clsx(classes.root, className)}
+      style={{
+        backgroundColor:'#2457BD'
+      }}
     >
       <Toolbar>
-        <RouterLink to="/">
+        <RouterLink to="/dashboard">
           <img
             alt="Logo"
-            src="/images/logos/logo--white.svg"
+            src="/images/kyungmin.png"
           />
         </RouterLink>
         <div className={classes.flexGrow} />
@@ -49,12 +52,6 @@ const Topbar = props => {
             >
               <NotificationsIcon />
             </Badge>
-          </IconButton>
-          <IconButton
-            className={classes.signOutButton}
-            color="inherit"
-          >
-            <InputIcon />
           </IconButton>
         </Hidden>
         <Hidden lgUp>

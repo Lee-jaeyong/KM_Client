@@ -25,31 +25,31 @@ const Profile = props => {
   const { className, userInfo,...rest } = props;
   const classes = useStyles();
 
-  const user = {
-    name: 'Shen Zhi',
-    avatar: '/images/avatars/avatar_11.png',
-    bio: 'Brain Director'
-  };
-
   return (
     <div
       {...rest}
       className={clsx(classes.root, className)}
     >
+      <br/>
       <Avatar
         alt="Person"
         className={classes.avatar}
+        style={{
+          minWidth:100,
+          minHeight:100
+        }}
         component={RouterLink}
-        src={user.avatar}
-        to="/settings"
+        src={userInfo.userImg}
+        to="/dashboard"
       />
       <Typography
         className={classes.name}
-        variant="h4"
+        variant="h5"
       >
         {userInfo.name}
       </Typography>
-      <Typography variant="body2">{userInfo.subject}</Typography>
+      <Typography variant="body2"><strong>{userInfo.subject}</strong></Typography>
+      <br/>
     </div>
   );
 };

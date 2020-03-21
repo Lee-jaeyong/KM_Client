@@ -50,18 +50,18 @@ function getJSONKeyList(jsonData){
 const CustomTable = props => {
   const { tableDataList, tableHeaderList, ...rest } = props;
 
-  // const [tableHeader,setTableHeader] = useState([<input type="checkBox"/>,"과제 번호","과제 코드","과제명","과제 시작일","과제 종료일","조회수"]);
-  // const [tableData,setTableData] = useState([
-  //   {checkBox:<input type="checkBox"/>, reportIdx:"23" , reportCode:"C3523",reportTitle:"C언어-별짓기",reportStartDate:"2020-03-20",reportEndDate:"2020-07-17",reportHit:"343"},
-  //   {checkBox:<input type="checkBox"/>, reportIdx:"24" , reportCode:"C3524",reportTitle:"자바-별짓기",reportStartDate:"2020-03-20",reportEndDate:"2020-07-17",reportHit:"343"},
-  //   {checkBox:<input type="checkBox"/>, reportIdx:"25" , reportCode:"C3525",reportTitle:"파이썬-별짓기",reportStartDate:"2020-03-20",reportEndDate:"2020-07-17",reportHit:"343"},
-  //   {checkBox:<input type="checkBox"/>, reportIdx:"26" , reportCode:"C3526",reportTitle:"JPA",reportStartDate:"2020-03-20",reportEndDate:"2020-07-17",reportHit:"343"},
-  //   {checkBox:<input type="checkBox"/>, reportIdx:"27" , reportCode:"C3527",reportTitle:"스프링 프레임워크",reportStartDate:"2020-03-20",reportEndDate:"2020-07-17",reportHit:"343"},
-  //   {checkBox:<input type="checkBox"/>, reportIdx:"28" , reportCode:"C3528",reportTitle:"RESTAPI",reportStartDate:"2020-03-20",reportEndDate:"2020-07-17",reportHit:"343"},
-  // ]);
+  const [tableHeader,setTableHeader] = useState([<input type="checkBox"/>,"과제 번호","과제 코드","과제명","과제 시작일","과제 종료일","조회수"]);
+  const [tableData,setTableData] = useState([
+    {checkBox:<input type="checkBox"/>, reportIdx:"23" , reportCode:"C3523",reportTitle:"C언어-별짓기",reportStartDate:"2020-03-20",reportEndDate:"2020-07-17",reportHit:"343"},
+    {checkBox:<input type="checkBox"/>, reportIdx:"24" , reportCode:"C3524",reportTitle:"자바-별짓기",reportStartDate:"2020-03-20",reportEndDate:"2020-07-17",reportHit:"343"},
+    {checkBox:<input type="checkBox"/>, reportIdx:"25" , reportCode:"C3525",reportTitle:"파이썬-별짓기",reportStartDate:"2020-03-20",reportEndDate:"2020-07-17",reportHit:"343"},
+    {checkBox:<input type="checkBox"/>, reportIdx:"26" , reportCode:"C3526",reportTitle:"JPA",reportStartDate:"2020-03-20",reportEndDate:"2020-07-17",reportHit:"343"},
+    {checkBox:<input type="checkBox"/>, reportIdx:"27" , reportCode:"C3527",reportTitle:"스프링 프레임워크",reportStartDate:"2020-03-20",reportEndDate:"2020-07-17",reportHit:"343"},
+    {checkBox:<input type="checkBox"/>, reportIdx:"28" , reportCode:"C3528",reportTitle:"RESTAPI",reportStartDate:"2020-03-20",reportEndDate:"2020-07-17",reportHit:"343"},
+  ]);
   
-  const [tableHeader,setTableHeader] = useState(tableHeaderList);
-  const [tableData,setTableData] = useState(tableDataList);
+  // const [tableHeader,setTableHeader] = useState(tableHeaderList);
+  // const [tableData,setTableData] = useState(tableDataList);
 
   const [jsonDataKeyList,setJsonDataKeyList] = useState(getJSONKeyList(tableData));
 
@@ -85,12 +85,17 @@ const CustomTable = props => {
 
   const getTableBody = (data,jsonKeyList) => {
     return (
-      <TableRow>
+      <TableRow hover>
         {
           jsonKeyList.map((key,idx)=>{
-            return (
-              <TableCell>{data[key]}</TableCell>
-            ) 
+            if(idx !== 0)
+              return (
+                <TableCell style={{cursor:'pointer'}} onClick={()=>alert('fds')}>{data[key]}</TableCell>
+              )
+            else
+              return (
+                <TableCell>{data[key]}</TableCell>
+              )
           })
         }
       </TableRow>

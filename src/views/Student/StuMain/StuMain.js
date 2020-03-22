@@ -7,9 +7,6 @@ const useStyles = makeStyles(theme => ({
     textAlign: 'center'
   },
   imgStyle: {
-    // alignItems: 'center',
-    // height: 751,
-    // width: 1278
     maxWidth: '70%',
     height: 'auto',
     opacity: '0.7'

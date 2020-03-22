@@ -1,13 +1,13 @@
 /* eslint-disable react/no-multi-comp */
 /* eslint-disable react/display-name */
-import React, { forwardRef,useState, useEffect } from 'react';
+import React, { forwardRef, useState, useEffect } from 'react';
 import { NavLink as RouterLink } from 'react-router-dom';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/styles';
 import { List, ListItem, Button, colors } from '@material-ui/core';
 
-import {DropDownPanel} from '@common/component';
+import { DropDownPanel } from '@common/component';
 
 const useStyles = makeStyles(theme => ({
   root: {},
@@ -60,14 +60,14 @@ const SidebarNav = props => {
       {...rest}
       className={clsx(classes.root, className)}
     >
-      {pages.map((page) => (
+      {pages.map(page => (
         <DropDownPanel
           classIdx={page.classIdx}
           className={page.title}
-          page={page}
           key={page.title}
+          page={page}
           {...rest}
-          />
+        />
       ))}
     </List>
   );

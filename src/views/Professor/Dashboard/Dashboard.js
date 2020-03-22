@@ -7,6 +7,8 @@ import * as SHOW_MESSAGE_ACTION from '@store/actions/MessageActions';
 
 import { useDispatch, useSelector } from 'react-redux';
 
+import * as a from '@axios/get';
+
 const useStyles = makeStyles(theme => ({
   root: {
     padding: theme.spacing(4)
@@ -28,6 +30,12 @@ const Dashboard = () => {
       dispatch(SHOW_MESSAGE_ACTION.show_message(a));
     },[]);
     
+  a.getNotContainsData("/user",b);
+
+  function b (res){
+    alert(res);
+  }
+
   useEffect(()=>{
     if(prevStoreData !== storeData)
     {

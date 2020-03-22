@@ -6,6 +6,7 @@ import { useMediaQuery } from '@material-ui/core';
 import {useSelector,useDispatch} from 'react-redux';
 import { Sidebar, Topbar, Footer } from '@common/component';
 import * as RedirectActions from '@store/actions/RedirectActions';
+import CustomMessageBox from '@common/component/CustomMessageBox';
 
 import {Redirect} from 'react-router-dom';
 
@@ -176,6 +177,7 @@ const Main = props => {
       <main className={classes.content}>
         {children}
         {isRedirect ? <Redirect to={redirectURL}/> : null}
+        <CustomMessageBox/>
         <Footer />
       </main>
     </div>

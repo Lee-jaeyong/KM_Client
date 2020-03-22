@@ -1,7 +1,6 @@
-import React, { useEffect,useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/styles';
 import { Grid } from '@material-ui/core';
-import { Avatar, Typography } from '@material-ui/core';
 
 import * as SHOW_MESSAGE_ACTION from '@store/actions/MessageActions';
 
@@ -17,37 +16,26 @@ const Dashboard = () => {
   const classes = useStyles();
 
   const dispatch = useDispatch();
-  const storeData = useSelector(state=>state['messageState']);
-  const [prevStoreData,setPrevStoreData] = useState(storeData);
-  
-  useEffect(()=>{
-      let a = {
-        content : '이재용',
-        level:'error'
-      }
-      dispatch(SHOW_MESSAGE_ACTION.show_message(a));
-    },[]);
-    
-  useEffect(()=>{
-    if(prevStoreData !== storeData)
-    {
+  const storeData = useSelector(state => state['messageState']);
+  const [prevStoreData, setPrevStoreData] = useState(storeData);
+
+  useEffect(() => {
+  }, []);
+
+  useEffect(() => {
+    if (prevStoreData !== storeData) {
       setPrevStoreData(storeData);
     }
-  },[storeData]);
+  }, [storeData]);
 
   return (
     <div className={classes.root}>
-      <Grid
-        container
-        spacing={4}
-      >
+      <Grid container spacing={4}>
+        <Grid item xs></Grid>
         <Grid item xs>
+          <img src="/images/kyunminMain.png" style={{ width: 1000 }} />
         </Grid>
-        <Grid item xs>
-          <img src="/images/kyunminMain.png" style={{width:1000}}/>
-        </Grid>
-        <Grid item xs>
-        </Grid>
+        <Grid item xs></Grid>
       </Grid>
     </div>
   );

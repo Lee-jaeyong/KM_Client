@@ -22,24 +22,23 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-
 const ReportList = () => {
   const dispatch = useDispatch();
-  
+
   function rowClickHandle(idx) {
-    dispatch(RedirectActions.isRedirect(true,"/class/report/"+idx));
+    dispatch(RedirectActions.isRedirect(true, '/class/report/' + idx));
   }
 
   const classes = useStyles();
   return (
     <div className={classes.root}>
-      <br></br>
-      <CustomSearchHeader title="과제 검색"/>
+      <br />
+      <CustomSearchHeader title="과제 검색" />
       <div>
-        <br></br>
-        <br></br>
+        <br />
+        <br />
       </div>
-      <CustomTable rowClickHandle={rowClickHandle}/>
+      <CustomTable rowClickHandle={rowClickHandle} />
     </div>
   );
 };

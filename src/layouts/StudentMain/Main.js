@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { makeStyles, useTheme } from '@material-ui/styles';
 import { useMediaQuery } from '@material-ui/core';
-
+import { useSelector, useDispatch } from 'react-redux';
 import { Sidebar, Topbar, Footer } from '@common/component';
+import * as RedirectActions from '@store/actions/RedirectActions';
+import { Redirect } from 'react-router-dom';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -27,6 +29,17 @@ const Main = props => {
 
   const classes = useStyles();
   const theme = useTheme();
+
+  const isRedirect = useSelector(
+    state => state['Redirect']['redirect']['isRedirect']
+  );
+
+  const redirectURL = useSelector(
+    state => state['Redirect']['redirect']['url']
+  );
+
+  const dispatch = useDispatch();
+
   const isDesktop = useMediaQuery(theme.breakpoints.up('lg'), {
     defaultMatches: true
   });
@@ -106,6 +119,10 @@ const Main = props => {
 
   const shouldOpenSidebar = isDesktop ? true : openSidebar;
 
+  useEffect(() => {
+    dispatch(RedirectActions.isRedirect(false));
+  }, [isRedirect]);
+
   return (
     <div
       className={clsx({
@@ -124,6 +141,7 @@ const Main = props => {
       />
       <main className={classes.content}>
         {children}
+        {isRedirect ? <Redirect to={redirectURL} /> : null}
         <Footer />
       </main>
     </div>

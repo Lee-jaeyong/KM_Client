@@ -16,7 +16,7 @@ const MessageBox_state = (state = initialState, action) => {
         messageState:{
           content:action.content,
           level:action.level,
-          visible:true 
+          visible:action.visible
         }
       };
     default:

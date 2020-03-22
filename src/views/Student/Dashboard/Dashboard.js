@@ -30,11 +30,6 @@ const Dashboard = () => {
   const [prevStoreData,setPrevStoreData] = useState(storeData);
   
   useEffect(()=>{
-      let a = {
-        content : '이재용',
-        level:'error'
-      }
-      dispatch(SHOW_MESSAGE_ACTION.show_message(a));
     },[]);
     
   useEffect(()=>{

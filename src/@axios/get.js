@@ -10,5 +10,10 @@ export async function getNotContainsData(URL,func){
 }
 
 export async function getContainsData(URL,func,data){
-    alert('a');
+    // axios({
+    //     url: URL,
+    //     method: 'get',
+    // }).then(
+    //     res=>func(res.data)
+    // );
 }

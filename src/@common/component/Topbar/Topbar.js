@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
+import { useSelector,useDispatch } from 'react-redux';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/styles';
@@ -7,6 +8,7 @@ import { AppBar, Toolbar, Badge, Hidden, IconButton } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
 import NotificationsIcon from '@material-ui/icons/NotificationsOutlined';
 import LinearProgress from '@material-ui/core/LinearProgress';
+import * as ProgressBarActions from '@store/actions/ProgressBarActions';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -26,6 +28,14 @@ const Topbar = props => {
   const classes = useStyles();
 
   const [notifications] = useState([]);
+  const progressBarState = useSelector(state=>state['ProgressBar']['visible']);
+  const dispatch = useDispatch();
+
+  useEffect(()=>{
+    setTimeout(() => {
+      dispatch(ProgressBarActions.isProgressBar(false));
+    }, 2000);
+  },[progressBarState]);
 
   return (
     <AppBar
@@ -63,8 +73,16 @@ const Topbar = props => {
           </IconButton>
         </Hidden>
       </Toolbar>
-      <LinearProgress color="secondary" />
-      <LinearProgress variant="query" color="secondary" />
+      {
+        progressBarState ? (
+          <div>
+            <LinearProgress color="secondary" />
+            <LinearProgress variant="query" color="secondary" />
+          </div>
+        )
+        :
+          null
+      }
     </AppBar>
   );
 };

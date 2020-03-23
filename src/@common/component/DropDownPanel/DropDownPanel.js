@@ -5,9 +5,10 @@ import MuiExpansionPanel from '@material-ui/core/ExpansionPanel';
 import MuiExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import MuiExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import Typography from '@material-ui/core/Typography';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import * as RedirectActions from '@store/actions/RedirectActions';
 import * as SelectActions from '@store/actions/SelectActions';
+import * as ProgressBarActions from '@store/actions/ProgressBarActions';
 
 const ExpansionPanel = withStyles({
   root: {
@@ -75,12 +76,18 @@ export default function CustomizedExpansionPanels(props) {
    
   const [openPanelState,setOpenPanelState] = useState(false);
   const [chageColorState,setChangeColorState] = useState(false);
-  
+  const selectClassIdx = useSelector(state=>state['SelectUtil']['selectClass']['classIdx']);
+
   const dispatch = useDispatch();
+
   const selectClassHandleChange = () => {
     window.scrollTo(0,0);
-    dispatch(RedirectActions.isRedirect(true,"/class/"+page['classIdx']));
-    dispatch(SelectActions.selectClass(page['classIdx']));
+    if(selectClassIdx !== page['classIdx'])
+    {
+      dispatch(ProgressBarActions.isProgressBar(true));
+      dispatch(RedirectActions.isRedirect(true,"/class/"+page['classIdx']));
+      dispatch(SelectActions.selectClass(page['classIdx']));
+    }
     setOpenPanelState(!openPanelState);
   };
 

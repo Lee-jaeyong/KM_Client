@@ -8,6 +8,8 @@ import { Sidebar, Topbar, Footer } from '@common/component';
 import * as RedirectActions from '@store/actions/RedirectActions';
 import CustomMessageBox from '@common/component/CustomMessageBox';
 import * as SideBarActions from '@store/actions/SideBarActions';
+import Backdrop from '@material-ui/core/Backdrop';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 import {Redirect} from 'react-router-dom';
 
@@ -26,6 +28,10 @@ const useStyles = makeStyles(theme => ({
   },
   content: {
     height: '100%'
+  },
+  backdrop: {
+    zIndex: theme.zIndex.drawer + 1,
+    color: '#ffffff',
   }
 }));
 
@@ -55,6 +61,7 @@ const Main = props => {
   const isRedirect = useSelector(state=>state['Redirect']['redirect']['isRedirect']);
   const redirectURL = useSelector(state=>state['Redirect']['redirect']['url']);
   const isSideBarUpdate = useSelector(state=>state['SideBar']['isUpdate']);
+  const progressBarState = useSelector(state=>state['ProgressBar']['visible']);
   const dispatch = useDispatch();
   const classes = useStyles();
   const theme = useTheme();
@@ -63,6 +70,11 @@ const Main = props => {
   });
 
   const [openSidebar, setOpenSidebar] = useState(false);
+  const [open, setOpen] = useState(true);
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   const handleSidebarOpen = () => {
     setOpenSidebar(true);
@@ -101,6 +113,9 @@ const Main = props => {
   }
 
   useEffect(()=>{
+  },[progressBarState])
+
+  useEffect(()=>{
     axiosGet.getNotContainsData("/professor/class",getResponse);
   },[]);
 
@@ -132,6 +147,15 @@ const Main = props => {
         otherPage={otherPage}
       />
       <main className={classes.content}>
+        {
+          progressBarState ? (
+            <Backdrop className={classes.backdrop} open={open} onClick={handleClose}>
+              <CircularProgress color="secondary" className={classes.progress}/>
+            </Backdrop>
+          )
+          :
+            null
+        }
         {children}
         {isRedirect ? <Redirect to={redirectURL}/> : null}
         <CustomMessageBox/>

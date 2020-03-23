@@ -29,6 +29,7 @@ import * as CLASS_ACTION from '@store/actions/ClassActions';
 import * as RedirectActions from '@store/actions/RedirectActions';
 import * as ProgressBarActions from '@store/actions/ProgressBarActions';
 import * as SideBarActions from '@store/actions/SideBarActions';
+import {compareToDate} from '@common/functions/CompareToDate';
 
 import * as axiosPost from '@axios/post';
 
@@ -116,15 +117,17 @@ const AddClass = () => {
     event.preventDefault();
     if(name.current.value === ''){
       showMessageBox('수업명을 입력해주세요.','',true);
+      name.current.focus();
       return;
     }else if(startDate.current.value === ''){
       showMessageBox('수업 시작일을 선택해주세요.','',true);
+      startDate.current.focus();
       return;
     }else if(endDate.current.value === ''){
       showMessageBox('수업 종료일을 선택해주세요.','',true);
+      endDate.current.focus();
       return;
-    }else if(!state['submitCheck'])
-    {
+    }else if(!state['submitCheck']){
       showMessageBox('동의란을 체크해주세요.','',true);
       return;
     }
@@ -250,7 +253,22 @@ const AddClass = () => {
                     fullWidth
                     type="date"
                     name="startDate"
-                    onChange={event => inputChangeHandle(event)}
+                    onChange={event =>
+                      {
+                        if(inputClassInfo['endDate'] === '')
+                        {
+                          inputChangeHandle(event)
+                          return;
+                        }
+                        if(inputClassInfo['endDate'] !== '' && compareToDate(event.target.value,inputClassInfo['endDate']))
+                          inputChangeHandle(event)
+                        else
+                        {
+                          showMessageBox('수업 시작일은 종료일보다 작아야합니다.','error',true);
+                          startDate.current.value='';
+                        }
+                      }
+                    }
                     variant="outlined"
                   />
                 </TableCell>
@@ -266,7 +284,22 @@ const AddClass = () => {
                     fullWidth
                     type="date"
                     name="endDate"
-                    onChange={event => inputChangeHandle(event)}
+                    onChange={event => {
+                      {
+                        if(inputClassInfo['startDate'] === '')
+                        {
+                          inputChangeHandle(event)
+                          return;
+                        }
+                        if(inputClassInfo['startDate'] !== '' && compareToDate(inputClassInfo['startDate'],event.target.value))
+                          inputChangeHandle(event)
+                        else
+                        {
+                          showMessageBox('수업 종료일은 시작일보다 커야합니다.','error',true);
+                          endDate.current.value='';
+                        }
+                      } 
+                    }}
                     variant="outlined"
                   />
                 </TableCell>

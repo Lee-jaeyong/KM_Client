@@ -1,4 +1,4 @@
-import React,{useState} from 'react';
+import React, { useState } from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/styles';
@@ -48,13 +48,14 @@ const Sidebar = props => {
         {...rest}
         className={clsx(classes.root, className)}
       >
-        <Profile userInfo={props.userInfo}/>
+        <Profile userInfo={props.userInfo} />
         <Divider className={classes.divider} />
         <SidebarNav
           classIdx={props.classIdx}
           className={classes.nav}
-          pages={props.classList}
           dropDown
+          pages={props.classList}
+          {...rest}
         />
         <Divider className={classes.divider} />
         <SidebarNav

@@ -16,6 +16,8 @@ import CustomTable from '@common/component/CustomTable';
 import CustomConfirmDialog from '@common/component/CustomConfirmDialog';
 import * as RedirectActions from '@store/actions/RedirectActions';
 
+import * as axiosGet from '@axios/get';
+
 const useStyles = makeStyles(theme => ({
   root: {
     padding: theme.spacing(4)
@@ -30,9 +32,10 @@ const ClassInfo = () => {
   const [confirmDialog,setConfirmDialog] = useState(false);
   const selectClassIdx = useSelector(state=>state['SelectUtil']['selectClass']['classIdx']);
   const [classInfo,setClassInfo] = useState({});
-  const addClassInfo = useSelector(state=>state['Class']);
+  const addClassInfo = useSelector(state=>state['Class']['classInfo']);
+  const addClassFileInfo = useSelector(state=>state['Class']['fileInfo']);
   const dispatch = useDispatch();
-  console.log(addClassInfo);
+  
   const redirectPage_updateClass = () => {
     dispatch(RedirectActions.isRedirect(true,"/class/"+selectClassIdx+"/update"));
   }
@@ -40,11 +43,19 @@ const ClassInfo = () => {
   const rowClickHandle = (idx) => {
     dispatch(RedirectActions.isRedirect(true,"/class/report/"+idx));
   }
-  useEffect(()=>{
-  },[]);
 
   useEffect(()=>{
-  },[selectClassIdx]);
+    console.log(addClassFileInfo);
+    if(addClassInfo !== undefined && addClassInfo !== null && JSON.stringify(addClassInfo) !== '{}'){
+      setClassInfo(addClassInfo);
+      if(addClassFileInfo !== undefined && addClassFileInfo !== null){
+        setClassInfo({
+          ...classInfo,
+          fileName:addClassFileInfo
+        });
+      }
+    }
+  },[addClassInfo,addClassFileInfo]);
 
   return (
     <div className={classes.root}>
@@ -71,7 +82,9 @@ const ClassInfo = () => {
                     <h2>수업명</h2>
                   </TableCell>
                   <TableCell colSpan="3" align="left">
-                    <TextField fullWidth variant="outlined" disabled/>
+                    <TextField fullWidth variant="outlined"
+                    value={classInfo['name'] ? classInfo['name'] : ''}
+                    disabled/>
                   </TableCell>
                 </TableRow>
                 <TableRow>
@@ -79,13 +92,18 @@ const ClassInfo = () => {
                     <h2>수업 시작일</h2>
                   </TableCell>
                   <TableCell align="left">
-                    <TextField type="date" fullWidth variant="outlined" disabled/>
+                    <TextField type="date" fullWidth variant="outlined"
+                    value={classInfo['startDate'] ? classInfo['startDate'] : ''}
+                    disabled/>
                   </TableCell>
                   <TableCell align="center">
                     <h2>수업 종료일</h2>
                   </TableCell>
                   <TableCell align="left">
-                    <TextField type="date" fullWidth variant="outlined" disabled/>
+                    <TextField type="date" fullWidth variant="outlined"
+                    value={classInfo['endDate'] ? classInfo['endDate'] : ''}
+                    disabled
+                    />
                   </TableCell>
                 </TableRow>
                 <TableRow>
@@ -94,7 +112,7 @@ const ClassInfo = () => {
                     <br />
                   </TableCell>
                   <TableCell colSpan="3" align="left">
-                    <a href="#">자바스크립트 강의 계획서.xlsx</a>
+                  {addClassFileInfo ? <a href="#">{addClassFileInfo}</a> : null}
                   </TableCell>
                 </TableRow>
                 <TableRow>
@@ -103,7 +121,9 @@ const ClassInfo = () => {
                     <br />
                   </TableCell>
                   <TableCell colSpan="3" align="left">
-                    
+                    <div>
+                    {classInfo['content'] ? classInfo['content'] : ''}
+                    </div>
                   </TableCell>
                 </TableRow>
                 <TableRow>

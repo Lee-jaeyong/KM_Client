@@ -23,10 +23,10 @@ const Student = () => {
   return (
     <Switch>
       <StudentRoute
-        component={DashboardView}
+        component={DashboardView} //각 강의 메인
         exact
         layout={MainLayout}
-        path="/a"
+        path="/stu/class/:idx"
       />
       <StudentRoute
         component={UserListView}

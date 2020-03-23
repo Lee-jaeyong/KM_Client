@@ -82,7 +82,9 @@ export default function CustomizedExpansionPanels(props) {
     dispatch(
       RedirectActions.isRedirect(
         true,
-        rest['student'] ? '/stu/class/' : '/class/' + page['classIdx']
+        rest['student']
+          ? '/stu/class/' + page['classIdx']
+          : '/class/' + page['classIdx']
       )
     );
     dispatch(SelectActions.selectClass(page['classIdx']));

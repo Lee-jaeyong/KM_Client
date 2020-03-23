@@ -34,7 +34,7 @@ const StuReportList = () => {
         }}
         variant="outlined"
       >
-        행 클릭시 해당과제보기 ("/view/report")
+        행 클릭시 해당과제보기 ("/view/report/:idx")
       </Button>
     </div>
   );

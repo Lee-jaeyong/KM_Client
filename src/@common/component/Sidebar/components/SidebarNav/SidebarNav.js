@@ -60,11 +60,11 @@ const SidebarNav = props => {
       {...rest}
       className={clsx(classes.root, className)}
     >
-      {pages.map(page => (
+      {pages.map((page,idx) => (
         <DropDownPanel
           classIdx={page.classIdx}
           className={page.title}
-          key={page.title}
+          key={idx}
           page={page}
           {...rest}
         />

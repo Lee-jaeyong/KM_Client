@@ -15,6 +15,7 @@ import {useSelector, useDispatch} from 'react-redux';
 import CustomTable from '@common/component/CustomTable';
 import CustomConfirmDialog from '@common/component/CustomConfirmDialog';
 import * as RedirectActions from '@store/actions/RedirectActions';
+import * as CLASS_ACTION from '@store/actions/ClassActions';
 
 import * as axiosGet from '@axios/get';
 
@@ -37,6 +38,7 @@ const ClassInfo = () => {
   const dispatch = useDispatch();
   
   const redirectPage_updateClass = () => {
+    dispatch(CLASS_ACTION.save_class(classInfo));
     dispatch(RedirectActions.isRedirect(true,"/class/"+selectClassIdx+"/update"));
   }
 
@@ -44,8 +46,21 @@ const ClassInfo = () => {
     dispatch(RedirectActions.isRedirect(true,"/class/report/"+idx));
   }
 
+  const requestData = (idx) => {
+    axiosGet.getNotContainsData("/professor/class/"+idx,getResponse);
+  }
+
+  const getResponse = (res) => {
+    setClassInfo(res);
+  }
+
   useEffect(()=>{
-    console.log(addClassFileInfo);
+    if(selectClassIdx !== -1){
+      requestData(selectClassIdx);
+    }
+  },[selectClassIdx]);
+
+  useEffect(()=>{
     if(addClassInfo !== undefined && addClassInfo !== null && JSON.stringify(addClassInfo) !== '{}'){
       setClassInfo(addClassInfo);
       if(addClassFileInfo !== undefined && addClassFileInfo !== null){
@@ -112,6 +127,7 @@ const ClassInfo = () => {
                     <br />
                   </TableCell>
                   <TableCell colSpan="3" align="left">
+                  {classInfo['plannerDocName'] ?  <a href="#">{classInfo['plannerDocName']}</a> : null }
                   {addClassFileInfo ? <a href="#">{addClassFileInfo}</a> : null}
                   </TableCell>
                 </TableRow>

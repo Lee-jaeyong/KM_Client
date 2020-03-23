@@ -28,6 +28,7 @@ import * as SHOW_MESSAGE_ACTION from '@store/actions/MessageActions';
 import * as CLASS_ACTION from '@store/actions/ClassActions';
 import * as RedirectActions from '@store/actions/RedirectActions';
 import * as ProgressBarActions from '@store/actions/ProgressBarActions';
+import * as SideBarActions from '@store/actions/SideBarActions';
 
 import * as axiosPost from '@axios/post';
 
@@ -142,7 +143,7 @@ const AddClass = () => {
         content:instance.getHtml()
       };
       axiosPost.postContainsData("/professor/class",getResponse,addClassInfo);
-    }, 2000);
+    }, 1000);
   };
   
   const getResponse = (res) => {
@@ -154,6 +155,7 @@ const AddClass = () => {
     }
     showMessageBox('수업 등록 완료','',true);
     dispatch(RedirectActions.isRedirect(true,"/class/"+res.seq));
+    dispatch(SideBarActions.isUpdate(true));
     window.scrollTo(0,0);
   }
 

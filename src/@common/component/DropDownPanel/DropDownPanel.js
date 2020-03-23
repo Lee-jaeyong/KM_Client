@@ -107,7 +107,7 @@ export default function CustomizedExpansionPanels(props) {
             </table>
             </Typography>
             </ExpansionPanelSummary_color_Gray>
-            <ExpansionPanelDetails style={{marginLeft:-20}}>
+            <ExpansionPanelDetails style={{marginLeft:0}}>
                 <Typography>
                 {page['pageList'].map((pageInfo,idx)=>
                     <Link to={pageInfo['href']}>
@@ -135,7 +135,7 @@ export default function CustomizedExpansionPanels(props) {
             </table>
             </Typography>
             </ExpansionPanelSummary_color_White>
-            <ExpansionPanelDetails style={{marginLeft:-20}}>
+            <ExpansionPanelDetails style={{marginLeft:0}}>
                 <Typography>
                 {page['pageList'].map((pageInfo,idx)=>
                     <Link to={pageInfo['href']}>

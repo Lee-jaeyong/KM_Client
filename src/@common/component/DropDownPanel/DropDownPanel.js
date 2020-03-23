@@ -122,18 +122,18 @@ export default function CustomizedExpansionPanels(props) {
                 </tr>
               </table>
             </Typography>
-          </ExpansionPanelSummary_color_Gray>
-          <ExpansionPanelDetails style={{ marginLeft: -20 }}>
-            <Typography>
-              {page['pageList'].map((pageInfo, idx) => (
-                <Link to={pageInfo['href']}>
-                  <ExpansionPanelList onClick={() => window.scrollTo(0, 0)}>
-                    <Typography>- {pageInfo.pageName}</Typography>
-                  </ExpansionPanelList>
-                </Link>
-              ))}
-            </Typography>
-          </ExpansionPanelDetails>
+            </ExpansionPanelSummary_color_Gray>
+            <ExpansionPanelDetails style={{marginLeft:0}}>
+                <Typography>
+                {page['pageList'].map((pageInfo,idx)=>
+                    <Link to={pageInfo['href']}>
+                        <ExpansionPanelList onClick={()=>window.scrollTo(0,0)}>
+                            <Typography>- {pageInfo.pageName}</Typography>
+                        </ExpansionPanelList>
+                    </Link>
+                )}
+                </Typography>
+            </ExpansionPanelDetails>
         </ExpansionPanel>
       ) : (
         <ExpansionPanel
@@ -158,18 +158,18 @@ export default function CustomizedExpansionPanels(props) {
                 </tr>
               </table>
             </Typography>
-          </ExpansionPanelSummary_color_White>
-          <ExpansionPanelDetails style={{ marginLeft: -20 }}>
-            <Typography>
-              {page['pageList'].map((pageInfo, idx) => (
-                <Link to={pageInfo['href']}>
-                  <ExpansionPanelList>
-                    <Typography>- {pageInfo.pageName}</Typography>
-                  </ExpansionPanelList>
-                </Link>
-              ))}
-            </Typography>
-          </ExpansionPanelDetails>
+            </ExpansionPanelSummary_color_White>
+            <ExpansionPanelDetails style={{marginLeft:0}}>
+                <Typography>
+                {page['pageList'].map((pageInfo,idx)=>
+                    <Link to={pageInfo['href']}>
+                        <ExpansionPanelList>
+                            <Typography>- {pageInfo.pageName}</Typography>
+                        </ExpansionPanelList>
+                    </Link>
+                )}
+                </Typography>
+            </ExpansionPanelDetails>
         </ExpansionPanel>
       )}
     </div>

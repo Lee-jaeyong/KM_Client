@@ -34,7 +34,7 @@ const Topbar = props => {
   useEffect(()=>{
     setTimeout(() => {
       dispatch(ProgressBarActions.isProgressBar(false));
-    }, 2000);
+    }, 1000);
   },[progressBarState]);
 
   return (

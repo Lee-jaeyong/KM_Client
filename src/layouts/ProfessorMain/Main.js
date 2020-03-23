@@ -7,6 +7,7 @@ import {useSelector,useDispatch} from 'react-redux';
 import { Sidebar, Topbar, Footer } from '@common/component';
 import * as RedirectActions from '@store/actions/RedirectActions';
 import CustomMessageBox from '@common/component/CustomMessageBox';
+import * as SideBarActions from '@store/actions/SideBarActions';
 
 import {Redirect} from 'react-router-dom';
 
@@ -53,6 +54,7 @@ const Main = props => {
   const { children } = props;
   const isRedirect = useSelector(state=>state['Redirect']['redirect']['isRedirect']);
   const redirectURL = useSelector(state=>state['Redirect']['redirect']['url']);
+  const isSideBarUpdate = useSelector(state=>state['SideBar']['isUpdate']);
   const dispatch = useDispatch();
   const classes = useStyles();
   const theme = useTheme();
@@ -100,12 +102,18 @@ const Main = props => {
 
   useEffect(()=>{
     axiosGet.getNotContainsData("/professor/class",getResponse);
-    alert('fds');
   },[]);
 
   useEffect(()=>{
     dispatch(RedirectActions.isRedirect(false));
   },[isRedirect]);
+
+  useEffect(()=>{
+    if(isSideBarUpdate){
+      axiosGet.getNotContainsData("/professor/class",getResponse);
+      dispatch(SideBarActions.isUpdate(false));
+    }
+  },[isSideBarUpdate]);
 
   return (
     <div

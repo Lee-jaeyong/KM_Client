@@ -10,6 +10,8 @@ import CustomMessageBox from '@common/component/CustomMessageBox';
 
 import {Redirect} from 'react-router-dom';
 
+import * as axiosGet from '@axios/get';
+
 const useStyles = makeStyles(theme => ({
   root: {
     paddingTop: 56,
@@ -33,91 +35,7 @@ const Main = props => {
     userImg : '/images/dlwodyd.jpg'
   });
 
-  const [classList,setClassList] = useState(
-    [
-      {
-        classIdx:1,
-        title: '자바',
-        pageList : [
-          {pageName:"과제 등록",href:"/class/"+1+"/report/add"},
-          {pageName:"과제 목록",href:"/class/"+1+"/reportList"},
-          {pageName:"참고자료 등록",href:"/class/"+1+"/referenceData/add"},
-          {pageName:"참고자료 목록",href:"/class/"+1+"/referenceDataList"},
-          {pageName:"공지사항 등록",href:"/class/"+1+"/notice/add"},
-          {pageName:"공지사항 목록",href:"/class/"+1+"/noticeList"},
-          {pageName:"Q/A",href:"/class/"+7+"/QnA"},
-        ]
-      },
-      {
-        classIdx:2,
-        title: 'C언어',
-        pageList : [
-          {pageName:"과제 등록",href:"/class/"+2+"/report/add"},
-          {pageName:"과제 목록",href:"/class/"+2+"/reportList"},
-          {pageName:"Q/A",href:"/class/"+7+"/QnA"},
-        ]
-      },
-      {
-        classIdx:3,
-        title: '스프링 프레임워크',
-        pageList : [
-          {pageName:"과제 등록",href:"/class/"+3+"/report/add"},
-          {pageName:"과제 목록",href:"/class/"+3+"/reportList"},
-          {pageName:"참고자료 등록",href:"/class/"+3+"/referenceData/add"},
-          {pageName:"참고자료 목록",href:"/class/"+3+"/referenceDataList"},
-        ]
-      },
-      {
-        classIdx:4,
-        title: 'JPA',
-        pageList : [
-          {pageName:"과제 등록",href:"/class/"+4+"/report/add"},
-          {pageName:"과제 목록",href:"/class/"+4+"/reportList"},
-        ]
-      },
-      {
-        classIdx:5,
-        title: '운영체제',
-        pageList : [
-          {pageName:"과제 등록",href:"/class/"+5+"/report/add"},
-          {pageName:"과제 목록",href:"/class/"+5+"/reportList"},
-          {pageName:"참고자료 등록",href:"/class/"+5+"/referenceData/add"},
-          {pageName:"참고자료 목록",href:"/class/"+5+"/referenceDataList"},
-          {pageName:"Q/A",href:"/class/"+7+"/QnA"},
-        ]
-      },
-      {
-        classIdx:6,
-        title: '시스템 설계 분석',
-        pageList : [
-          {pageName:"과제 등록",href:"/class/"+2+"/report/add"},
-          {pageName:"과제 목록",href:"/class/"+2+"/reportList"},
-          {pageName:"Q/A",href:"/class/"+7+"/QnA"},
-        ]
-      },
-      {
-        classIdx:7,
-        title: 'React',
-        pageList : [
-          {pageName:"과제 등록",href:"/class/"+7+"/report/add"},
-          {pageName:"과제 목록",href:"/class/"+7+"/reportList"},
-          {pageName:"참고자료 등록",href:"/class/"+7+"/referenceData/add"},
-          {pageName:"참고자료 목록",href:"/class/"+7+"/referenceDataList"},
-          {pageName:"공지사항 등록",href:"/class/"+7+"/notice/add"},
-          {pageName:"공지사항 목록",href:"/class/"+7+"/noticeList"},
-          {pageName:"Q/A",href:"/class/"+7+"/QnA"},
-        ]
-      },
-      {
-        classIdx:8,
-        title: '데이터베이스',
-        pageList : [
-          {pageName:"과제 등록",href:"/class/"+8+"/report/add"},
-          {pageName:"과제 목록",href:"/class/"+8+"/reportList"},
-        ]
-      },
-    ]
-  );
+  const [classList,setClassList] = useState([]);
 
   const [otherPage,setOtherPage] = useState(
     [
@@ -153,6 +71,37 @@ const Main = props => {
   };
 
   const shouldOpenSidebar = isDesktop ? true : openSidebar;
+
+  function getResponse (res){
+    if(res.length > 0){
+      let result = [];
+      for(let i =0;i<res.length;i++){
+        let pageData = []
+        if(res[i]['selectMenu'].includes('REPORT')){
+          pageData.push({
+            pageName:"과제 등록",
+            href:"/class/"+res[i]['seq']+"/report/add",
+          });
+          pageData.push({
+            pageName:"과제 목록",
+            href:"/class/"+res[i]['seq']+"/reportList",
+          });
+        }
+        let data = {
+          classIdx : res[i]['seq'],
+          title : res[i]['name'],
+          pageList : pageData
+        };
+        result.push(data);
+      }
+      setClassList(result);
+    }
+  }
+
+  useEffect(()=>{
+    axiosGet.getNotContainsData("/professor/class",getResponse);
+    alert('fds');
+  },[]);
 
   useEffect(()=>{
     dispatch(RedirectActions.isRedirect(false));

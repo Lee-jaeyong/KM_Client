@@ -167,7 +167,7 @@ const AddClass = () => {
   }
 
   const getFileResponse = (res) => {
-    dispatch(CLASS_ACTION.save_class(res));
+    dispatch(CLASS_ACTION.fileUpload_class(res));
   }
 
   useEffect(() => {

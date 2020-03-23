@@ -4,3 +4,10 @@ export function save_class(classInfo){
         classInfo : classInfo
     }
 }
+
+export function fileUpload_class(fileInfo){
+    return{
+        type:"FILEUPLOAD_CLASS",
+        fileInfo : fileInfo
+    }
+}

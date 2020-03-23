@@ -29,8 +29,10 @@ const ClassInfo = () => {
   const classes = useStyles();
   const [confirmDialog,setConfirmDialog] = useState(false);
   const selectClassIdx = useSelector(state=>state['SelectUtil']['selectClass']['classIdx']);
+  const [classInfo,setClassInfo] = useState({});
+  const addClassInfo = useSelector(state=>state['Class']);
   const dispatch = useDispatch();
-
+  console.log(addClassInfo);
   const redirectPage_updateClass = () => {
     dispatch(RedirectActions.isRedirect(true,"/class/"+selectClassIdx+"/update"));
   }
@@ -38,6 +40,8 @@ const ClassInfo = () => {
   const rowClickHandle = (idx) => {
     dispatch(RedirectActions.isRedirect(true,"/class/report/"+idx));
   }
+  useEffect(()=>{
+  },[]);
 
   useEffect(()=>{
   },[selectClassIdx]);

@@ -19,15 +19,17 @@ export default function CustomMessageBox(props) {
   },[]);
 
   useEffect(() => {
-    setTimeout(() => {
-      let message = {
-        content: '',
-        level: '',
-        visible: false
-      };
-      dispatch(SHOW_MESSAGE_ACTION.show_message(message));
-    }, 6000);
-  },[messageState]);
+    if(messageState['visible'] === true){
+      setTimeout(() => {
+        let message = {
+          content: '',
+          level: '',
+          visible: false
+        };
+        dispatch(SHOW_MESSAGE_ACTION.show_message(message));
+      }, 3000);
+    }
+  },[messageState['visible']]);
 
   return (
     <Snackbar

@@ -1,4 +1,5 @@
-const CLASS_SAVE = 'CLASS_SAVE';
+const SAVE_CLASS = 'SAVE_CLASS';
+const FILEUPLOAD_CLASS = "FILEUPLOAD_CLASS";
 
 const initialState = {
     classInfo : {
@@ -7,7 +8,7 @@ const initialState = {
 
 const Class_state = (state = initialState, action) => {
   switch (action.type) {
-    case CLASS_SAVE:
+    case SAVE_CLASS:
       return{
         ...state,
         classInfo:{
@@ -15,6 +16,11 @@ const Class_state = (state = initialState, action) => {
           ...action.classInfo
         }
       };
+    case FILEUPLOAD_CLASS :
+      return {
+        ...state,
+        fileInfo : action.fileInfo
+      }
     default:
       return state;
   }

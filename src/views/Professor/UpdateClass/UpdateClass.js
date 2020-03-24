@@ -27,6 +27,8 @@ import {compareToDate} from '@common/functions/CompareToDate';
 import * as SHOW_MESSAGE_ACTION from '@store/actions/MessageActions';
 import * as ProgressBarActions from '@store/actions/ProgressBarActions';
 
+import * as axiosDelete from '@axios/delete';
+
 const useStyles = makeStyles(theme => ({
   root: {
     padding: theme.spacing(4)
@@ -60,8 +62,8 @@ const UpdateClass = () => {
     checkedD: false,
     submitCheck:false
   });
-  const [classFileUpload, setClassFileUpload] = useState();
   const [inputClassInfo,setInputClassInfo] = useState(useSelector(state=>state['Class']['classInfo']));
+  const [classFileUpload, setClassFileUpload] = useState();
   const inputChangeHandle = event => {
     const updateClassInfo = {
       ...inputClassInfo,
@@ -73,6 +75,14 @@ const UpdateClass = () => {
   const handleChange = event => {
     setState({ ...state, [event.target.name]: event.target.checked });
   };
+
+  const fileDeleteHandle = () => {
+    axiosDelete.deleteNotContainsData("/uploadFile/"+inputClassInfo['seq']+"/classInfoExcel",getResponse);
+  }
+
+  const getResponse = (res) => {
+    setClassFileUpload(null);
+  }
 
   const fileUploadHandle = event => {
     let _fileLen = event.target.value.length;
@@ -133,6 +143,9 @@ const UpdateClass = () => {
   };
 
   useEffect(()=>{
+  },[classFileUpload]);
+
+  useEffect(()=>{
     const instance = new Editor({
       el: document.querySelector('#editorSection'),
       initialEditType: 'markdown',
@@ -161,6 +174,7 @@ const UpdateClass = () => {
       ]
     });
     instance.setHtml(inputClassInfo['content']);
+    setClassFileUpload(inputClassInfo['plannerDocName'] ? inputClassInfo['plannerDocName'] : null);
   },[]);
 
   return (
@@ -263,8 +277,8 @@ const UpdateClass = () => {
                   <TableCell align="center"><h2>강의계획서 등록</h2><br/>
                   </TableCell>
                   <TableCell colSpan="3" align="left">
-                    {inputClassInfo['plannerDocName'] ? <div>{inputClassInfo['plannerDocName']}&nbsp;&nbsp;
-                    <Button variant="contained" color="primary" style={{minHeight:20}}>
+                    {classFileUpload ? <div><a href="#">{classFileUpload}</a>&nbsp;&nbsp;
+                    <Button variant="contained" color="primary" style={{minHeight:20}} onClick={()=>fileDeleteHandle()}>
                       삭 제
                     </Button>
                     </div>

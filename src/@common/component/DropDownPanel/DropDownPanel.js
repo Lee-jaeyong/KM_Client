@@ -80,13 +80,13 @@ export default function CustomizedExpansionPanels(props) {
 
   const dispatch = useDispatch();
 
-  const selectClassHandleChange = () => {
+  const selectClassHandleChange = (className) => {
     window.scrollTo(0,0);
     if(selectClassIdx !== page['classIdx'])
     {
       dispatch(ProgressBarActions.isProgressBar(true));
       dispatch(RedirectActions.isRedirect(true,"/class/"+page['classIdx']));
-      dispatch(SelectActions.selectClass(page['classIdx']));
+      dispatch(SelectActions.selectClass(page['classIdx'],className));
     }
     setOpenPanelState(!openPanelState);
   };
@@ -101,7 +101,7 @@ export default function CustomizedExpansionPanels(props) {
     <div onMouseOver={()=>setChangeColorState(true)} onMouseLeave={()=>setChangeColorState(false)}>
       {chageColorState ? 
       (
-        <ExpansionPanel square expanded={openPanelState} onChange={()=>selectClassHandleChange()}>
+        <ExpansionPanel square expanded={openPanelState} onChange={()=>selectClassHandleChange(className)}>
             <ExpansionPanelSummary_color_Gray aria-controls="panel1d-content">
             <Typography>
             <table>

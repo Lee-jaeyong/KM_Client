@@ -5,9 +5,10 @@ import SelectUtil from './SelectUtil_state';
 import Class from './Class_state';
 import ProgressBar  from './ProgressBar_state';
 import SideBar from './SideBar_state';
+import Report from './Report_state';
 
 const rootReducer = combineReducers({
-    MessageBox,Redirect,SelectUtil,Class,ProgressBar,SideBar
+    MessageBox,Redirect,SelectUtil,Class,ProgressBar,SideBar,Report
 });
 
 export default rootReducer;

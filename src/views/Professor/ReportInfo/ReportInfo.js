@@ -29,6 +29,8 @@ const ReportInfo = (props) => {
   const classes = useStyles();
   const [confirmDialog,setConfirmDialog] = useState(false);
   const selectClassIdx = useSelector(state=>state['SelectUtil']['selectClass']['classIdx']);
+  const selectReportIdx = useSelector(state=>state);
+  console.log(selectReportIdx);
   const dispatch = useDispatch();
 
   const redirectPage_updateClass = () => {

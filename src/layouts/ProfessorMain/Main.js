@@ -87,6 +87,7 @@ const Main = props => {
   const shouldOpenSidebar = isDesktop ? true : openSidebar;
 
   function getResponse (res){
+    console.log(res);
     if(res.length > 0){
       let result = [];
       for(let i =0;i<res.length;i++){
@@ -99,6 +100,32 @@ const Main = props => {
           pageData.push({
             pageName:"과제 목록",
             href:"/class/"+res[i]['seq']+"/reportList",
+          });
+        }
+        if(res[i]['selectMenu'].includes('NOTICE')){
+          pageData.push({
+            pageName:"공지사항 등록",
+            href:"/class/"+res[i]['seq']+"/notice/add",
+          });
+          pageData.push({
+            pageName:"공지사항 목록",
+            href:"/class/"+res[i]['seq']+"/noticeList",
+          });
+        }
+        if(res[i]['selectMenu'].includes('REFERENCE')){
+          pageData.push({
+            pageName:"참고자료 등록",
+            href:"/class/"+res[i]['seq']+"/referenceData/add",
+          });
+          pageData.push({
+            pageName:"참고자료 목록",
+            href:"/class/"+res[i]['seq']+"/referenceDataList",
+          });
+        }
+        if(res[i]['selectMenu'].includes('QnA')){
+          pageData.push({
+            pageName:"Q/A",
+            href:"/class/"+res[i]['seq']+"/QnA",
           });
         }
         let data = {

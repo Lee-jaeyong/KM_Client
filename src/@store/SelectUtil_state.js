@@ -3,6 +3,7 @@ const SELECT_CLASS = 'SELECT_CLASS';
 const initialState = {
     selectClass : {
         classIdx : -1,
+        className : ''
     }
 };
 
@@ -13,6 +14,7 @@ const SelectUtil_state = (state = initialState, action) => {
         ...state,
         selectClass:{
             classIdx:action.classIdx,
+            className:action.className
         }
       };
     default:

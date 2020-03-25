@@ -15,6 +15,6 @@ export function fileUpload_report_IMG(fileInfo){
 export function fileUpload_report_FILE(fileInfo){
     return{
         type:"FILEUPLOAD_REPORT_FILE",
-        imgList : fileInfo
+        fileList : fileInfo
     }
 }

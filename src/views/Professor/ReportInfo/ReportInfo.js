@@ -15,6 +15,7 @@ import {useSelector, useDispatch} from 'react-redux';
 import CustomTable from '@common/component/CustomTable';
 import CustomConfirmDialog from '@common/component/CustomConfirmDialog';
 import * as RedirectActions from '@store/actions/RedirectActions';
+import * as filter from '@common/functions/ConvertNotXssFilter';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -29,8 +30,21 @@ const ReportInfo = (props) => {
   const classes = useStyles();
   const [confirmDialog,setConfirmDialog] = useState(false);
   const selectClassIdx = useSelector(state=>state['SelectUtil']['selectClass']['classIdx']);
-  const selectReportIdx = useSelector(state=>state);
-  console.log(selectReportIdx);
+  const selectReport = useSelector(state=>state['Report']['reportInfo']);
+  const [reportInfo,setReportInfo] = useState(JSON.stringify(selectReport) !== '{}' ? 
+  {
+    classIdx : selectReport['classIdx'],
+    seq : selectReport['seq'],
+    name : selectReport['name'],
+    startDate : selectReport['startDate'],
+    endDate : selectReport['endDate'],
+    content : selectReport['content'],
+    hit : selectReport['hit'],
+    submitOverDue_state : selectReport['submitOverDue_state'],
+    showOtherReportOfStu_state : selectReport['showOtherReportOfStu_state'],
+  }
+  : null);
+
   const dispatch = useDispatch();
 
   const redirectPage_updateClass = () => {
@@ -38,7 +52,8 @@ const ReportInfo = (props) => {
   }
 
   useEffect(()=>{
-  },[selectClassIdx]);
+    document.getElementById("reportInfoContent").innerHTML = filter.ConvertNotXssFilter(reportInfo['content']);
+  },[]);
 
   return (
     <div className={classes.root}>
@@ -65,7 +80,7 @@ const ReportInfo = (props) => {
                     <h2>과제명</h2>
                   </TableCell>
                   <TableCell colSpan="3" align="left">
-                    <TextField fullWidth variant="outlined" disabled/>
+                    <TextField fullWidth variant="outlined" value={reportInfo['name'] ? reportInfo['name'] : ""} disabled/>
                   </TableCell>
                 </TableRow>
                 <TableRow>
@@ -73,13 +88,13 @@ const ReportInfo = (props) => {
                     <h2>과제 시작일</h2>
                   </TableCell>
                   <TableCell align="left">
-                    <TextField type="date" fullWidth variant="outlined" disabled/>
+                    <TextField type="date" fullWidth variant="outlined" value={reportInfo['startDate'] ? reportInfo['startDate'] : ""} disabled/>
                   </TableCell>
                   <TableCell align="center">
                     <h2>과제 종료일</h2>
                   </TableCell>
                   <TableCell align="left">
-                    <TextField type="date" fullWidth variant="outlined" disabled/>
+                    <TextField type="date" fullWidth variant="outlined" value={reportInfo['endDate'] ? reportInfo['endDate'] : ""} disabled/>
                   </TableCell>
                 </TableRow>
                 <TableRow>
@@ -88,7 +103,8 @@ const ReportInfo = (props) => {
                     <br />
                   </TableCell>
                   <TableCell colSpan="3" align="left">
-                    
+                    <div id="reportInfoContent">
+                    </div>
                   </TableCell>
                 </TableRow>
                 <TableRow>
@@ -96,7 +112,15 @@ const ReportInfo = (props) => {
                     <h2>과제 이미지</h2>
                   </TableCell>
                   <TableCell colSpan="3" align="left">
-                    
+                    {selectReport['imgList'] ? selectReport['imgList'].split(',').map((img,idx)=>{
+                      return (
+                        <div>
+                          <a href="#">{img}</a>
+                          <br/>
+                        </div>
+                      )
+                    })
+                     : '이미지 없음'}
                   </TableCell>
                 </TableRow>
                 <TableRow>
@@ -104,7 +128,15 @@ const ReportInfo = (props) => {
                     <h2>과제 파일</h2>
                   </TableCell>
                   <TableCell colSpan="3" align="left">
-                    
+                    {selectReport['fileList'] ? selectReport['fileList'].split(',').map((file,idx)=>{
+                      return (
+                        <div>
+                          <a href="#">{file}</a>
+                          <br/>
+                        </div>
+                      )
+                    })
+                     : '파일 없음'}
                   </TableCell>
                 </TableRow>
                 <TableRow>

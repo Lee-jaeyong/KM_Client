@@ -68,21 +68,24 @@ const UpdateClass = () => {
 
   const [dialogState,setDialogState] = useState(false);
   const [instance,setInstance] = useState();
-  const [checkedMenuResult, setCheckedMenuResult] = useState([]);
-
+  
   const [inputClassInfo,setInputClassInfo] = useState(useSelector(state=>state['Class']['classInfo']));
-  const selectedMenu = inputClassInfo['selectMenu'].split(",");
+  const [checkedMenuResult, setCheckedMenuResult] = useState(inputClassInfo['selectMenu'] ? inputClassInfo['selectMenu'].split(",") : null);
+  const selectedMenu = inputClassInfo['selectMenu'] ? inputClassInfo['selectMenu'].split(",") : null;
 
   let checkMenu = {};
-  for(let i =0;i<selectedMenu.length;i++)
-  {
-    if(selectedMenu[i] !== '')
+  try{
+    for(let i =0;i<selectedMenu.length;i++)
     {
-      checkMenu = {
-        ...checkMenu,
-        [selectedMenu[i]]:true
+      if(selectedMenu[i] !== '')
+      {
+        checkMenu = {
+          ...checkMenu,
+          [selectedMenu[i]]:true
+        }
       }
     }
+  }catch{
   }
 
   const [state, setState] = React.useState({
@@ -125,7 +128,7 @@ const UpdateClass = () => {
       formData.append("file",update_classFileUpload);
       axiosPost.postFileUpload("/uploadFile/"+res.seq+"/classInfoExcel",getFileResponse,formData);
     }
-    showMessageBox('수업 등록 완료','',true);
+    showMessageBox('수업 수정 완료','',true);
     dispatch(RedirectActions.isRedirect(true,"/class/"+res.seq));
     dispatch(SideBarActions.isUpdate(true));
     window.scrollTo(0,0);
@@ -207,10 +210,9 @@ const UpdateClass = () => {
         setInstance(
           new Editor({
             el: document.querySelector('#editorSection'),
-            initialEditType: 'markdown',
+            initialEditType: 'wysiwyg',
             initialValue: filter.ConvertNotXssFilter(inputClassInfo['content']),
-            height: '300px',
-            content : "fsdfsd",
+            height: '1000px',
             toolbarItems: [
               'heading',
               'bold',

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/styles';
 import { Grid, TextField } from '@material-ui/core';
+import {Redirect} from 'react-router-dom';
 
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -15,7 +16,10 @@ import {useSelector, useDispatch} from 'react-redux';
 import CustomTable from '@common/component/CustomTable';
 import CustomConfirmDialog from '@common/component/CustomConfirmDialog';
 import * as RedirectActions from '@store/actions/RedirectActions';
+
 import * as CLASS_ACTION from '@store/actions/ClassActions';
+
+import * as filter from '@common/functions/ConvertNotXssFilter';
 
 import * as axiosGet from '@axios/get';
 
@@ -34,9 +38,7 @@ const ClassInfo = () => {
   const selectClassIdx = useSelector(state=>state['SelectUtil']['selectClass']['classIdx']);
   const [classInfo,setClassInfo] = useState({});
   const addClassInfo = useSelector(state=>state['Class']['classInfo']);
-  const addClassFileInfo = useSelector(state=>state['Class']['fileInfo']);
   const dispatch = useDispatch();
-  
   const redirectPage_updateClass = () => {
     dispatch(CLASS_ACTION.save_class(classInfo));
     dispatch(RedirectActions.isRedirect(true,"/class/"+selectClassIdx+"/update"));
@@ -52,6 +54,7 @@ const ClassInfo = () => {
 
   const getResponse = (res) => {
     setClassInfo(res);
+    document.getElementById("classInfoContent").innerHTML = filter.ConvertNotXssFilter(res['content']);
   }
 
   useEffect(()=>{
@@ -63,17 +66,13 @@ const ClassInfo = () => {
   useEffect(()=>{
     if(addClassInfo !== undefined && addClassInfo !== null && JSON.stringify(addClassInfo) !== '{}'){
       setClassInfo(addClassInfo);
-      if(addClassFileInfo !== undefined && addClassFileInfo !== null){
-        setClassInfo({
-          ...classInfo,
-          fileName:addClassFileInfo
-        });
-      }
+      document.getElementById("classInfoContent").innerHTML = filter.ConvertNotXssFilter(addClassInfo['content']);
     }
-  },[addClassInfo,addClassFileInfo]);
+  },[addClassInfo]);
 
   return (
     <div className={classes.root}>
+      { selectClassIdx === -1 && JSON.stringify(addClassInfo) === '{}' ? <Redirect to={"/dashboard"}/> : null}
       <Grid container spacing={3}>
         <CustomConfirmDialog
           open={confirmDialog}
@@ -127,8 +126,7 @@ const ClassInfo = () => {
                     <br />
                   </TableCell>
                   <TableCell colSpan="3" align="left">
-                  {classInfo['plannerDocName'] ?  <a href="#">{classInfo['plannerDocName']}</a> : null }
-                  {addClassFileInfo ? <a href="#">{addClassFileInfo}</a> : null}
+                  {classInfo['plannerDocName'] ?  <a href="#">{classInfo['plannerDocName']}</a> : "미등록" }
                   </TableCell>
                 </TableRow>
                 <TableRow>
@@ -137,8 +135,7 @@ const ClassInfo = () => {
                     <br />
                   </TableCell>
                   <TableCell colSpan="3" align="left">
-                    <div>
-                    {classInfo['content'] ? classInfo['content'] : ''}
+                    <div id="classInfoContent">
                     </div>
                   </TableCell>
                 </TableRow>

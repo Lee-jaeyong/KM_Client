@@ -26,8 +26,18 @@ import FormGroup from '@material-ui/core/FormGroup';
 import {compareToDate} from '@common/functions/CompareToDate';
 import * as SHOW_MESSAGE_ACTION from '@store/actions/MessageActions';
 import * as ProgressBarActions from '@store/actions/ProgressBarActions';
+import {Redirect} from 'react-router-dom';
 
 import * as axiosDelete from '@axios/delete';
+import * as axiosPut from '@axios/put';
+import * as axiosPost from '@axios/post';
+
+import * as filter from '@common/functions/ConvertNotXssFilter';
+import * as CLASS_ACTION from '@store/actions/ClassActions';
+import * as RedirectActions from '@store/actions/RedirectActions';
+import * as SideBarActions from '@store/actions/SideBarActions';
+
+import CustomConfirmDialog from '@common/component/CustomConfirmDialog';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -55,15 +65,33 @@ const UpdateClass = () => {
   const endDate = useRef();
 
   const classes = useStyles();
+
+  const [dialogState,setDialogState] = useState(false);
+  const [instance,setInstance] = useState();
+  const [checkedMenuResult, setCheckedMenuResult] = useState([]);
+
+  const [inputClassInfo,setInputClassInfo] = useState(useSelector(state=>state['Class']['classInfo']));
+  const selectedMenu = inputClassInfo['selectMenu'].split(",");
+
+  let checkMenu = {};
+  for(let i =0;i<selectedMenu.length;i++)
+  {
+    if(selectedMenu[i] !== '')
+    {
+      checkMenu = {
+        ...checkMenu,
+        [selectedMenu[i]]:true
+      }
+    }
+  }
+
   const [state, setState] = React.useState({
-    checkedA: true,
-    checkedB: false,
-    checkedC: false,
-    checkedD: false,
+    ...checkMenu,
     submitCheck:false
   });
-  const [inputClassInfo,setInputClassInfo] = useState(useSelector(state=>state['Class']['classInfo']));
+
   const [classFileUpload, setClassFileUpload] = useState();
+  const [update_classFileUpload,setUpdate_classFileUpload] = useState();
   const inputChangeHandle = event => {
     const updateClassInfo = {
       ...inputClassInfo,
@@ -71,17 +99,40 @@ const UpdateClass = () => {
     };
     setInputClassInfo(updateClassInfo);
   };
-
   const handleChange = event => {
+    let menuArr = checkedMenuResult;
+    if (event.target.checked) {
+      menuArr.push(event.target.value);
+    } else {
+      menuArr.splice(menuArr.indexOf(event.target.value), 1);
+    }
+    setCheckedMenuResult(menuArr);
     setState({ ...state, [event.target.name]: event.target.checked });
   };
 
   const fileDeleteHandle = () => {
-    axiosDelete.deleteNotContainsData("/uploadFile/"+inputClassInfo['seq']+"/classInfoExcel",getResponse);
+    axiosDelete.deleteNotContainsData("/uploadFile/"+inputClassInfo['seq']+"/classInfoExcel",fileDeleteResult);
+  }
+
+  const fileDeleteResult = (res) => {
+    setClassFileUpload(null);
   }
 
   const getResponse = (res) => {
-    setClassFileUpload(null);
+    dispatch(CLASS_ACTION.save_class(res));
+    if(update_classFileUpload !== null && update_classFileUpload !== undefined){
+      let formData = new FormData();
+      formData.append("file",update_classFileUpload);
+      axiosPost.postFileUpload("/uploadFile/"+res.seq+"/classInfoExcel",getFileResponse,formData);
+    }
+    showMessageBox('수업 등록 완료','',true);
+    dispatch(RedirectActions.isRedirect(true,"/class/"+res.seq));
+    dispatch(SideBarActions.isUpdate(true));
+    window.scrollTo(0,0);
+  }
+
+  const getFileResponse = (res) => {
+    dispatch(CLASS_ACTION.fileUpload_class(res));
   }
 
   const fileUploadHandle = event => {
@@ -90,11 +141,11 @@ const UpdateClass = () => {
     let _fileExt = event.target.value.substring(_lastDot, _fileLen).toLowerCase();
     if(_fileExt !== '.xlsx'){
       event.target.value = "";
-      setClassFileUpload(null);
+      setUpdate_classFileUpload(null);
       dispatch(SHOW_MESSAGE_ACTION.show_message({content:"엑셀 형식만 업로드 가능합니다.",visible:true}));
       return;
     }
-    setClassFileUpload(event.target.files[0]);
+    setUpdate_classFileUpload(event.target.files[0]);
   }
 
   const showMessageBox = (title,level,visible) => {
@@ -125,60 +176,72 @@ const UpdateClass = () => {
       return;
     }
     dispatch(ProgressBarActions.isProgressBar(true));
-    // setTimeout(() => {
-    //   let addClassInfo = {
-    //     ...inputClassInfo
-    //   };
-    //   let classMenuSelect = 'REPORT,';
-    //   for (let i=0;i<checkedMenuResult.length;i++) {
-    //     classMenuSelect += checkedMenuResult[i] + ',';
-    //   }
-    //   addClassInfo = {
-    //     ...inputClassInfo,
-    //     selectMenu: classMenuSelect,
-    //     content:instance.getHtml()
-    //   };
-    //   axiosPost.postContainsData("/professor/class",getResponse,addClassInfo);
-    // }, 1000);
+    setTimeout(() => {
+      let updateClassInfo = {
+        ...inputClassInfo
+      };
+      let classMenuSelect = 'REPORT,';
+      for (let i=0;i<checkedMenuResult.length;i++) {
+        classMenuSelect += checkedMenuResult[i] + ',';
+      }
+      updateClassInfo = {
+        seq : inputClassInfo['seq'],
+        name: inputClassInfo['name'],
+        startDate: inputClassInfo['startDate'],
+        endDate: inputClassInfo['endDate'],
+        type: inputClassInfo['type'],
+        replyPermit_state: inputClassInfo['replyPermit_state'],
+        use_state: inputClassInfo['use_state'],
+        selectMenu: classMenuSelect,
+        content:instance.getHtml()
+      };
+      axiosPut.putContainsData("/professor/class",getResponse,updateClassInfo);
+    }, 1000);
   };
 
   useEffect(()=>{
   },[classFileUpload]);
 
   useEffect(()=>{
-    const instance = new Editor({
-      el: document.querySelector('#editorSection'),
-      initialEditType: 'markdown',
-      height: '300px',
-      toolbarItems: [
-        'heading',
-        'bold',
-        'italic',
-        'strike',
-        'divider',
-        'hr',
-        'divider',
-        'ul',
-        'ol',
-        'table',
-        // Using Option: Customize the last button
-        {
-          type: 'button',
-          options: {
-            el: createButton('last'),
-            name: 'Custom Button 1',
-            tooltip: 'Custom Bold',
-            command: 'Bold'
-          }
-        }
-      ]
-    });
-    instance.setHtml(inputClassInfo['content']);
+    try{
+        setInstance(
+          new Editor({
+            el: document.querySelector('#editorSection'),
+            initialEditType: 'markdown',
+            initialValue: filter.ConvertNotXssFilter(inputClassInfo['content']),
+            height: '300px',
+            content : "fsdfsd",
+            toolbarItems: [
+              'heading',
+              'bold',
+              'italic',
+              'strike',
+              'divider',
+              'hr',
+              'divider',
+              'ul',
+              'ol',
+              'table',
+              // Using Option: Customize the last button
+              {
+                type: 'button',
+                options: {
+                  el: createButton('last'),
+                  name: 'Custom Button 1',
+                  tooltip: 'Custom Bold',
+                  command: 'Bold'
+                }
+              }
+            ]
+          })
+        );
+    }catch{}
     setClassFileUpload(inputClassInfo['plannerDocName'] ? inputClassInfo['plannerDocName'] : null);
   },[]);
 
   return (
     <div className={classes.root}>
+        {JSON.stringify(inputClassInfo) === "{}" ? <Redirect to={"/dashboard"}/> : null} 
         <Grid
           item
           lg={12}
@@ -278,7 +341,7 @@ const UpdateClass = () => {
                   </TableCell>
                   <TableCell colSpan="3" align="left">
                     {classFileUpload ? <div><a href="#">{classFileUpload}</a>&nbsp;&nbsp;
-                    <Button variant="contained" color="primary" style={{minHeight:20}} onClick={()=>fileDeleteHandle()}>
+                    <Button variant="contained" color="primary" style={{minHeight:20}} onClick={()=>setDialogState(true)}>
                       삭 제
                     </Button>
                     </div>
@@ -338,19 +401,48 @@ const UpdateClass = () => {
                   <TableCell colSpan="3" align="left">
                     <FormGroup row>
                       <FormControlLabel
-                        control={<Checkbox checked={state.checkedA} onChange={handleChange} name="checkedA" disabled/>}
+                        control={
+                          <Checkbox
+                            value="REPORT"
+                            checked={state.REPORT}
+                            onChange={handleChange}
+                            name="REPORT"
+                            disabled
+                          />
+                        }
                         label="과 제"
                       />
                       <FormControlLabel
-                        control={<Checkbox checked={state.checkedB} onChange={handleChange} name="checkedB" />}
+                        control={
+                          <Checkbox
+                            value="NOTICE"
+                            checked={state.NOTICE}
+                            onChange={handleChange}
+                            name="NOTICE"
+                          />
+                        }
                         label="공지사항"
                       />
                       <FormControlLabel
-                        control={<Checkbox checked={state.checkedC} onChange={handleChange} name="checkedC" />}
+                        control={
+                          <Checkbox
+                            value="REFERENCE"
+                            checked={state.REFERENCE}
+                            onChange={handleChange}
+                            name="REFERENCE"
+                          />
+                        }
                         label="참고자료"
                       />
                       <FormControlLabel
-                        control={<Checkbox checked={state.checkedD} onChange={handleChange} name="checkedD" />}
+                        control={
+                          <Checkbox
+                            value="QnA"
+                            checked={state.QnA}
+                            onChange={handleChange}
+                            name="QnA"
+                          />
+                        }
                         label="Q/A"
                       />
                     </FormGroup>
@@ -397,6 +489,13 @@ const UpdateClass = () => {
               </TableBody>
             </Table>
           </TableContainer>
+          <CustomConfirmDialog
+            title={"강의 계획서 삭제"}
+            content={"정말 강의 계획서를 삭제하시겠습니까?"}
+            open={dialogState}
+            closeHandle={()=>setDialogState(false)}
+            handleYseClick={fileDeleteHandle}
+          />
         </Grid>
     </div>
   );

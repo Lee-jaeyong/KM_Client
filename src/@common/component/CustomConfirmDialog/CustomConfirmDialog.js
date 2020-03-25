@@ -17,6 +17,11 @@ export default function CustomConfirmDialog(props) {
     setOpen(true);
   };
 
+  const handleYseClick = () =>{
+    props.handleYseClick();
+    props.closeHandle();
+  }
+
   const handleClose = () => {
     setOpen(false);
     props.closeHandle();
@@ -38,7 +43,7 @@ export default function CustomConfirmDialog(props) {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button autoFocus onClick={handleClose} color="primary">
+          <Button autoFocus onClick={handleYseClick} color="primary">
             예
           </Button>
           <Button onClick={handleClose} color="primary">

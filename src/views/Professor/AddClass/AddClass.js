@@ -61,10 +61,10 @@ const AddClass = () => {
 
   const classes = useStyles();
   const [state, setState] = React.useState({
-    checkedA: true,
-    checkedB: false,
-    checkedC: false,
-    checkedD: false,
+    REPORT: true,
+    NOTICE: false,
+    REFERENCE: false,
+    QnA: false,
     submitCheck: false
   });
 
@@ -384,9 +384,9 @@ const AddClass = () => {
                       control={
                         <Checkbox
                           value="REPORT"
-                          checked={state.checkedA}
+                          checked={state.REPORT}
                           onChange={handleChange}
-                          name="checkedA"
+                          name="REPORT"
                           disabled
                         />
                       }
@@ -396,9 +396,9 @@ const AddClass = () => {
                       control={
                         <Checkbox
                           value="NOTICE"
-                          checked={state.checkedB}
+                          checked={state.NOTICE}
                           onChange={handleChange}
-                          name="checkedB"
+                          name="NOTICE"
                         />
                       }
                       label="공지사항"
@@ -407,9 +407,9 @@ const AddClass = () => {
                       control={
                         <Checkbox
                           value="REFERENCE"
-                          checked={state.checkedC}
+                          checked={state.REFERENCE}
                           onChange={handleChange}
-                          name="checkedC"
+                          name="REFERENCE"
                         />
                       }
                       label="참고자료"
@@ -418,9 +418,9 @@ const AddClass = () => {
                       control={
                         <Checkbox
                           value="QnA"
-                          checked={state.checkedD}
+                          checked={state.QnA}
                           onChange={handleChange}
-                          name="checkedD"
+                          name="QnA"
                         />
                       }
                       label="Q/A"

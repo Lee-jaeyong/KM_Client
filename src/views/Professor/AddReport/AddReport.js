@@ -26,7 +26,6 @@ import {compareToDate} from '@common/functions/CompareToDate';
 import * as SHOW_MESSAGE_ACTION from '@store/actions/MessageActions';
 import * as REPORT_ACTION from '@store/actions/ReportActions';
 import * as RedirectActions from '@store/actions/RedirectActions';
-import * as SideBarActions from '@store/actions/SideBarActions';
 
 import * as axiosPost from '@axios/post';
 
@@ -88,13 +87,13 @@ const AddReport = () => {
   }
 
   const imgFileChangeHandle = event => {
-    let _reportImg = new Array();
+    let _reportImg = reportImg;
     _reportImg.push(event.target.files[0]);
     setReportImg(_reportImg);
   }
 
   const fileChangeHandle = event => {
-    let _reportFile = new Array();
+    let _reportFile = reportFile;
     _reportFile.push(event.target.files[0]);
     setReportFile(_reportFile);
   }
@@ -142,7 +141,6 @@ const AddReport = () => {
     }
     showMessageBox('과제 등록 완료','',true);
     dispatch(RedirectActions.isRedirect(true,"/class/report/"+res.seq));
-    dispatch(SideBarActions.isUpdate(true));
     window.scrollTo(0,0);
   }
 
@@ -289,7 +287,7 @@ const AddReport = () => {
                 <TableRow>
                   <TableCell align="center"><h2>마감 이후 제출 가능 여부</h2></TableCell>
                   <TableCell colSpan="3" align="left">
-                    <RadioGroup row aria-label="position" value={reportInfo['submitOverDue_state']}
+                    <RadioGroup row aria-label="position" name="submitOverDue_state" value={reportInfo['submitOverDue_state']}
                     onChange={event => inputChangeHandle(event)}>
                       <FormControlLabel
                         value="YSE"
@@ -313,7 +311,7 @@ const AddReport = () => {
                 <TableRow>
                   <TableCell align="center"><h2>학생 제출 과제 공개 상태</h2></TableCell>
                   <TableCell colSpan="3" align="left">
-                    <RadioGroup row aria-label="position" value={reportInfo['showOtherReportOfStu_state']}
+                    <RadioGroup row aria-label="position" name="showOtherReportOfStu_state" value={reportInfo['showOtherReportOfStu_state']}
                     onChange={event => inputChangeHandle(event)}>
                       <FormControlLabel
                         value="YSE"

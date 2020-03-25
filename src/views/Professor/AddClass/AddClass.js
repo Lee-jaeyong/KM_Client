@@ -179,8 +179,8 @@ const AddClass = () => {
     setInstance(
       new Editor({
         el: document.querySelector('#editorSection'),
-        initialEditType: 'markdown',
-        height: '300px',
+        initialEditType: 'wysiwyg',
+        height: '1000px',
         toolbarItems: [
           'heading',
           'bold',

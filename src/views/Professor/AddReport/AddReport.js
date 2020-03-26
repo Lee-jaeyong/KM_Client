@@ -16,6 +16,8 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import Checkbox from '@material-ui/core/Checkbox';
+import Fab from '@material-ui/core/Fab';
+import NavigationIcon from '@material-ui/icons/Navigation';
 
 import Editor from 'tui-editor'; /* ES6 */
 import 'tui-editor/dist/tui-editor.css'; // editor's ui
@@ -35,7 +37,13 @@ const useStyles = makeStyles(theme => ({
   },
   requireFont : {
     color:'red'
-  }
+  },
+  margin: {
+    margin: theme.spacing(1),
+  },
+  extendedIcon: {
+    marginRight: theme.spacing(1),
+  },
 }));
 
 function createButton(iconClassName) {
@@ -51,12 +59,17 @@ const AddReport = () => {
   const name = useRef();
   const startDate = useRef();
   const endDate = useRef();
+  const imgInput = useRef();
+  const fileInput = useRef();
 
   const dispatch = useDispatch();
   const classes = useStyles();
   const [submitCheck, setSubmitCheck] = useState(false);
   const [instance,setInstance] = useState();
   const selectClass = useSelector(state=>state['SelectUtil']['selectClass']);
+  
+  const [nowSaveImg, setNowSaveImg] = useState('');
+  const [nowSaveFile, setNowSaveFile] = useState('');
 
   const [reportImg,setReportImg] = useState([]);
   const [reportFile,setReportFile] = useState([]);
@@ -87,14 +100,39 @@ const AddReport = () => {
   }
 
   const imgFileChangeHandle = event => {
+    let _fileLen = event.target.value.length;
+    let _lastDot = event.target.value.lastIndexOf('.');
+    let _fileExt = event.target.value.substring(_lastDot, _fileLen).toLowerCase();
+    if(_fileExt !== '.jpg' && _fileExt !== '.png' && _fileExt !== '.jpeg'){
+      event.target.value = '';
+      setNowSaveImg('');
+      dispatch(SHOW_MESSAGE_ACTION.show_message({content:"이미지 형식(jpg,jpeg,png)만 업로드 가능합니다.",visible:true}));
+      return;
+    }
     let _reportImg = reportImg;
     _reportImg.push(event.target.files[0]);
     setReportImg(_reportImg);
-  }
+    setNowSaveImg(event.target.value);
+  } 
 
   const fileChangeHandle = event => {
     let _reportFile = reportFile;
     _reportFile.push(event.target.files[0]);
+    setReportFile(_reportFile);
+    setNowSaveFile(event.target.value);
+  }
+
+  const deleteImg = name => {
+    let _reportImg = reportImg.filter((img)=>img['name'] !== name);
+    imgInput.current.value="";
+    setNowSaveImg('');
+    setReportImg(_reportImg);
+  }
+
+  const deleteFile = name => {
+    let _reportFile = reportFile.filter((file)=>file['name'] !== name);
+    fileInput.current.value="";
+    setNowSaveFile('');
     setReportFile(_reportFile);
   }
 
@@ -121,7 +159,6 @@ const AddReport = () => {
       ...reportInfo,
       content : instance.getHtml()
     }
-    console.log(addReportInfo);
     axiosPost.postContainsData("/report/"+selectClass['classIdx'],getResponse,addReportInfo);
   }
 
@@ -151,6 +188,9 @@ const AddReport = () => {
   const getFileResponse = (res) => {
     dispatch(REPORT_ACTION.fileUpload_report_FILE(res));
   }
+
+  useEffect(()=>{
+  },[nowSaveFile,nowSaveImg]);
 
   useEffect(()=>{
     setInstance(new Editor({
@@ -276,13 +316,53 @@ const AddReport = () => {
                   <TableCell align="center"><h2>참고 이미지 등록</h2><br/>
                   </TableCell>
                   <TableCell colSpan="3" align="left">
-                    <input type="file" onChange={event=>imgFileChangeHandle(event)}/>
+                    <input type="file" ref={imgInput} onChange={event=>imgFileChangeHandle(event)}/>
+                    {
+                      reportImg.map((img,idx)=>{
+                        return (
+                          <div>
+                            <Fab
+                              variant="extended"
+                              size="medium"
+                              color="primary"
+                              aria-label="add"
+                              className={classes.margin}
+                              onClick={()=>deleteImg(img['name'])}
+                            >
+                              <NavigationIcon className={classes.extendedIcon} />
+                              {img['name']}
+                            </Fab>
+                          </div>
+                        )
+                      })
+                    }
                   </TableCell>
                 </TableRow>
                 <TableRow>
                   <TableCell align="center"><h2>참고 파일 등록</h2><br/>
                   </TableCell>
-                  <TableCell colSpan="3" align="left"><input type="file" onChange={event=>fileChangeHandle(event)}/></TableCell>
+                  <TableCell colSpan="3" align="left">
+                    <input type="file" ref={fileInput} onChange={event=>fileChangeHandle(event)}/>
+                    {
+                      reportFile.map((file,idx)=>{
+                        return (
+                          <div>
+                            <Fab
+                              variant="extended"
+                              size="medium"
+                              color="primary"
+                              aria-label="add"
+                              className={classes.margin}
+                              onClick={()=>deleteFile(file['name'])}
+                            >
+                              <NavigationIcon className={classes.extendedIcon} />
+                              {file['name']}
+                            </Fab>
+                          </div>
+                        )
+                      })
+                    }
+                  </TableCell>
                 </TableRow>
                 <TableRow>
                   <TableCell align="center"><h2>마감 이후 제출 가능 여부</h2></TableCell>

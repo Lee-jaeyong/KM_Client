@@ -72,21 +72,29 @@ const ExpansionPanelDetails = withStyles(theme => ({
 }))(MuiExpansionPanelDetails);
 
 export default function CustomizedExpansionPanels(props) {
-  const {className,page,...rest} = props;
-   
-  const [openPanelState,setOpenPanelState] = useState(false);
-  const [chageColorState,setChangeColorState] = useState(false);
-  const selectClassIdx = useSelector(state=>state['SelectUtil']['selectClass']['classIdx']);
+  const { className, page, ...rest } = props;
+
+  const [openPanelState, setOpenPanelState] = useState(false);
+  const [chageColorState, setChangeColorState] = useState(false);
+  const selectClassIdx = useSelector(
+    state => state['SelectUtil']['selectClass']['classIdx']
+  );
 
   const dispatch = useDispatch();
 
-  const selectClassHandleChange = (className) => {
-    window.scrollTo(0,0);
-    if(selectClassIdx !== page['classIdx'])
-    {
+  const selectClassHandleChange = className => {
+    window.scrollTo(0, 0);
+    if (selectClassIdx !== page['classIdx']) {
       dispatch(ProgressBarActions.isProgressBar(true));
-      dispatch(RedirectActions.isRedirect(true,"/class/"+page['classIdx']));
-      dispatch(SelectActions.selectClass(page['classIdx'],className));
+      dispatch(
+        RedirectActions.isRedirect(
+          true,
+          rest['student']
+            ? '/stu/class/' + page['classIdx']
+            : '/class/' + page['classIdx']
+        )
+      );
+      dispatch(SelectActions.selectClass(page['classIdx'], className));
     }
     setOpenPanelState(!openPanelState);
   };
@@ -96,13 +104,18 @@ export default function CustomizedExpansionPanels(props) {
     dispatch(SelectActions.selectClass(-1));
   };
 
-  return (
-    rest['dropDown'] ? (
-    <div onMouseOver={()=>setChangeColorState(true)} onMouseLeave={()=>setChangeColorState(false)}>
-      {chageColorState ? 
-      (
-        <ExpansionPanel square expanded={openPanelState} onChange={()=>selectClassHandleChange(className)}>
-            <ExpansionPanelSummary_color_Gray aria-controls="panel1d-content">
+  return rest['dropDown'] ? (
+    <div
+      onMouseLeave={() => setChangeColorState(false)}
+      onMouseOver={() => setChangeColorState(true)}
+    >
+      {chageColorState ? (
+        <ExpansionPanel
+          expanded={openPanelState}
+          onChange={() => selectClassHandleChange(className)}
+          square
+        >
+          <ExpansionPanelSummary_color_Gray aria-controls="panel1d-content">
             <Typography>
               <table>
                 <tr>
@@ -119,18 +132,18 @@ export default function CustomizedExpansionPanels(props) {
                 </tr>
               </table>
             </Typography>
-            </ExpansionPanelSummary_color_Gray>
-            <ExpansionPanelDetails style={{marginLeft:0}}>
-                <Typography>
-                {page['pageList'].map((pageInfo,idx)=>
-                    <Link to={pageInfo['href']}>
-                        <ExpansionPanelList onClick={()=>window.scrollTo(0,0)}>
-                            <Typography>- {pageInfo.pageName}</Typography>
-                        </ExpansionPanelList>
-                    </Link>
-                )}
-                </Typography>
-            </ExpansionPanelDetails>
+          </ExpansionPanelSummary_color_Gray>
+          <ExpansionPanelDetails style={{ marginLeft: 0 }}>
+            <Typography>
+              {page['pageList'].map((pageInfo, idx) => (
+                <Link to={pageInfo['href']}>
+                  <ExpansionPanelList onClick={() => window.scrollTo(0, 0)}>
+                    <Typography>- {pageInfo.pageName}</Typography>
+                  </ExpansionPanelList>
+                </Link>
+              ))}
+            </Typography>
+          </ExpansionPanelDetails>
         </ExpansionPanel>
       ) : (
         <ExpansionPanel
@@ -155,18 +168,18 @@ export default function CustomizedExpansionPanels(props) {
                 </tr>
               </table>
             </Typography>
-            </ExpansionPanelSummary_color_White>
-            <ExpansionPanelDetails style={{marginLeft:0}}>
-                <Typography>
-                {page['pageList'].map((pageInfo,idx)=>
-                    <Link to={pageInfo['href']}>
-                        <ExpansionPanelList>
-                            <Typography>- {pageInfo.pageName}</Typography>
-                        </ExpansionPanelList>
-                    </Link>
-                )}
-                </Typography>
-            </ExpansionPanelDetails>
+          </ExpansionPanelSummary_color_White>
+          <ExpansionPanelDetails style={{ marginLeft: 0 }}>
+            <Typography>
+              {page['pageList'].map((pageInfo, idx) => (
+                <Link to={pageInfo['href']}>
+                  <ExpansionPanelList>
+                    <Typography>- {pageInfo.pageName}</Typography>
+                  </ExpansionPanelList>
+                </Link>
+              ))}
+            </Typography>
+          </ExpansionPanelDetails>
         </ExpansionPanel>
       )}
     </div>
@@ -181,5 +194,5 @@ export default function CustomizedExpansionPanels(props) {
         </ExpansionPanelSummary_color_Gray>
       </Link>
     </ExpansionPanel>
-  ));
+  );
 }

@@ -28,6 +28,7 @@ import {compareToDate} from '@common/functions/CompareToDate';
 import * as SHOW_MESSAGE_ACTION from '@store/actions/MessageActions';
 import * as REPORT_ACTION from '@store/actions/ReportActions';
 import * as RedirectActions from '@store/actions/RedirectActions';
+import * as ProgressBarActions from '@store/actions/ProgressBarActions';
 
 import * as axiosPost from '@axios/post';
 
@@ -159,6 +160,7 @@ const AddReport = () => {
       ...reportInfo,
       content : instance.getHtml()
     }
+    dispatch(ProgressBarActions.isProgressBar(true));
     axiosPost.postContainsData("/report/"+selectClass['classIdx'],getResponse,addReportInfo);
   }
 
@@ -195,7 +197,7 @@ const AddReport = () => {
   useEffect(()=>{
     setInstance(new Editor({
       el: document.querySelector('#editorSection'),
-      initialEditType: 'markdown',
+      initialEditType: 'wysiwyg',
       height: '300px',
       toolbarItems: [
         'heading',

@@ -49,7 +49,7 @@ function getJSONKeyList(jsonData){
 }
 
 const CustomTable = props => {
-  const { exclude,tableDataList, tableHeaderList, ...rest } = props;
+  const { tableDataCount,searchSeq,exclude,tableDataList, tableHeaderList, ...rest } = props;
   //const [tableHeader,setTableHeader] = useState(["과제 번호","과제 코드","과제명","과제 시작일","과제 종료일","조회수"]);
   // const [tableData,setTableData] = useState([
   //   {reportIdx:"23" , reportCode:"C3523",reportTitle:"C언어-별짓기",reportStartDate:"2020-03-20",reportEndDate:"2020-07-17",reportHit:"343"},
@@ -72,7 +72,6 @@ const CustomTable = props => {
 
   const classes = useStyles();
 
-  const [selectedUsers, setSelectedUsers] = useState([]);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [page, setPage] = useState(0);
 
@@ -105,44 +104,14 @@ const CustomTable = props => {
     );
   }
 
-  const handleSelectAll = event => {
-    const { users } = props;
-
-    let selectedUsers;
-
-    if (event.target.checked) {
-      selectedUsers = users.map(user => user.id);
-    } else {
-      selectedUsers = [];
-    }
-
-    setSelectedUsers(selectedUsers);
-  };
-
-  const handleSelectOne = (event, id) => {
-    const selectedIndex = selectedUsers.indexOf(id);
-    let newSelectedUsers = [];
-
-    if (selectedIndex === -1) {
-      newSelectedUsers = newSelectedUsers.concat(selectedUsers, id);
-    } else if (selectedIndex === 0) {
-      newSelectedUsers = newSelectedUsers.concat(selectedUsers.slice(1));
-    } else if (selectedIndex === selectedUsers.length - 1) {
-      newSelectedUsers = newSelectedUsers.concat(selectedUsers.slice(0, -1));
-    } else if (selectedIndex > 0) {
-      newSelectedUsers = newSelectedUsers.concat(
-        selectedUsers.slice(0, selectedIndex),
-        selectedUsers.slice(selectedIndex + 1)
-      );
-    }
-    setSelectedUsers(newSelectedUsers);
-  };
-
   const handlePageChange = (event, page) => {
+    props.requestData(searchSeq,page,rowsPerPage);
     setPage(page);
   };
 
   const handleRowsPerPageChange = event => {
+    props.requestData(searchSeq,0,event.target.value);
+    setPage(0);
     setRowsPerPage(event.target.value);
   };
 
@@ -151,6 +120,7 @@ const CustomTable = props => {
       setTableData(tableDataList);
       setJsonDataKeyList(getJSONKeyList(tableDataList));
     }
+    console.log(tableDataList);
   },[tableDataList]);
 
   return (
@@ -180,7 +150,7 @@ const CustomTable = props => {
       <CardActions className={classes.actions}>
         <TablePagination
           component="div"
-          count={tableData.length}
+          count={tableDataCount}
           onChangePage={handlePageChange}
           onChangeRowsPerPage={handleRowsPerPageChange}
           page={page}

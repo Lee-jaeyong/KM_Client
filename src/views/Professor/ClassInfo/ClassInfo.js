@@ -18,6 +18,7 @@ import CustomConfirmDialog from '@common/component/CustomConfirmDialog';
 import * as RedirectActions from '@store/actions/RedirectActions';
 
 import * as CLASS_ACTION from '@store/actions/ClassActions';
+import * as ProgressBarActions from '@store/actions/ProgressBarActions';
 
 import * as filter from '@common/functions/ConvertNotXssFilter';
 
@@ -41,8 +42,9 @@ const ClassInfo = () => {
   const dispatch = useDispatch();
 
   const [tableDataList,setTableDataList] = useState();
+  const [tableDataCount,setTableDataCount] = useState();
   const [tableDataHeader,setTableDataHeader] = useState(
-    ["과제 번호","과제명","과제 시작일","과제 종료일","내 용","조회수","마감 이후 제출 여부","제출 과제 관람 여부"]
+    ["과제 번호","과제명","과제 시작일","과제 종료일","조회수","마감 이후 제출 여부","제출 과제 관람 여부"]
   );
 
   const redirectPage_updateClass = () => {
@@ -51,21 +53,22 @@ const ClassInfo = () => {
   }
 
   const rowClickHandle = (idx) => {
+    dispatch(ProgressBarActions.isProgressBar(true));
     dispatch(RedirectActions.isRedirect(true,"/class/report/"+idx));
   }
 
-  const requestData = (idx) => {
+  const requestData = (idx,page,size) => {
     axiosGet.getNotContainsData("/professor/class/"+idx,getResponse);
     let data = {
-      page : 0,
-      size : 10
+      page : page,
+      size : size
     }
     axiosGet.getContainsData("/report/"+idx+"/list",reportListResponse,data);
   }
 
   const reportListResponse = (res) => {
-    console.log(res);
-    setTableDataList(res);
+    setTableDataList(res['list']);
+    setTableDataCount(res['totalCount']);
   }
 
   const getResponse = (res) => {
@@ -78,7 +81,7 @@ const ClassInfo = () => {
 
   useEffect(()=>{
     if(selectClassIdx !== -1){
-      requestData(selectClassIdx);
+      requestData(selectClassIdx,0,10);
     }
   },[selectClassIdx]);
 
@@ -187,7 +190,10 @@ const ClassInfo = () => {
               rowClickHandle={rowClickHandle}
               tableHeaderList={tableDataHeader}
               tableDataList={tableDataList}
-              exclude={['classIdx','links']}
+              tableDataCount={tableDataCount}
+              searchSeq={selectClassIdx}
+              exclude={['classIdx','links','fileList','imgList','content']}
+              requestData={requestData}
             />
           </TableContainer>
         </Grid>

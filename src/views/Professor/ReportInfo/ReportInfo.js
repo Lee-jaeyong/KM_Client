@@ -15,7 +15,11 @@ import {useSelector, useDispatch} from 'react-redux';
 import CustomTable from '@common/component/CustomTable';
 import CustomConfirmDialog from '@common/component/CustomConfirmDialog';
 import * as RedirectActions from '@store/actions/RedirectActions';
+import * as REPORT_ACTION from '@store/actions/ReportActions';
+
 import * as filter from '@common/functions/ConvertNotXssFilter';
+
+import * as axiosGet from '@axios/get';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -43,17 +47,36 @@ const ReportInfo = (props) => {
     submitOverDue_state : selectReport['submitOverDue_state'],
     showOtherReportOfStu_state : selectReport['showOtherReportOfStu_state'],
   }
-  : null);
+  : {
+    classIdx : '',
+    seq : '',
+    name : '',
+    startDate : '',
+    endDate : '',
+    content : '',
+    hit : '',
+    submitOverDue_state : '',
+    showOtherReportOfStu_state : '',
+  });
 
   const dispatch = useDispatch();
 
   const redirectPage_updateClass = () => {
     dispatch(RedirectActions.isRedirect(true,"/class/"+props.match.params.idx+"/report/update"));
   }
+  
+  const reportInfoResponse = (res) => {
+    dispatch(REPORT_ACTION.save_report(res));
+    setReportInfo(res);
+  }
+
+  useEffect(()=>{
+    axiosGet.getNotContainsData("/report/"+props.match.params.idx,reportInfoResponse);
+  },[]);
 
   useEffect(()=>{
     document.getElementById("reportInfoContent").innerHTML = filter.ConvertNotXssFilter(reportInfo['content']);
-  },[]);
+  },[reportInfo]);
 
   return (
     <div className={classes.root}>

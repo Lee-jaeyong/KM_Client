@@ -27,9 +27,16 @@ import 'highlight.js/styles/github.css'; // code block highlight
 import CustomConfirmDialog from '@common/component/CustomConfirmDialog';
 import {compareToDate} from '@common/functions/CompareToDate';
 import * as SHOW_MESSAGE_ACTION from '@store/actions/MessageActions';
+import * as ProgressBarActions from '@store/actions/ProgressBarActions';
+import * as REPORT_ACTION from '@store/actions/ReportActions';
+import * as RedirectActions from '@store/actions/RedirectActions';
+
 import * as filter from '@common/functions/ConvertNotXssFilter';
 
 import * as axiosDelete from '@axios/delete';
+import * as axiosGet from '@axios/get';
+import * as axiosPost from '@axios/post';
+import * as axiosPut from '@axios/put';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -50,6 +57,7 @@ function createButton(iconClassName) {
 }
 
 const UpdateReport = () => {
+  const name = useRef();
   const startDate = useRef();
   const endDate = useRef();
   const imgInput = useRef();
@@ -93,13 +101,57 @@ const UpdateReport = () => {
   }
 
   const fileDeleteHandle = () => {
-    //axiosDelete.deleteNotContainsData("/uploadFile/"+inputClassInfo['seq']+"/classInfoExcel",fileDeleteResult);
+    let fileName = nowDeleteFile.substring(0,nowDeleteFile.indexOf('.'));
+    let fileForm = nowDeleteFile.substring(fileName.length+1,nowDeleteFile.length);
+    axiosDelete.deleteNotContainsData("/uploadFile/"+reportInfo['seq']+"/reportRelatedFiles/"+fileName+"/"+fileForm,fileDeleteResult);
+  }
+
+  const fileDeleteResult = (res) => {
+    axiosGet.getNotContainsData("/report/"+reportInfo['seq']+"/fileList",fileGetResult);
+  }
+
+  const fileGetResult = (res) => {
+    let _imgList = [];
+    let _fileList = [];
+    for(let i =0;i<res.length;i++){
+      if(res[i]['type'] === 'FILE')
+        _fileList.push(res[i]['fileName']);
+      else
+        _imgList.push(res[i]['fileName']);
+    }
+    setImgList(_imgList);
+    setFileList(_fileList);
   }
 
   const openDialog = (fileOrImg,type) => {
     setDialogState(true);
     setNowDeleteFile(fileOrImg);
     setDialogState_type(type);
+  }
+
+  const imgFileUpload = event => {
+    let _fileLen = event.target.value.length;
+    let _lastDot = event.target.value.lastIndexOf('.');
+    let _fileExt = event.target.value.substring(_lastDot, _fileLen).toLowerCase();
+    if(_fileExt !== '.jpg' && _fileExt !== '.jpeg' && _fileExt !== '.png'){
+      dispatch(SHOW_MESSAGE_ACTION.show_message({content:"이미지 형식만 업로드 가능합니다.",visible:true}));
+      return;
+    }
+    let formData = new FormData();
+    formData.append("file",event.target.files[0]);
+    axiosPost.postFileUpload("/uploadFile/"+reportInfo['seq']+"/reportRelatedFiles/"+event.target.name,getFileListAfterUpload,formData);
+    event.target.value = "";
+  }
+
+  const fileUpload = event => {
+    let formData = new FormData();
+    formData.append("file",event.target.files[0]);
+    axiosPost.postFileUpload("/uploadFile/"+reportInfo['seq']+"/reportRelatedFiles/"+event.target.name,getFileListAfterUpload,formData);
+    event.target.value = "";
+  }
+
+  const getFileListAfterUpload = (res) => {
+    axiosGet.getNotContainsData("/report/"+reportInfo['seq']+"/fileList",fileGetResult);
   }
 
   const deleteImg = name => {
@@ -114,6 +166,45 @@ const UpdateReport = () => {
     fileInput.current.value="";
     setNowSaveFile('');
     setImgList(_reportFile);
+  }
+
+  const updateReportSubmit = event => {
+    event.preventDefault();
+    if(name.current.value === ''){
+      showMessageBox('과제명을 입력해주세요.','',true);
+      name.current.focus();
+      return;
+    }else if(startDate.current.value === ''){
+      showMessageBox('과제 시작일을 선택해주세요.','',true);
+      startDate.current.focus();
+      return;
+    }else if(endDate.current.value === ''){
+      showMessageBox('과제 마감일을 선택해주세요.','',true);
+      endDate.current.focus();
+      return;
+    }else if(!submitCheck){
+      showMessageBox('동의란을 체크해주세요.','',true);
+      return;
+    }
+    dispatch(ProgressBarActions.isProgressBar(true));
+    setTimeout(() => {
+      let updateReportInfo = {
+        name:reportInfo['name'],
+        startDate:reportInfo['startDate'],
+        endDate:reportInfo['endDate'],
+        submitOverDue_state:reportInfo['submitOverDue_state'],
+        showOtherReportOfStu_state:reportInfo['showOtherReportOfStu_state'],
+        content : instance.getHtml()
+      }
+      axiosPut.putContainsData("/report/"+reportInfo['seq'],getResponse,updateReportInfo);
+    },1000);
+  }
+
+  const getResponse = (res) => {
+    dispatch(REPORT_ACTION.save_report(res));
+    showMessageBox('과제 수정 완료','',true);
+    dispatch(RedirectActions.isRedirect(true,"/class/report/"+reportInfo['seq']));
+    window.scrollTo(0,0);
   }
 
   const showMessageBox = (title,level,visible) => {
@@ -178,7 +269,7 @@ const UpdateReport = () => {
               <TableBody>
                 <TableRow>
                   <TableCell align="center"><h2>과제명</h2><span className={classes.requireFont}>*필수 입력 값입니다</span></TableCell>
-                  <TableCell colSpan="3" align="left"><TextField fullWidth variant="outlined" name="name" value={reportInfo['name']} onChange={(event)=>inputHandleChange(event)}/></TableCell>
+                  <TableCell colSpan="3" align="left"><TextField inputRef={name} fullWidth variant="outlined" name="name" value={reportInfo['name']} onChange={(event)=>inputHandleChange(event)}/></TableCell>
                 </TableRow>
                 <TableRow>
                   <TableCell align="center"><h2>과제 시작일</h2><span className={classes.requireFont}>*필수 입력 값입니다</span></TableCell>
@@ -237,7 +328,7 @@ const UpdateReport = () => {
                 <TableRow>
                   <TableCell align="center"><h2>참고 이미지 등록</h2><br/>
                   </TableCell>
-                  <TableCell colSpan="3" align="left"><input ref={imgInput} type="file"/>
+                  <TableCell colSpan="3" align="left"><input ref={imgInput} type="file" name="img" onChange={(event)=>imgFileUpload(event)}/>
                       {imgList ? imgList.map((img,idx)=>{
                         return (
                           img !== '' ?
@@ -263,7 +354,7 @@ const UpdateReport = () => {
                 <TableRow>
                   <TableCell align="center"><h2>참고 파일 등록</h2><br/>
                   </TableCell>
-                  <TableCell colSpan="3" align="left"><input ref={fileInput} type="file"/><br/>
+                  <TableCell colSpan="3" align="left"><input ref={fileInput} type="file" name="file" onChange={(event)=>fileUpload(event)}/><br/>
                   {fileList ? fileList.map((file,idx)=>{
                         return (
                           file !== '' ? 
@@ -336,7 +427,7 @@ const UpdateReport = () => {
                 </TableRow>
                 <TableRow>
                   <TableCell colSpan="4" align="right">
-                    <Button variant="contained" color="primary" fullWidth style={{minHeight:70}}>
+                    <Button variant="contained" color="primary" fullWidth style={{minHeight:70}} onClick={(event)=>updateReportSubmit(event)}>
                       과제 수정
                     </Button>
                   </TableCell>

@@ -39,6 +39,12 @@ const ClassInfo = () => {
   const [classInfo,setClassInfo] = useState({});
   const addClassInfo = useSelector(state=>state['Class']['classInfo']);
   const dispatch = useDispatch();
+
+  const [tableDataList,setTableDataList] = useState();
+  const [tableDataHeader,setTableDataHeader] = useState(
+    ["과제 번호","과제명","과제 시작일","과제 종료일","내 용","조회수","마감 이후 제출 여부","제출 과제 관람 여부"]
+  );
+
   const redirectPage_updateClass = () => {
     dispatch(CLASS_ACTION.save_class(classInfo));
     dispatch(RedirectActions.isRedirect(true,"/class/"+selectClassIdx+"/update"));
@@ -50,11 +56,24 @@ const ClassInfo = () => {
 
   const requestData = (idx) => {
     axiosGet.getNotContainsData("/professor/class/"+idx,getResponse);
+    let data = {
+      page : 0,
+      size : 10
+    }
+    axiosGet.getContainsData("/report/"+idx+"/list",reportListResponse,data);
+  }
+
+  const reportListResponse = (res) => {
+    console.log(res);
+    setTableDataList(res);
   }
 
   const getResponse = (res) => {
     setClassInfo(res);
-    document.getElementById("classInfoContent").innerHTML = filter.ConvertNotXssFilter(res['content']);
+    try{
+      document.getElementById("classInfoContent").innerHTML = filter.ConvertNotXssFilter(res['content']);
+    }catch{
+    }
   }
 
   useEffect(()=>{
@@ -164,7 +183,12 @@ const ClassInfo = () => {
       <br/>
       <Grid item lg={12} md={12} xl={12} xs={12}>
           <TableContainer component={Paper}>
-            <CustomTable rowClickHandle={rowClickHandle}/>
+            <CustomTable
+              rowClickHandle={rowClickHandle}
+              tableHeaderList={tableDataHeader}
+              tableDataList={tableDataList}
+              exclude={['classIdx','links']}
+            />
           </TableContainer>
         </Grid>
     </div>

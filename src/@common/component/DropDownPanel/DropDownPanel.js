@@ -80,6 +80,10 @@ export default function CustomizedExpansionPanels(props) {
 
   const dispatch = useDispatch();
 
+  const selectClassMenu = (className) => {
+    dispatch(SelectActions.selectClass(page['classIdx'],className));
+  }
+
   const selectClassHandleChange = (className) => {
     window.scrollTo(0,0);
     if(selectClassIdx !== page['classIdx'])
@@ -123,7 +127,7 @@ export default function CustomizedExpansionPanels(props) {
             <ExpansionPanelDetails style={{marginLeft:0}}>
                 <Typography>
                 {page['pageList'].map((pageInfo,idx)=>
-                    <Link to={pageInfo['href']}>
+                    <Link onClick={()=>selectClassMenu(className)} to={pageInfo['href']}>
                         <ExpansionPanelList onClick={()=>window.scrollTo(0,0)}>
                             <Typography>- {pageInfo.pageName}</Typography>
                         </ExpansionPanelList>

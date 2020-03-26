@@ -18,6 +18,7 @@ import CustomConfirmDialog from '@common/component/CustomConfirmDialog';
 import * as RedirectActions from '@store/actions/RedirectActions';
 
 import * as CLASS_ACTION from '@store/actions/ClassActions';
+import * as ProgressBarActions from '@store/actions/ProgressBarActions';
 
 import * as filter from '@common/functions/ConvertNotXssFilter';
 
@@ -39,27 +40,48 @@ const ClassInfo = () => {
   const [classInfo,setClassInfo] = useState({});
   const addClassInfo = useSelector(state=>state['Class']['classInfo']);
   const dispatch = useDispatch();
+
+  const [tableDataList,setTableDataList] = useState();
+  const [tableDataCount,setTableDataCount] = useState();
+  const [tableDataHeader,setTableDataHeader] = useState(
+    ["과제 번호","과제명","과제 시작일","과제 종료일","조회수","마감 이후 제출 여부","제출 과제 관람 여부"]
+  );
+
   const redirectPage_updateClass = () => {
     dispatch(CLASS_ACTION.save_class(classInfo));
     dispatch(RedirectActions.isRedirect(true,"/class/"+selectClassIdx+"/update"));
   }
 
   const rowClickHandle = (idx) => {
+    dispatch(ProgressBarActions.isProgressBar(true));
     dispatch(RedirectActions.isRedirect(true,"/class/report/"+idx));
   }
 
-  const requestData = (idx) => {
+  const requestData = (idx,page,size) => {
     axiosGet.getNotContainsData("/professor/class/"+idx,getResponse);
+    let data = {
+      page : page,
+      size : size
+    }
+    axiosGet.getContainsData("/report/"+idx+"/list",reportListResponse,data);
+  }
+
+  const reportListResponse = (res) => {
+    setTableDataList(res['list']);
+    setTableDataCount(res['totalCount']);
   }
 
   const getResponse = (res) => {
     setClassInfo(res);
-    document.getElementById("classInfoContent").innerHTML = filter.ConvertNotXssFilter(res['content']);
+    try{
+      document.getElementById("classInfoContent").innerHTML = filter.ConvertNotXssFilter(res['content']);
+    }catch{
+    }
   }
 
   useEffect(()=>{
     if(selectClassIdx !== -1){
-      requestData(selectClassIdx);
+      requestData(selectClassIdx,0,10);
     }
   },[selectClassIdx]);
 
@@ -164,7 +186,15 @@ const ClassInfo = () => {
       <br/>
       <Grid item lg={12} md={12} xl={12} xs={12}>
           <TableContainer component={Paper}>
-            <CustomTable rowClickHandle={rowClickHandle}/>
+            <CustomTable
+              rowClickHandle={rowClickHandle}
+              tableHeaderList={tableDataHeader}
+              tableDataList={tableDataList}
+              tableDataCount={tableDataCount}
+              searchSeq={selectClassIdx}
+              exclude={['classIdx','links','fileList','imgList','content']}
+              requestData={requestData}
+            />
           </TableContainer>
         </Grid>
     </div>

@@ -7,6 +7,9 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Sidebar, Topbar, Footer } from '@common/component';
 import * as RedirectActions from '@store/actions/RedirectActions';
 import { Redirect } from 'react-router-dom';
+import CustomMessageBox from '@common/component/CustomMessageBox';
+import Backdrop from '@material-ui/core/Backdrop';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -21,6 +24,10 @@ const useStyles = makeStyles(theme => ({
   },
   content: {
     height: '100%'
+  },
+  backdrop: {
+    zIndex: theme.zIndex.drawer + 1,
+    color: '#ffffff'
   }
 }));
 
@@ -43,8 +50,16 @@ const Main = props => {
   const isDesktop = useMediaQuery(theme.breakpoints.up('lg'), {
     defaultMatches: true
   });
-
+  const progressBarState = useSelector(
+    state => state['ProgressBar']['visible']
+  );
   const [openSidebar, setOpenSidebar] = useState(false); //user정보
+  const [open, setOpen] = useState(true);
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   const [userInfo, setUserInfo] = useState({
     name: '윤지원',
     subject: '융합소프트웨어',
@@ -58,40 +73,40 @@ const Main = props => {
         classIdx: 1,
         title: 'Spring기초',
         pageList: [
-          { pageName: '과제 목록', href: '/list/' + 1 + '/report' },
-          { pageName: '참고자료', href: '/list/' + 1 + '/refdata' },
-          { pageName: '공지사항', href: '/list/' + 1 + '/notice' },
-          { pageName: 'Q/A', href: '/list/' + 1 + '/qna' }
+          { pageName: '과제 목록', href: '/list/report/' + 1 },
+          { pageName: '참고자료', href: '/list/refdata/' + 1 },
+          { pageName: '공지사항', href: '/list/notice/' + 1 },
+          { pageName: 'Q/A', href: '/list/qna/' + 1 }
         ]
       },
       {
         classIdx: 2,
         title: '운영체제',
         pageList: [
-          { pageName: '과제 목록', href: '/list/' + 2 + '/report' },
-          { pageName: '참고자료', href: '/list/' + 2 + '/refdata' },
-          { pageName: '공지사항', href: '/list/' + 2 + '/notice' },
-          { pageName: 'Q/A', href: '/list/' + 2 + '/qna' }
+          { pageName: '과제 목록', href: '/list/report/' + 2 },
+          { pageName: '참고자료', href: '/list/refdata/' + 2 },
+          { pageName: '공지사항', href: '/list/notice/' + 2 },
+          { pageName: 'Q/A', href: '/list/qna/' + 2 }
         ]
       },
       {
         classIdx: 3,
         title: 'RaspberryPi',
         pageList: [
-          { pageName: '과제 목록', href: '/list/' + 3 + '/report' },
-          { pageName: '참고자료', href: '/list/' + 3 + '/refdata' },
-          { pageName: '공지사항', href: '/list/' + 3 + '/notice' },
-          { pageName: 'Q/A', href: '/list/' + 3 + '/qna' }
+          { pageName: '과제 목록', href: '/list/report/' + 3 },
+          { pageName: '참고자료', href: '/list/refdata/' + 3 },
+          { pageName: '공지사항', href: '/list/notice/' + 3 },
+          { pageName: 'Q/A', href: '/list/qna/' + 3 }
         ]
       },
       {
         classIdx: 4,
         title: '안드로이드 활용',
         pageList: [
-          { pageName: '과제 목록', href: '/list/' + 4 + '/report' },
-          { pageName: '참고자료', href: '/list/' + 4 + '/refdata' },
-          { pageName: '공지사항', href: '/list/' + 4 + '/notice' },
-          { pageName: 'Q/A', href: '/list/' + 4 + '/qna' }
+          { pageName: '과제 목록', href: '/list/report/' + 4 },
+          { pageName: '참고자료', href: '/list/refdata/' + 4 },
+          { pageName: '공지사항', href: '/list/notice/' + 4 },
+          { pageName: 'Q/A', href: '/list/qna/' + 4 }
         ]
       }
     ]
@@ -141,8 +156,21 @@ const Main = props => {
         variant={isDesktop ? 'persistent' : 'temporary'}
       />
       <main className={classes.content}>
+        {progressBarState ? (
+          <Backdrop
+            className={classes.backdrop}
+            onClick={handleClose}
+            open={open}
+          >
+            <CircularProgress
+              className={classes.progress}
+              color="secondary"
+            />
+          </Backdrop>
+        ) : null}
         {children}
         {isRedirect ? <Redirect to={redirectURL} /> : null}
+        <CustomMessageBox />
         <Footer />
       </main>
     </div>

@@ -35,7 +35,7 @@ const useStyles = makeStyles(theme => ({
     color: theme.palette.error.dark
   },
   differenceValue: {
-    color: theme.palette.error.dark,
+    color: theme.palette.dark,
     marginRight: theme.spacing(1)
   }
 }));
@@ -62,9 +62,9 @@ const Budget = props => {
               gutterBottom
               variant="body2"
             >
-              BUDGET
+              강의정보
             </Typography>
-            <Typography variant="h3">$24,000</Typography>
+            <Typography variant="h3">SPRING 기초</Typography>
           </Grid>
           <Grid item>
             <Avatar className={classes.avatar}>
@@ -73,18 +73,11 @@ const Budget = props => {
           </Grid>
         </Grid>
         <div className={classes.difference}>
-          <ArrowDownwardIcon className={classes.differenceIcon} />
           <Typography
             className={classes.differenceValue}
             variant="body2"
           >
-            12%
-          </Typography>
-          <Typography
-            className={classes.caption}
-            variant="caption"
-          >
-            Since last month
+            교수 : 박남일
           </Typography>
         </div>
       </CardContent>

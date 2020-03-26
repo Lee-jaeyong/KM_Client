@@ -38,7 +38,7 @@ const Student = () => {
         component={StuReportListView}
         exact
         layout={MainLayout}
-        path="/list/report"
+        path="/list/report/:idx"
       />
       <StudentRoute
         component={StuMainView}

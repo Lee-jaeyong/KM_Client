@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 import { makeStyles } from '@material-ui/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -7,6 +8,10 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
+import TextField from '@material-ui/core/TextField';
+import * as SHOW_MESSAGE_ACTION from '@store/actions/MessageActions';
+import Button from '@material-ui/core/Button';
+import Grid from '@material-ui/core/Grid';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -27,7 +32,17 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const StuReportInfo = () => {
+  const dispatch = useDispatch();
   const classes = useStyles();
+
+  const showMessageBox = (title, level, visible) => {
+    let message = {
+      content: title,
+      level: level,
+      visible: visible
+    };
+    dispatch(SHOW_MESSAGE_ACTION.show_message(message));
+  };
 
   return (
     <div className={classes.root}>
@@ -59,6 +74,36 @@ const StuReportInfo = () => {
           </TableBody>
         </Table>
       </TableContainer>
+      <br />
+      <TextField
+        fullWidth
+        id="outlined-multiline-static"
+        label="과제 내용"
+        multiline
+        onKeyUp={() => showMessageBox('읽기 전용입니다.', 'error', true)}
+        rows="15"
+        value="이번주 과제는 어.. 컴퓨터의 작동원리를 조사하는것입니다."
+        variant="outlined"
+      />
+      <br />
+      <br />
+      <br />
+      <Grid container>
+        <Grid xs={5} />
+        <Grid
+          sm={2}
+          xs={12}
+        >
+          <Button
+            color="primary"
+            fullWidth
+            variant="contained"
+          >
+            과제 제출하기
+          </Button>
+        </Grid>
+        <Grid xs={5} />
+      </Grid>
     </div>
   );
 };

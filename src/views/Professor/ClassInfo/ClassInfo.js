@@ -61,7 +61,11 @@ const ClassInfo = () => {
     axiosGet.getNotContainsData("/professor/class/"+idx,getResponse);
     let data = {
       page : page,
-      size : size
+      size : size,
+      name : '',
+      startDate :'',
+      endDate : '',
+      searchType : ''
     }
     axiosGet.getContainsData("/report/"+idx+"/list",reportListResponse,data);
   }

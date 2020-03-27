@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
+
 import { makeStyles } from '@material-ui/styles';
 import { Paper } from '@material-ui/core';
 import TextField from '@material-ui/core/TextField';
@@ -9,6 +11,8 @@ import MuiExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import MuiExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
+import * as SHOW_MESSAGE_ACTION from '@store/actions/MessageActions';
+import Grid from '@material-ui/core/Grid';
 
 const ExpansionPanel = withStyles({
   root: {
@@ -51,16 +55,15 @@ const currencies = [
     label: '선 택'
   },
   {
-    value: 'reportTitle',
+    value: 'name',
     label: '과제명'
-  },
-  {
-    value: 'reportCode',
-    label: '과제 코드'
   }
 ];
 
 const useStyles = makeStyles(theme => ({
+  containerRoot: {
+    flexGrow: 1
+  },
   root: {
     borderRadius: '4px',
     alignItems: 'center',
@@ -77,6 +80,11 @@ const useStyles = makeStyles(theme => ({
     fontSize: '14px',
     lineHeight: '16px',
     letterSpacing: '-0.05px'
+  },
+  paper: {
+    padding: theme.spacing(1),
+    textAlign: 'center',
+    color: theme.palette.text.secondary
   }
 }));
 
@@ -87,16 +95,55 @@ const ExpansionPanelDetails = withStyles(theme => ({
 }))(MuiExpansionPanelDetails);
 
 const CustomSearchHeader = props => {
+  const dispatch = useDispatch();
   const [expanded, setExpanded] = React.useState('panel1');
 
-  const { className, onChange, style, ...rest } = props;
+  const { className, style, ...rest } = props;
+
+  const [searchInput, setSearchInput] = useState({
+    name: '',
+    searchType: '',
+    startDate: '',
+    endDate: ''
+  });
 
   const classes = useStyles();
 
   const [currency, setCurrency] = useState('선 택');
 
-  const handleChange = event => {
-    setCurrency(event.target.value);
+  const inputOnChange = event => {
+    setSearchInput({
+      ...searchInput,
+      [event.target.name]: event.target.value
+    });
+  };
+
+  const showMessageBox = (title, level, visible) => {
+    let message = {
+      content: title,
+      level: level,
+      visible: visible
+    };
+    dispatch(SHOW_MESSAGE_ACTION.show_message(message));
+  };
+
+  const searchClick = () => {
+    if (searchInput['name'] !== '' && searchInput['searchType'] === '') {
+      showMessageBox('검색 조건을 선택해주세요', 'error', true);
+      return;
+    }
+    props.searchHandle(searchInput);
+  };
+
+  const initialValue = () => {
+    let initValue = {
+      name: '',
+      searchType: '',
+      startDate: '',
+      endDate: ''
+    };
+    setSearchInput(initValue);
+    props.searchHandle(initValue);
   };
 
   return (
@@ -104,68 +151,104 @@ const CustomSearchHeader = props => {
       <ExpansionPanelSummary
         aria-controls="panel1d-content"
         id="panel1d-header">
-        <Typography><h3>== {props.title} == </h3></Typography>
+        <Typography>
+          <h3>== {props.title} == </h3>
+        </Typography>
       </ExpansionPanelSummary>
       <ExpansionPanelDetails>
-        <Typography>
-          <TextField
-            {...rest}
-            label="검 색"
-            defaultValue=""
-            className={classes.input}
-            disableUnderline
-            onChange={onChange}
-            defaultValue={'검 색'}
-            style={{ minWidth: 300 }}
-          />
-          <TextField
-            select
-            label="선 택"
-            value={currency}
-            onChange={handleChange}
-            style={{ marginLeft: 20, minWidth: 150 }}>
-            {currencies.map(option => (
-              <MenuItem key={option.value} value={option.value}>
-                {option.label}
-              </MenuItem>
-            ))}
-          </TextField>
-          <TextField
-            id="date"
-            type="date"
-            label="시작일"
-            className={classes.textField}
-            InputLabelProps={{
-              shrink: true
-            }}
-            style={{ marginLeft: 20, minWidth: 200 }}
-          />
-          <TextField
-            id="date"
-            type="date"
-            label="종료일"
-            className={classes.textField}
-            InputLabelProps={{
-              shrink: true
-            }}
-            style={{
-              marginLeft: 10,
-              minWidth: 200
-            }}
-          />
-          <Button
-            style={{ minWidth: 200, marginLeft: 250 }}
-            variant="contained"
-            color="primary">
-            검&nbsp;&nbsp;&nbsp;&nbsp;색
-          </Button>
-          <Button
-            style={{ minWidth: 200, marginLeft: 20 }}
-            variant="contained"
-            color="secondary">
-            초기화
-          </Button>
-        </Typography>
+        <div className={classes.containerRoot}>
+          <Grid container spacing={1}>
+            <Grid item xs={10} sm={3}>
+              <Paper className={classes.paper}>
+                <TextField
+                  {...rest}
+                  label="검 색"
+                  defaultValue=""
+                  name="name"
+                  value={searchInput['name']}
+                  className={classes.input}
+                  disableUnderline
+                  onChange={event => inputOnChange(event)}
+                  fullWidth
+                />
+              </Paper>
+            </Grid>
+            <Grid item xs={2} sm={1}>
+              <Paper className={classes.paper}>
+                <TextField
+                  select
+                  label="선 택"
+                  value={currency}
+                  name="searchType"
+                  value={searchInput['searchType']}
+                  onChange={event => inputOnChange(event)}
+                  fullWidth>
+                  {currencies.map(option => (
+                    <MenuItem key={option.value} value={option.value}>
+                      {option.label}
+                    </MenuItem>
+                  ))}
+                </TextField>
+              </Paper>
+            </Grid>
+            <Grid item xs={12} sm={2}>
+              <Paper className={classes.paper}>
+                <TextField
+                  id="date"
+                  type="date"
+                  label="시작일"
+                  name="startDate"
+                  value={searchInput['startDate']}
+                  onChange={event => inputOnChange(event)}
+                  className={classes.textField}
+                  InputLabelProps={{
+                    shrink: true
+                  }}
+                  fullWidth
+                />
+              </Paper>
+            </Grid>
+            <Grid item xs={12} sm={2}>
+              <Paper className={classes.paper}>
+                <TextField
+                  id="date"
+                  type="date"
+                  label="종료일"
+                  name="endDate"
+                  value={searchInput['endDate']}
+                  onChange={event => inputOnChange(event)}
+                  className={classes.textField}
+                  InputLabelProps={{
+                    shrink: true
+                  }}
+                  fullWidth
+                />
+              </Paper>
+            </Grid>
+            <Grid item xs={12} sm={2}>
+              <Paper className={classes.paper}>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={searchClick}
+                  fullWidth>
+                  검&nbsp;&nbsp;&nbsp;&nbsp;색
+                </Button>
+              </Paper>
+            </Grid>
+            <Grid item xs={12} sm={2}>
+              <Paper className={classes.paper}>
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  onClick={initialValue}
+                  fullWidth>
+                  초기화
+                </Button>
+              </Paper>
+            </Grid>
+          </Grid>
+        </div>
       </ExpansionPanelDetails>
     </ExpansionPanel>
   );

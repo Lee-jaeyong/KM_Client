@@ -92,8 +92,10 @@ const ReportList = (props) => {
         <br />
         <br />
       </div>
-      <CustomTable 
+      <CustomTable
+        tableDescription={"과제 정보"}
         rowClickHandle={rowClickHandle}
+        noDataMessage={<h3>* 과제 리스트가 존재하지 않습니다.</h3>}
         tableHeaderList={tableDataHeader}
         tableDataList={tableDataList}
         tableDataCount={tableDataCount}

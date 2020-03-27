@@ -230,7 +230,13 @@ const ClassInfo = () => {
         </Grid>
         <Grid item lg={4} md={4} xl={4} xs={12}>
           <TableContainer component={Paper}>
-            <CustomTable rowClickHandle={() => {}} />
+            <CustomTable
+              rowClickHandle={() => {}}
+              tableDescription={"수강 학생 리스트"}
+              tableHeaderList={['이름']}
+              noDataMessage={<h3>* 학생 리스트가 존재하지 않습니다.</h3>}
+              exclude={''}
+            />
           </TableContainer>
         </Grid>
       </Grid>
@@ -239,6 +245,7 @@ const ClassInfo = () => {
         <TableContainer component={Paper}>
           <CustomTable
             rowClickHandle={rowClickHandle}
+            tableDescription={"최신 과제 10건"}
             tableHeaderList={tableDataHeader}
             noDataMessage={<h3>* 과제 리스트가 존재하지 않습니다.</h3>}
             tableDataList={tableDataList}
@@ -246,6 +253,7 @@ const ClassInfo = () => {
             searchSeq={selectClassIdx}
             exclude={['classIdx', 'links', 'fileList', 'imgList', 'content']}
             requestData={requestData}
+            notPageInfo
           />
         </TableContainer>
       </Grid>

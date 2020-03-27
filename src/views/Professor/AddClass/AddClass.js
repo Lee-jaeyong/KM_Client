@@ -31,6 +31,9 @@ import * as ProgressBarActions from '@store/actions/ProgressBarActions';
 import * as SideBarActions from '@store/actions/SideBarActions';
 import { compareToDate } from '@common/functions/CompareToDate';
 
+import 'tui-editor/dist/tui-editor-contents.css';
+import 'highlight.js/styles/github.css';
+ 
 import * as axiosPost from '@axios/post';
 
 const useStyles = makeStyles(theme => ({

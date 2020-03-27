@@ -23,6 +23,7 @@ import * as ProgressBarActions from '@store/actions/ProgressBarActions';
 import * as filter from '@common/functions/ConvertNotXssFilter';
 
 import * as axiosGet from '@axios/get';
+import Viewer from 'tui-editor/dist/tui-editor-Viewer';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -97,9 +98,11 @@ const ClassInfo = () => {
   const getResponse = res => {
     setClassInfo(res);
     try {
-      document.getElementById(
-        'classInfoContent'
-      ).innerHTML = filter.ConvertNotXssFilter(res['content']);
+      const instance = new Viewer({
+        el: document.querySelector('#classInfoContent'),
+        height: '500px',
+        initialValue: filter.ConvertNotXssFilter(res['content'])
+      });
     } catch {}
   };
 
@@ -116,9 +119,11 @@ const ClassInfo = () => {
       JSON.stringify(addClassInfo) !== '{}'
     ) {
       setClassInfo(addClassInfo);
-      document.getElementById(
-        'classInfoContent'
-      ).innerHTML = filter.ConvertNotXssFilter(addClassInfo['content']);
+      const instance = new Viewer({
+        el: document.querySelector('#classInfoContent'),
+        height: '500px',
+        initialValue: filter.ConvertNotXssFilter(addClassInfo['content'])
+      });
     }
   }, [addClassInfo]);
 
@@ -140,7 +145,9 @@ const ClassInfo = () => {
           <Paper className={classes.paper}>
             <Paper className={classes.paper}>
               <Grid xs={12} sm={12}>
+                <br/>
                 <h2>* 수업 정보</h2>
+                <br/>
               </Grid>
             </Paper>
             <Grid container style={{ marginTop: 25 }}>
@@ -202,7 +209,11 @@ const ClassInfo = () => {
                   <h3>수업 내용</h3>{' '}
                 </Grid>
                 <Grid xs={8} sm={8}>
-                  <div id="classInfoContent"></div>
+                  <div style={{overflow:'scroll', height:700}}>
+                    <Paper style={{padding:20}}>
+                      <div id="classInfoContent"></div>
+                    </Paper>
+                  </div>
                 </Grid>
               </Grid>
               <Grid container style={{ marginTop: 100 }}>

@@ -49,7 +49,7 @@ function getJSONKeyList(jsonData){
 }
 
 const CustomTable = props => {
-  const { tableDataCount,searchSeq,exclude,tableDataList, tableHeaderList, ...rest } = props;
+  const { noDataMessage,tableDataCount,searchSeq,exclude,tableDataList, tableHeaderList, ...rest } = props;
   //const [tableHeader,setTableHeader] = useState(["과제 번호","과제 코드","과제명","과제 시작일","과제 종료일","조회수"]);
   // const [tableData,setTableData] = useState([
   //   {reportIdx:"23" , reportCode:"C3523",reportTitle:"C언어-별짓기",reportStartDate:"2020-03-20",reportEndDate:"2020-07-17",reportHit:"343"},
@@ -138,9 +138,10 @@ const CustomTable = props => {
               </TableHead>
               <TableBody>
               {
+                tableData.length !== 0 ?
                 tableData.map((data,idx)=>{
                   return getTableBody(data,jsonDataKeyList,props) 
-                })
+                }) : <TableRow><TableCell align="center" colSpan={tableHeader.length}>{noDataMessage}</TableCell></TableRow>
               }
               </TableBody>
             </Table>

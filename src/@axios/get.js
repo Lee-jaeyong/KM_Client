@@ -18,7 +18,7 @@ export async function getContainsData(URL,func,data){
     for(let i =0;i<_dataArr.length;i++){
         addURL += _dataArr[i]+"="+data[_dataArr[i]];
         if(i !== _dataArr.length-1)
-            addURL += '&';
+        addURL += '&';
     }
     axios({
         url: URL+addURL,

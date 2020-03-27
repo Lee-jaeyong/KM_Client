@@ -12,7 +12,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const StuReportList = () => {
+const StuQnAList = () => {
   const classes = useStyles();
 
   const dispatch = useDispatch();
@@ -22,62 +22,51 @@ const StuReportList = () => {
   const [tableDataList, setTableDataList] = useState();
   const [tableDataCount, setTableDataCount] = useState();
   const [tableDataHeader, setTableDataHeader] = useState([
-    '과제 번호',
-    '과제명',
-    '과제 시작일',
-    '과제 종료일',
+    'No.',
+    '제목',
+    '내용',
+    '날짜',
     '조회수',
-    '마감 이후 제출 여부',
-    '제출 과제 관람 여부',
-    '확인상태'
+    '답변상태'
   ]);
 
   const testData = [
     {
-      reportNum: 1,
-      reportName: 'spring에대하여간략히 설명',
-      startDate: '2020-01-29',
-      endDate: '2020-03-01',
+      No: 1,
+      title: 'spring에대하여',
+      content: '스프링MVC와 스프링부트의 차이점은 무엇인가요',
+      date: '2020-03-01',
       hit: 10,
-      deadlinesubmissionYorN: 'N',
-      PreviewYorN: 'Y',
-      checkState: '확인전'
+      state: '답변완료'
     },
     {
-      reportNum: 2,
-      reportName: '@Autowired 란 무엇인지 설명',
-      startDate: '2020-01-29',
-      endDate: '2020-03-01',
-      hit: 10,
-      deadlinesubmissionYorN: 'N',
-      PreviewYorN: 'Y',
-      checkState: '확인전'
+      No: 2,
+      title: '스프링JPA',
+      content: 'JPA를 사용하는것과 안사용하는것의 차이는?',
+      date: '2020-03-04',
+      hit: 16,
+      state: '답변완료'
     },
     {
-      reportNum: 3,
-      reportName: 'bean으로 등록되는 애노테이션 종류',
-      startDate: '2020-01-29',
-      endDate: '2020-03-01',
-      hit: 10,
-      deadlinesubmissionYorN: 'N',
-      PreviewYorN: 'Y',
-      checkState: '확인전'
+      No: 3,
+      title: '운영체제에서',
+      content: '쉘과 커널은 각각 어떻게 동작하나요?',
+      date: '2020-04-01',
+      hit: 5,
+      state: '답변완료'
     },
     {
-      reportNum: 4,
-      reportName: '스프링 데이터 JPA',
-      startDate: '2020-01-29',
-      endDate: '2020-03-01',
+      No: 4,
+      title: '리액트에서',
+      content: '리액트는 프레임워크인가요?',
+      date: '2020-03-01',
       hit: 10,
-      deadlinesubmissionYorN: 'N',
-      PreviewYorN: 'Y',
-      checkState: '확인전'
+      state: '답변 미완료'
     }
   ];
 
   const rowClickHandle = idx => {
-    // dispatch(RedirectActions.isRedirect(true, '/view/report/' + idx));
-    dispatch(RedirectActions.isRedirect(true, '/view/report/1'));
+    dispatch(RedirectActions.isRedirect(true, '/class/report/' + idx));
   };
 
   const testRequestData = () => {
@@ -102,7 +91,7 @@ const StuReportList = () => {
 
   return (
     <div className={classes.root}>
-      <CustomSearchHeader title="과제 검색" />
+      <CustomSearchHeader title="질의응답 검색" />
       <br />
       <CustomTable
         exclude={''}
@@ -118,4 +107,4 @@ const StuReportList = () => {
   );
 };
 
-export default StuReportList;
+export default StuQnAList;

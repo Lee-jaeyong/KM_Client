@@ -4,7 +4,6 @@ import CustomTable from '@common/component/CustomTable';
 import { useDispatch, useSelector } from 'react-redux';
 import * as RedirectActions from '@store/actions/RedirectActions';
 import CustomSearchHeader from '@common/component/CustomSearchHeader';
-import Button from '@material-ui/core/Button';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -12,7 +11,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const StuReportList = () => {
+const StuNoticeList = () => {
   const classes = useStyles();
 
   const dispatch = useDispatch();
@@ -22,62 +21,42 @@ const StuReportList = () => {
   const [tableDataList, setTableDataList] = useState();
   const [tableDataCount, setTableDataCount] = useState();
   const [tableDataHeader, setTableDataHeader] = useState([
-    '과제 번호',
-    '과제명',
-    '과제 시작일',
-    '과제 종료일',
-    '조회수',
-    '마감 이후 제출 여부',
-    '제출 과제 관람 여부',
-    '확인상태'
+    'No.',
+    '제목',
+    '내용',
+    '조회수'
   ]);
 
   const testData = [
     {
-      reportNum: 1,
-      reportName: 'spring에대하여간략히 설명',
-      startDate: '2020-01-29',
-      endDate: '2020-03-01',
-      hit: 10,
-      deadlinesubmissionYorN: 'N',
-      PreviewYorN: 'Y',
-      checkState: '확인전'
+      No: 1,
+      title: '개강 첫날 공지사항 입니다.',
+      content: '지각 3번 결석처리 / 결석3번 학점 F...',
+      hit: 21
     },
     {
-      reportNum: 2,
-      reportName: '@Autowired 란 무엇인지 설명',
-      startDate: '2020-01-29',
-      endDate: '2020-03-01',
-      hit: 10,
-      deadlinesubmissionYorN: 'N',
-      PreviewYorN: 'Y',
-      checkState: '확인전'
+      No: 2,
+      title: '과제에 대한 공지사항',
+      content:
+        '당일 과제는 다음주에 해당 수업 요일 오후11시59분까지 제출해야합니다....',
+      hit: 30
     },
     {
-      reportNum: 3,
-      reportName: 'bean으로 등록되는 애노테이션 종류',
-      startDate: '2020-01-29',
-      endDate: '2020-03-01',
-      hit: 10,
-      deadlinesubmissionYorN: 'N',
-      PreviewYorN: 'Y',
-      checkState: '확인전'
+      No: 3,
+      title: '체육대회 공지사항',
+      content: '체육대회 피구, 달리기....',
+      hit: 8
     },
     {
-      reportNum: 4,
-      reportName: '스프링 데이터 JPA',
-      startDate: '2020-01-29',
-      endDate: '2020-03-01',
-      hit: 10,
-      deadlinesubmissionYorN: 'N',
-      PreviewYorN: 'Y',
-      checkState: '확인전'
+      No: 4,
+      title: '진단평가 공지',
+      content: '3월29일까지 모든 과목에 진단평가를 완료 해주세요',
+      hit: 17
     }
   ];
 
   const rowClickHandle = idx => {
-    // dispatch(RedirectActions.isRedirect(true, '/view/report/' + idx));
-    dispatch(RedirectActions.isRedirect(true, '/view/report/1'));
+    dispatch(RedirectActions.isRedirect(true, '/class/report/' + idx));
   };
 
   const testRequestData = () => {
@@ -102,7 +81,7 @@ const StuReportList = () => {
 
   return (
     <div className={classes.root}>
-      <CustomSearchHeader title="과제 검색" />
+      <CustomSearchHeader title="공지사항 검색" />
       <br />
       <CustomTable
         exclude={''}
@@ -118,4 +97,4 @@ const StuReportList = () => {
   );
 };
 
-export default StuReportList;
+export default StuNoticeList;

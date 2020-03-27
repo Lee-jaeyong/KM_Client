@@ -4,14 +4,15 @@ import { StudentRoute } from './StudentRoute';
 import {
   Dashboard as DashboardView,
   StuReportList as StuReportListView,
-  UserList as UserListView,
+  StuRefDataList as StuRefDataListView,
   StuMain as StuMainView,
-  Icons as IconsView,
-  Account as AccountView,
+  StuNoticeList as StuNoticeListView,
+  StuQnAList as StuQnAListView,
   Settings as SettingsView,
   SignUp as SignUpView,
   SignIn as SignInView,
-  NotFound as NotFoundView
+  NotFound as NotFoundView,
+  StuReportInfo as StuReportInfoView
 } from '../views/Student';
 
 import {
@@ -29,10 +30,11 @@ const Student = () => {
         path="/stu/class/:idx"
       />
       <StudentRoute
-        component={UserListView}
+        //참고자료 리스트
+        component={StuRefDataListView}
         exact
         layout={MainLayout}
-        path="/b"
+        path="/list/refdata/:idx"
       />
       <StudentRoute
         component={StuReportListView}
@@ -47,16 +49,22 @@ const Student = () => {
         path="/stu/main"
       />
       <StudentRoute
-        component={IconsView}
+        component={StuNoticeListView}
         exact
         layout={MainLayout}
-        path="/e"
+        path="/list/notice/:idx"
       />
       <StudentRoute
-        component={AccountView}
+        component={StuQnAListView}
         exact
         layout={MainLayout}
-        path="/f"
+        path="/list/qna/:idx"
+      />
+      <StudentRoute
+        component={StuReportInfoView}
+        exact
+        layout={MainLayout}
+        path="/view/report/:idx"
       />
       <StudentRoute
         component={SettingsView}

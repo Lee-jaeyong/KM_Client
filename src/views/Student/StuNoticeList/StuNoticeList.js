@@ -91,6 +91,7 @@ const StuNoticeList = () => {
         searchSeq={selectClassIdx}
         tableDataCount={tableDataCount}
         tableDataList={testData}
+        tableDescription="공지사항"
         tableHeaderList={tableDataHeader}
       />
     </div>

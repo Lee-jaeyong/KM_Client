@@ -12,7 +12,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const StuReportList = () => {
+const StuReportList = props => {
   const classes = useStyles();
 
   const dispatch = useDispatch();
@@ -75,9 +75,9 @@ const StuReportList = () => {
     }
   ];
 
-  const rowClickHandle = idx => {
-    // dispatch(RedirectActions.isRedirect(true, '/view/report/' + idx));
-    dispatch(RedirectActions.isRedirect(true, '/view/report/1'));
+  const rowClickHandle = reportidx => {
+    dispatch(RedirectActions.isRedirect(true, 'reportView/1'));
+    //dispatch(RedirectActions.isRedirect(true, 'reportView/' + reportidx));
   };
 
   const testRequestData = () => {
@@ -112,6 +112,7 @@ const StuReportList = () => {
         searchSeq={selectClassIdx}
         tableDataCount={tableDataCount}
         tableDataList={testData}
+        tableDescription="과제 목록"
         tableHeaderList={tableDataHeader}
       />
     </div>

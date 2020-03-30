@@ -76,6 +76,7 @@ const StuReportInfo = () => {
       </TableContainer>
       <br />
       <TextField
+        component={Paper}
         fullWidth
         id="outlined-multiline-static"
         label="과제 내용"
@@ -97,6 +98,9 @@ const StuReportInfo = () => {
           <Button
             color="primary"
             fullWidth
+            onClick={() => {
+              alert('과제제출하는화면 기기');
+            }}
             variant="contained"
           >
             과제 제출하기

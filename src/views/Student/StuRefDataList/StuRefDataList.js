@@ -90,6 +90,7 @@ const StuRefDataList = () => {
         searchSeq={selectClassIdx}
         tableDataCount={tableDataCount}
         tableDataList={testData}
+        tableDescription="참고자료"
         tableHeaderList={tableDataHeader}
       />
     </div>

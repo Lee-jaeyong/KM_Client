@@ -27,20 +27,20 @@ const Student = () => {
         component={DashboardView} //각 강의 메인
         exact
         layout={MainLayout}
-        path="/stu/class/:idx"
+        path="/stu/class/:classidx"
       />
       <StudentRoute
         //참고자료 리스트
         component={StuRefDataListView}
         exact
         layout={MainLayout}
-        path="/list/refdata/:idx"
+        path="/stu/class/:classidx/refDataList"
       />
       <StudentRoute
         component={StuReportListView}
         exact
         layout={MainLayout}
-        path="/list/report/:idx"
+        path="/stu/class/:classidx/reportList"
       />
       <StudentRoute
         component={StuMainView}
@@ -52,19 +52,19 @@ const Student = () => {
         component={StuNoticeListView}
         exact
         layout={MainLayout}
-        path="/list/notice/:idx"
+        path="/stu/class/:classidx/noticeList"
       />
       <StudentRoute
         component={StuQnAListView}
         exact
         layout={MainLayout}
-        path="/list/qna/:idx"
+        path="/stu/class/:classidx/qnaList"
       />
       <StudentRoute
         component={StuReportInfoView}
         exact
         layout={MainLayout}
-        path="/view/report/:idx"
+        path="/stu/class/:classidx/reportView/:reportidx"
       />
       <StudentRoute
         component={SettingsView}

@@ -5,6 +5,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import * as RedirectActions from '@store/actions/RedirectActions';
 import CustomSearchHeader from '@common/component/CustomSearchHeader';
 import Button from '@material-ui/core/Button';
+import Grid from '@material-ui/core/Grid';
+import Paper from '@material-ui/core/Paper';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -93,6 +95,24 @@ const StuQnAList = () => {
     <div className={classes.root}>
       <CustomSearchHeader title="질의응답 검색" />
       <br />
+      <Grid
+        container
+        spacing={3}
+        style={{ marginBottom: 0 }}
+      >
+        <Grid
+          align="right"
+          item
+          xs={12}
+        >
+          <Button
+            color="primary"
+            variant="contained"
+          >
+            질문 등록
+          </Button>
+        </Grid>
+      </Grid>
       <CustomTable
         exclude={''}
         requestData={testRequestData}
@@ -101,6 +121,7 @@ const StuQnAList = () => {
         searchSeq={selectClassIdx}
         tableDataCount={tableDataCount}
         tableDataList={testData}
+        tableDescription="Q/A"
         tableHeaderList={tableDataHeader}
       />
     </div>

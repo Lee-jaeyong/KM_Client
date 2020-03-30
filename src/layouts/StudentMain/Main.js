@@ -73,40 +73,40 @@ const Main = props => {
         classIdx: 1,
         title: 'Spring기초',
         pageList: [
-          { pageName: '과제 목록', href: '/list/report/' + 1 },
-          { pageName: '참고자료', href: '/list/refdata/' + 1 },
-          { pageName: '공지사항', href: '/list/notice/' + 1 },
-          { pageName: 'Q/A', href: '/list/qna/' + 1 }
+          { pageName: '과제 목록', href: '/stu/class/' + 1 + '/reportList' },
+          { pageName: '참고자료', href: '/stu/class/' + 1 + '/refDataList' },
+          { pageName: '공지사항', href: '/stu/class/' + 1 + '/noticeList' },
+          { pageName: 'Q/A', href: '/stu/class/' + 1 + '/qnaList' }
         ]
       },
       {
         classIdx: 2,
         title: '운영체제',
         pageList: [
-          { pageName: '과제 목록', href: '/list/report/' + 2 },
-          { pageName: '참고자료', href: '/list/refdata/' + 2 },
-          { pageName: '공지사항', href: '/list/notice/' + 2 },
-          { pageName: 'Q/A', href: '/list/qna/' + 2 }
+          { pageName: '과제 목록', href: '/stu/class/' + 2 + '/reportList' },
+          { pageName: '참고자료', href: '/stu/class/' + 2 + '/refDataList' },
+          { pageName: '공지사항', href: '/stu/class/' + 2 + '/noticeList' },
+          { pageName: 'Q/A', href: '/stu/class/' + 2 + '/qnaList' }
         ]
       },
       {
         classIdx: 3,
         title: 'RaspberryPi',
         pageList: [
-          { pageName: '과제 목록', href: '/list/report/' + 3 },
-          { pageName: '참고자료', href: '/list/refdata/' + 3 },
-          { pageName: '공지사항', href: '/list/notice/' + 3 },
-          { pageName: 'Q/A', href: '/list/qna/' + 3 }
+          { pageName: '과제 목록', href: '/stu/class/' + 3 + '/reportList' },
+          { pageName: '참고자료', href: '/stu/class/' + 3 + '/refDataList' },
+          { pageName: '공지사항', href: '/stu/class/' + 3 + '/noticeList' },
+          { pageName: 'Q/A', href: '/stu/class/' + 3 + '/qnaList' }
         ]
       },
       {
         classIdx: 4,
         title: '안드로이드 활용',
         pageList: [
-          { pageName: '과제 목록', href: '/list/report/' + 4 },
-          { pageName: '참고자료', href: '/list/refdata/' + 4 },
-          { pageName: '공지사항', href: '/list/notice/' + 4 },
-          { pageName: 'Q/A', href: '/list/qna/' + 4 }
+          { pageName: '과제 목록', href: '/stu/class/' + 4 + '/reportList' },
+          { pageName: '참고자료', href: '/stu/class/' + 4 + '/refDataList' },
+          { pageName: '공지사항', href: '/stu/class/' + 4 + '/noticeList' },
+          { pageName: 'Q/A', href: '/stu/class/' + 4 + '/qnaList' }
         ]
       }
     ]

@@ -2,6 +2,8 @@ import React,{useEffect,useState,useRef} from 'react';
 import { makeStyles } from '@material-ui/styles';
 import { Grid, TextField } from '@material-ui/core';
 
+import {Redirect} from 'react-router-dom';
+
 import {useDispatch,useSelector} from 'react-redux';
 
 import Table from '@material-ui/core/Table';
@@ -69,7 +71,7 @@ const UpdateReport = () => {
   const [nowDeleteFile,setNowDeleteFile] = useState();
 
   const selectReport = useSelector(state=>state['Report']['reportInfo']);
-  const classes = useStyles();
+  const classes = useStyles(); 
 
   const [submitCheck,setSubmitCheck] = useState(false);
   const [instance,setInstance] = useState();
@@ -218,41 +220,45 @@ const UpdateReport = () => {
   }
 
   useEffect(()=>{
-    setReportInfo(selectReport);
-    setImgList(selectReport['imgList'].split(','));
-    setFileList(selectReport['fileList'].split(','));
-    setInstance(new Editor({
-      el: document.querySelector('#editorSection'),
-      initialEditType: 'wysiwyg',
-      initialValue: filter.ConvertNotXssFilter(selectReport['content']),
-      height: '300px',
-      toolbarItems: [
-        'heading',
-        'bold',
-        'italic',
-        'strike',
-        'divider',
-        'hr',
-        'divider',
-        'ul',
-        'ol',
-        'table',
-        // Using Option: Customize the last button
-        {
-          type: 'button',
-          options: {
-            el: createButton('last'),
-            name: 'Custom Button 1',
-            tooltip: 'Custom Bold',
-            command: 'Bold'
+    try{
+      setReportInfo(selectReport);
+      setImgList(selectReport['imgList'].split(','));
+      setFileList(selectReport['fileList'].split(','));
+      setInstance(new Editor({
+        el: document.querySelector('#editorSection'),
+        initialEditType: 'wysiwyg',
+        initialValue: filter.ConvertNotXssFilter(selectReport['content']),
+        height: '300px',
+        toolbarItems: [
+          'heading',
+          'bold',
+          'italic',
+          'strike',
+          'divider',
+          'hr',
+          'divider',
+          'ul',
+          'ol',
+          'table',
+          // Using Option: Customize the last button
+          {
+            type: 'button',
+            options: {
+              el: createButton('last'),
+              name: 'Custom Button 1',
+              tooltip: 'Custom Bold',
+              command: 'Bold'
+            }
           }
-        }
-      ]
-    }));
+        ]
+      }));
+    }catch{
+    }
   },[]);
 
   return (
     <div className={classes.root}>
+        {JSON.stringify(selectReport) === "{}" ? <Redirect to={"/dashboard"}/> : null} 
         <Grid
           item
           lg={12}

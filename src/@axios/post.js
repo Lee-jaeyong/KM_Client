@@ -15,3 +15,12 @@ export async function postContainsData(URL,func,data){
         }
     }).then(res=>func(res.data));
 }
+
+export async function getAccessToken(func){
+    axios.defaults.headers.common['Authorization'] = 'Basic S01hcHA6cGFzcw==';
+    axios.post("http://localhost:8090/oauth/token?grant_type=password&username=dlwodyd202&password=dlwodyd",{
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        }
+    }).then(res=>func(res.data));
+}

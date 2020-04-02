@@ -11,9 +11,12 @@ import * as SideBarActions from '@store/actions/SideBarActions';
 import Backdrop from '@material-ui/core/Backdrop';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
+import {OauthReceiver} from 'react-oauth-flow';
+
 import {Redirect} from 'react-router-dom';
 
 import * as axiosGet from '@axios/get';
+import * as axiosPost from '@axios/post';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -87,50 +90,50 @@ const Main = props => {
   const shouldOpenSidebar = isDesktop ? true : openSidebar;
 
   function getResponse (res){
-    console.log(res);
-    if(res.length > 0){
+    const classInfo = res['_embedded']['kM_classVOList'];
+    if(classInfo.length > 0){
       let result = [];
-      for(let i =0;i<res.length;i++){
+      for(let i =0;i<classInfo.length;i++){
         let pageData = []
-        if(res[i]['selectMenu'].includes('REPORT')){
+        if(classInfo[i]['selectMenu'].includes('REPORT')){
           pageData.push({
             pageName:"과제 등록",
-            href:"/class/"+res[i]['seq']+"/report/add",
+            href:"/class/"+classInfo[i]['seq']+"/report/add",
           });
           pageData.push({
             pageName:"과제 목록",
-            href:"/class/"+res[i]['seq']+"/reportList",
+            href:"/class/"+classInfo[i]['seq']+"/reportList",
           });
         }
-        if(res[i]['selectMenu'].includes('NOTICE')){
+        if(classInfo[i]['selectMenu'].includes('NOTICE')){
           pageData.push({
             pageName:"공지사항 등록",
-            href:"/class/"+res[i]['seq']+"/notice/add",
+            href:"/class/"+classInfo[i]['seq']+"/notice/add",
           });
           pageData.push({
             pageName:"공지사항 목록",
-            href:"/class/"+res[i]['seq']+"/noticeList",
+            href:"/class/"+classInfo[i]['seq']+"/noticeList",
           });
         }
-        if(res[i]['selectMenu'].includes('REFERENCE')){
+        if(classInfo[i]['selectMenu'].includes('REFERENCE')){
           pageData.push({
             pageName:"참고자료 등록",
-            href:"/class/"+res[i]['seq']+"/referenceData/add",
+            href:"/class/"+classInfo[i]['seq']+"/referenceData/add",
           });
           pageData.push({
             pageName:"참고자료 목록",
-            href:"/class/"+res[i]['seq']+"/referenceDataList",
+            href:"/class/"+classInfo[i]['seq']+"/referenceDataList",
           });
         }
-        if(res[i]['selectMenu'].includes('QnA')){
+        if(classInfo[i]['selectMenu'].includes('QnA')){
           pageData.push({
             pageName:"Q/A",
-            href:"/class/"+res[i]['seq']+"/QnA",
+            href:"/class/"+classInfo[i]['seq']+"/QnA",
           });
         }
         let data = {
-          classIdx : res[i]['seq'],
-          title : res[i]['name'],
+          classIdx : classInfo[i]['seq'],
+          title : classInfo[i]['name'],
           pageList : pageData
         };
         result.push(data);
@@ -143,8 +146,13 @@ const Main = props => {
   },[progressBarState])
 
   useEffect(()=>{
-    axiosGet.getNotContainsData("/professor/class",getResponse);
+    axiosPost.getAccessToken(loginRes);
+    //axiosGet.getNotContainsData("/api/professor/class",getResponse);
   },[]);
+
+  function loginRes(res){
+    alert(JSON.stringify(res));
+  }
 
   useEffect(()=>{
     dispatch(RedirectActions.isRedirect(false));

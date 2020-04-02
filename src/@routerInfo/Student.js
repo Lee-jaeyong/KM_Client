@@ -12,7 +12,8 @@ import {
   SignUp as SignUpView,
   SignIn as SignInView,
   NotFound as NotFoundView,
-  StuReportInfo as StuReportInfoView
+  StuReportInfo as StuReportInfoView,
+  StuWriteReport as StuWriteReportView
 } from '../views/Student';
 
 import {
@@ -67,10 +68,10 @@ const Student = () => {
         path="/stu/class/:classidx/reportView/:reportidx"
       />
       <StudentRoute
-        component={SettingsView}
+        component={StuWriteReportView}
         exact
         layout={MainLayout}
-        path="/g"
+        path="/stu/class/:classidx/writeReport/:reportidx"
       />
     </Switch>
   );

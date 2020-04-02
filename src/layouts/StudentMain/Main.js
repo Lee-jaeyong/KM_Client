@@ -116,11 +116,15 @@ const Main = props => {
   const [otherPage, setOtherPage] = useState([
     {
       title: 'My 강의실',
-      href: '/myClassRoom'
+      href: '/stu/myClassRoom'
+    },
+    {
+      title: '신규강의등록',
+      href: '/stu/AddClass'
     },
     {
       title: '설정',
-      href: '/setForUser'
+      href: '/stu/setForUser'
     }
   ]);
 

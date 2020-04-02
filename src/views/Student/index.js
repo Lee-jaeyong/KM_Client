@@ -10,3 +10,4 @@ export { default as StuMain } from './StuMain';
 export { default as StuRefDataList } from './StuRefDataList';
 export { default as StuQnAList } from './StuQnAList';
 export { default as StuReportInfo } from './StuReportInfo';
+export { default as StuWriteReport } from './StuWriteReport';

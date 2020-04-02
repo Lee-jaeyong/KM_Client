@@ -12,6 +12,13 @@ import TextField from '@material-ui/core/TextField';
 import * as SHOW_MESSAGE_ACTION from '@store/actions/MessageActions';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
+import Editor from 'tui-editor'; /* ES6 */
+import 'tui-editor/dist/tui-editor.css'; // editor's ui
+import 'tui-editor/dist/tui-editor-contents.css'; // editor's content
+import 'codemirror/lib/codemirror.css'; // codemirror
+import 'highlight.js/styles/github.css'; // code block highlight
+import 'tui-editor/dist/tui-editor-contents.css';
+import 'highlight.js/styles/github.css';
 import * as RedirectActions from '@store/actions/RedirectActions';
 
 const useStyles = makeStyles(theme => ({
@@ -19,7 +26,7 @@ const useStyles = makeStyles(theme => ({
     padding: theme.spacing(6)
   },
   table: {
-    height: 130
+    height: 173
   },
   titleCell: {
     textAlign: 'center',
@@ -32,9 +39,51 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const StuReportInfo = props => {
+function createButton(iconClassName) {
+  const button = document.createElement('button');
+
+  button.className = 'custom-button';
+  button.innerHTML = `<i class="${iconClassName}"></i>`;
+
+  return button;
+}
+
+const StuWriteReport = props => {
   const dispatch = useDispatch();
   const classes = useStyles();
+  const [instance, setInstance] = useState();
+
+  useEffect(() => {
+    setInstance(
+      new Editor({
+        el: document.querySelector('#editorSection'),
+        initialEditType: 'wysiwyg',
+        height: '300px',
+        toolbarItems: [
+          'heading',
+          'bold',
+          'italic',
+          'strike',
+          'divider',
+          'hr',
+          'divider',
+          'ul',
+          'ol',
+          'table',
+          // Using Option: Customize the last button
+          {
+            type: 'button',
+            options: {
+              el: createButton('last'),
+              name: 'Custom Button 1',
+              tooltip: 'Custom Bold',
+              command: 'Bold'
+            }
+          }
+        ]
+      })
+    );
+  }, []);
 
   const showMessageBox = (title, level, visible) => {
     let message = {
@@ -67,35 +116,48 @@ const StuReportInfo = props => {
               <TableCell className={classes.contentCell}>2020-03-08</TableCell>
             </TableRow>
             <TableRow>
-              <TableCell className={classes.titleCell}>참고 파일</TableCell>
-              <TableCell className={classes.contentCell}>ssdfsdf</TableCell>
-              <TableCell className={classes.titleCell}>참고 이미지</TableCell>
-              <TableCell className={classes.contentCell}>dsfsdfsf</TableCell>
+              <TableCell className={classes.titleCell}>파일 업로드</TableCell>
+              <TableCell
+                className={classes.contentCell}
+                colSpan="3"
+                style={{ textAlign: 'left' }}
+              >
+                <input type="file" />
+              </TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell className={classes.titleCell}>이미지 업로드</TableCell>
+              <TableCell
+                className={classes.contentCell}
+                colSpan="3"
+                style={{ textAlign: 'left' }}
+              >
+                <input type="file" />
+              </TableCell>
             </TableRow>
           </TableBody>
         </Table>
       </TableContainer>
-      <br />
-      <TextField
-        component={Paper}
-        fullWidth
-        id="outlined-multiline-static"
-        label="과제 내용"
-        multiline
-        onKeyUp={() => showMessageBox('읽기 전용입니다.', 'error', true)}
-        rows="15"
-        value="이번주 과제는 어.. 컴퓨터의 작동원리를 조사하는것입니다.  ///여기 웹에디터 view로 바꾸기"
-        variant="outlined"
-      />
-      <br />
-      <br />
+
       <br />
       <Grid container>
+        <Grid
+          sm={12}
+          xs={6}
+        >
+          <Paper
+            className={classes.paper}
+            style={{ minHeight: 105 }}
+          >
+            <div id="editorSection" />
+          </Paper>
+        </Grid>
         <Grid xs={5} />
         <Grid
           sm={2}
           xs={12}
         >
+          <br />
           <Button
             color="primary"
             fullWidth
@@ -105,14 +167,14 @@ const StuReportInfo = props => {
                   true,
                   '/stu/class/' +
                     props.match.params.classidx +
-                    '/writeReport/' +
+                    '/reportView/' +
                     props.match.params.reportidx
                 )
               );
             }}
             variant="contained"
           >
-            과제 제출하기
+            제출하기
           </Button>
         </Grid>
         <Grid xs={5} />
@@ -121,4 +183,4 @@ const StuReportInfo = props => {
   );
 };
 
-export default StuReportInfo;
+export default StuWriteReport;

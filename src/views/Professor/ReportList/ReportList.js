@@ -65,7 +65,7 @@ const ReportList = (props) => {
     }
     dispatch(ProgressBarActions.isProgressBar(true));
     setTimeout(() => {
-      axiosGet.getContainsData("/report/"+idx+"/list",reportListResponse,data);
+      axiosGet.getContainsData("/api/professor/report/class/"+idx+"/list",reportListResponse,data);
     }, 300);
   }
 

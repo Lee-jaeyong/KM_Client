@@ -103,21 +103,22 @@ const UpdateReport = () => {
   const fileDeleteHandle = () => {
     let fileName = nowDeleteFile.substring(0,nowDeleteFile.indexOf('.'));
     let fileForm = nowDeleteFile.substring(fileName.length+1,nowDeleteFile.length);
-    axiosDelete.deleteNotContainsData("/uploadFile/"+reportInfo['seq']+"/reportRelatedFiles/"+fileName+"/"+fileForm,fileDeleteResult);
+    axiosDelete.deleteNotContainsData("/api/professor/uploadFile/"+reportInfo['seq']+"/reportRelatedFiles/"+fileName+"/"+fileForm,fileDeleteResult);
   }
 
   const fileDeleteResult = (res) => {
-    axiosGet.getNotContainsData("/report/"+reportInfo['seq']+"/fileList",fileGetResult);
+    axiosGet.getNotContainsData("/api/professor/report/"+reportInfo['seq']+"/fileList",fileGetResult);
   }
 
   const fileGetResult = (res) => {
     let _imgList = [];
     let _fileList = [];
-    for(let i =0;i<res.length;i++){
-      if(res[i]['type'] === 'FILE')
-        _fileList.push(res[i]['fileName']);
+    const fileList = res['reportFileAndImgList'];
+    for(let i =0;i<fileList.length;i++){
+      if(fileList[i]['type'] === 'FILE')
+        _fileList.push(fileList[i]['fileName']);
       else
-        _imgList.push(res[i]['fileName']);
+        _imgList.push(fileList[i]['fileName']);
     }
     setImgList(_imgList);
     setFileList(_fileList);
@@ -139,19 +140,19 @@ const UpdateReport = () => {
     }
     let formData = new FormData();
     formData.append("file",event.target.files[0]);
-    axiosPost.postFileUpload("/uploadFile/"+reportInfo['seq']+"/reportRelatedFiles/"+event.target.name,getFileListAfterUpload,formData);
+    axiosPost.postFileUpload("/api/professor/uploadFile/"+reportInfo['seq']+"/reportRelatedFiles/"+event.target.name,getFileListAfterUpload,formData);
     event.target.value = "";
   }
 
   const fileUpload = event => {
     let formData = new FormData();
     formData.append("file",event.target.files[0]);
-    axiosPost.postFileUpload("/uploadFile/"+reportInfo['seq']+"/reportRelatedFiles/"+event.target.name,getFileListAfterUpload,formData);
+    axiosPost.postFileUpload("/api/professor/uploadFile/"+reportInfo['seq']+"/reportRelatedFiles/"+event.target.name,getFileListAfterUpload,formData);
     event.target.value = "";
   }
 
   const getFileListAfterUpload = (res) => {
-    axiosGet.getNotContainsData("/report/"+reportInfo['seq']+"/fileList",fileGetResult);
+    axiosGet.getNotContainsData("/api/professor/report/"+reportInfo['seq']+"/fileList",fileGetResult);
   }
 
   const deleteImg = name => {
@@ -196,7 +197,7 @@ const UpdateReport = () => {
         showOtherReportOfStu_state:reportInfo['showOtherReportOfStu_state'],
         content : instance.getHtml()
       }
-      axiosPut.putContainsData("/report/"+reportInfo['seq'],getResponse,updateReportInfo);
+      axiosPut.putContainsData("/api/professor/report/"+reportInfo['seq'],getResponse,updateReportInfo);
     },1000);
   }
 

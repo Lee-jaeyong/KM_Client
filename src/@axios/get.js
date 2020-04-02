@@ -5,7 +5,7 @@ export async function getNotContainsData(URL,func){
         url: URL,
         method: 'get',
         headers : {
-            Authorization:'bearer 47eaaaf3-bfd0-452c-bc75-c4360fb4f54f'
+            Authorization:localStorage.getItem('token_type')+' '+localStorage.getItem('access_token')
         }
     }).then(
         res=>func(res.data)
@@ -26,7 +26,10 @@ export async function getContainsData(URL,func,data){
     axios({
         url: URL+addURL,
         method: 'get',
-        data: data
+        data: data,
+        headers : {
+            Authorization:localStorage.getItem('token_type')+' '+localStorage.getItem('access_token')
+        }
     }).then(
         res=>func(res.data)
     );

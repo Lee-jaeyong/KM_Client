@@ -160,7 +160,7 @@ const AddClass = () => {
         selectMenu: classMenuSelect,
         content: instance.getHtml()
       };
-      axiosPost.postContainsData('/professor/class', getResponse, addClassInfo);
+      axiosPost.postContainsData('/api/professor/class', getResponse, addClassInfo);
     }, 1000);
   };
 
@@ -170,7 +170,7 @@ const AddClass = () => {
       let formData = new FormData();
       formData.append('file', classFileUpload);
       axiosPost.postFileUpload(
-        '/uploadFile/' + res.seq + '/classInfoExcel',
+        '/api/professor//uploadFile/' + res.seq + '/classInfoExcel',
         getFileResponse,
         formData
       );
@@ -191,7 +191,7 @@ const AddClass = () => {
   };
 
   const getFileResponse = res => {
-    dispatch(CLASS_ACTION.fileUpload_class(res));
+    dispatch(CLASS_ACTION.fileUpload_class(res['file']));
   };
 
   useEffect(() => {

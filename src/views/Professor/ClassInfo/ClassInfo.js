@@ -74,7 +74,7 @@ const ClassInfo = () => {
   };
 
   const requestData = (idx, page, size) => {
-    axiosGet.getNotContainsData('/professor/class/' + idx, getResponse);
+    axiosGet.getNotContainsData('/api/professor/class/' + idx, getResponse);
     let data = {
       page: page,
       size: size,
@@ -84,13 +84,14 @@ const ClassInfo = () => {
       searchType: ''
     };
     axiosGet.getContainsData(
-      '/report/' + idx + '/list',
+      '/api/professor/report/class/' + idx + '/list',
       reportListResponse,
       data
     );
   };
 
   const reportListResponse = res => {
+    console.log(res);
     setTableDataList(res['list']);
     setTableDataCount(res['totalCount']);
   };

@@ -161,7 +161,7 @@ const AddReport = () => {
       content : instance.getHtml()
     }
     dispatch(ProgressBarActions.isProgressBar(true));
-    axiosPost.postContainsData("/report/"+selectClass['classIdx'],getResponse,addReportInfo);
+    axiosPost.postContainsData("/api/professor/report/"+selectClass['classIdx'],getResponse,addReportInfo);
   }
 
   const getResponse = (res) => {
@@ -170,13 +170,13 @@ const AddReport = () => {
       let formData = new FormData();
       for(let i = 0;i<reportImg.length;i++)
         formData.append("file",reportImg[i]);
-      axiosPost.postFileUpload("/uploadFile/"+res.seq+"/reportRelatedFiles/img",getImgFileResponse,formData);
+      axiosPost.postFileUpload("/api/professor/uploadFile/"+res.seq+"/reportRelatedFiles/img",getImgFileResponse,formData);
     }
     if(reportFile.length !== 0){
       let formData = new FormData();
       for(let i =0;i<reportFile.length;i++)
         formData.append("file",reportFile[i]);
-      axiosPost.postFileUpload("/uploadFile/"+res.seq+"/reportRelatedFiles/file",getFileResponse,formData);
+      axiosPost.postFileUpload("/api/professor/uploadFile/"+res.seq+"/reportRelatedFiles/file",getFileResponse,formData);
     }
     showMessageBox('과제 등록 완료','',true);
     dispatch(RedirectActions.isRedirect(true,"/class/report/"+res.seq));
@@ -184,11 +184,12 @@ const AddReport = () => {
   }
 
   const getImgFileResponse = (res) => {
-    dispatch(REPORT_ACTION.fileUpload_report_IMG(res));
+    dispatch(REPORT_ACTION.fileUpload_report_IMG(res['imgList']));
   }
-
+  
   const getFileResponse = (res) => {
-    dispatch(REPORT_ACTION.fileUpload_report_FILE(res));
+    console.log(res);
+    dispatch(REPORT_ACTION.fileUpload_report_FILE(res['fileList']));
   }
 
   useEffect(()=>{

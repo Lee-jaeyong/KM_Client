@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { makeStyles, useTheme } from '@material-ui/styles';
 import { useMediaQuery } from '@material-ui/core';
-import {useSelector,useDispatch} from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { Sidebar, Topbar, Footer } from '@common/component';
 import * as RedirectActions from '@store/actions/RedirectActions';
 import CustomMessageBox from '@common/component/CustomMessageBox';
@@ -11,9 +11,7 @@ import * as SideBarActions from '@store/actions/SideBarActions';
 import Backdrop from '@material-ui/core/Backdrop';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
-import {OauthReceiver} from 'react-oauth-flow';
-
-import {Redirect} from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 
 import * as axiosGet from '@axios/get';
 import * as Oauth from '@oauth/AcessToken';
@@ -34,37 +32,41 @@ const useStyles = makeStyles(theme => ({
   },
   backdrop: {
     zIndex: theme.zIndex.drawer + 1,
-    color: '#ffffff',
+    color: '#ffffff'
   }
 }));
 
 const Main = props => {
-  const [userInfo,setUserInfo] = useState({
-    name : '이재용',
-    subject : '융합소프트웨어',
-    userImg : '/images/dlwodyd.jpg'
+  const [userInfo, setUserInfo] = useState({
+    name: '이재용',
+    subject: '융합소프트웨어',
+    userImg: '/images/dlwodyd.jpg'
   });
 
-  const [classList,setClassList] = useState([]);
+  const [classList, setClassList] = useState([]);
 
-  const [otherPage,setOtherPage] = useState(
-    [
-      {
-        title: '수업 등록',
-        href:'/class/add'
-      },
-      {
-        title: '설정',
-        href:'/settings'
-      },
-    ]
-  );
+  const [otherPage, setOtherPage] = useState([
+    {
+      title: '수업 등록',
+      href: '/class/add'
+    },
+    {
+      title: '설정',
+      href: '/settings'
+    }
+  ]);
 
   const { children } = props;
-  const isRedirect = useSelector(state=>state['Redirect']['redirect']['isRedirect']);
-  const redirectURL = useSelector(state=>state['Redirect']['redirect']['url']);
-  const isSideBarUpdate = useSelector(state=>state['SideBar']['isUpdate']);
-  const progressBarState = useSelector(state=>state['ProgressBar']['visible']);
+  const isRedirect = useSelector(
+    state => state['Redirect']['redirect']['isRedirect']
+  );
+  const redirectURL = useSelector(
+    state => state['Redirect']['redirect']['url']
+  );
+  const isSideBarUpdate = useSelector(state => state['SideBar']['isUpdate']);
+  const progressBarState = useSelector(
+    state => state['ProgressBar']['visible']
+  );
   const dispatch = useDispatch();
   const classes = useStyles();
   const theme = useTheme();
@@ -89,52 +91,52 @@ const Main = props => {
 
   const shouldOpenSidebar = isDesktop ? true : openSidebar;
 
-  function getResponse (res){
+  function getResponse(res) {
     const classInfo = res['_embedded']['kM_classVOList'];
-    if(classInfo.length > 0){
+    if (classInfo.length > 0) {
       let result = [];
-      for(let i =0;i<classInfo.length;i++){
-        let pageData = []
-        if(classInfo[i]['selectMenu'].includes('REPORT')){
+      for (let i = 0; i < classInfo.length; i++) {
+        let pageData = [];
+        if (classInfo[i]['selectMenu'].includes('REPORT')) {
           pageData.push({
-            pageName:"과제 등록",
-            href:"/class/"+classInfo[i]['seq']+"/report/add",
+            pageName: '과제 등록',
+            href: '/class/' + classInfo[i]['seq'] + '/report/add'
           });
           pageData.push({
-            pageName:"과제 목록",
-            href:"/class/"+classInfo[i]['seq']+"/reportList",
-          });
-        }
-        if(classInfo[i]['selectMenu'].includes('NOTICE')){
-          pageData.push({
-            pageName:"공지사항 등록",
-            href:"/class/"+classInfo[i]['seq']+"/notice/add",
-          });
-          pageData.push({
-            pageName:"공지사항 목록",
-            href:"/class/"+classInfo[i]['seq']+"/noticeList",
+            pageName: '과제 목록',
+            href: '/class/' + classInfo[i]['seq'] + '/reportList'
           });
         }
-        if(classInfo[i]['selectMenu'].includes('REFERENCE')){
+        if (classInfo[i]['selectMenu'].includes('NOTICE')) {
           pageData.push({
-            pageName:"참고자료 등록",
-            href:"/class/"+classInfo[i]['seq']+"/referenceData/add",
+            pageName: '공지사항 등록',
+            href: '/class/' + classInfo[i]['seq'] + '/notice/add'
           });
           pageData.push({
-            pageName:"참고자료 목록",
-            href:"/class/"+classInfo[i]['seq']+"/referenceDataList",
+            pageName: '공지사항 목록',
+            href: '/class/' + classInfo[i]['seq'] + '/noticeList'
           });
         }
-        if(classInfo[i]['selectMenu'].includes('QnA')){
+        if (classInfo[i]['selectMenu'].includes('REFERENCE')) {
           pageData.push({
-            pageName:"Q/A",
-            href:"/class/"+classInfo[i]['seq']+"/QnA",
+            pageName: '참고자료 등록',
+            href: '/class/' + classInfo[i]['seq'] + '/referenceData/add'
+          });
+          pageData.push({
+            pageName: '참고자료 목록',
+            href: '/class/' + classInfo[i]['seq'] + '/referenceDataList'
+          });
+        }
+        if (classInfo[i]['selectMenu'].includes('QnA')) {
+          pageData.push({
+            pageName: 'Q/A',
+            href: '/class/' + classInfo[i]['seq'] + '/QnA'
           });
         }
         let data = {
-          classIdx : classInfo[i]['seq'],
-          title : classInfo[i]['name'],
-          pageList : pageData
+          classIdx: classInfo[i]['seq'],
+          title: classInfo[i]['name'],
+          pageList: pageData
         };
         result.push(data);
       }
@@ -142,28 +144,27 @@ const Main = props => {
     }
   }
 
-  useEffect(()=>{
-  },[progressBarState])
+  useEffect(() => {}, [progressBarState]);
 
-  useEffect(()=>{
+  useEffect(() => {
     const user = {
-      id : 'dlwodyd202',
-      pass : 'dlwodyd'
-    }
+      id: 'dlwodyd202',
+      pass: 'dlwodyd'
+    };
     Oauth.getAccessToken(user);
-    axiosGet.getNotContainsData("/api/professor/class",getResponse);
-  },[]);
+    axiosGet.getNotContainsData('/api/professor/class', getResponse);
+  }, []);
 
-  useEffect(()=>{
+  useEffect(() => {
     dispatch(RedirectActions.isRedirect(false));
-  },[isRedirect]);
+  }, [isRedirect]);
 
-  useEffect(()=>{
-    if(isSideBarUpdate){
-      axiosGet.getNotContainsData("/api/professor/class",getResponse);
+  useEffect(() => {
+    if (isSideBarUpdate) {
+      axiosGet.getNotContainsData('/api/professor/class', getResponse);
       dispatch(SideBarActions.isUpdate(false));
     }
-  },[isSideBarUpdate]);
+  }, [isSideBarUpdate]);
 
   return (
     <div
@@ -174,26 +175,29 @@ const Main = props => {
     >
       <Topbar onSidebarOpen={handleSidebarOpen} />
       <Sidebar
+        classList={classList}
         onClose={handleSidebarClose}
         open={shouldOpenSidebar}
-        variant={isDesktop ? 'persistent' : 'temporary'}
-        userInfo={userInfo}
-        classList={classList}
         otherPage={otherPage}
+        userInfo={userInfo}
+        variant={isDesktop ? 'persistent' : 'temporary'}
       />
       <main className={classes.content}>
-        {
-          progressBarState ? (
-            <Backdrop className={classes.backdrop} open={open} onClick={handleClose}>
-              <CircularProgress color="secondary" className={classes.progress}/>
-            </Backdrop>
-          )
-          :
-            null
-        }
+        {progressBarState ? (
+          <Backdrop
+            className={classes.backdrop}
+            onClick={handleClose}
+            open={open}
+          >
+            <CircularProgress
+              className={classes.progress}
+              color="secondary"
+            />
+          </Backdrop>
+        ) : null}
         {children}
-        {isRedirect ? <Redirect to={redirectURL}/> : null}
-        <CustomMessageBox/>
+        {isRedirect ? <Redirect to={redirectURL} /> : null}
+        <CustomMessageBox />
         <Footer />
       </main>
     </div>

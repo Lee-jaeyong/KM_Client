@@ -16,7 +16,7 @@ import {OauthReceiver} from 'react-oauth-flow';
 import {Redirect} from 'react-router-dom';
 
 import * as axiosGet from '@axios/get';
-import * as axiosPost from '@axios/post';
+import * as Oauth from '@oauth/AcessToken';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -146,13 +146,13 @@ const Main = props => {
   },[progressBarState])
 
   useEffect(()=>{
-    axiosPost.getAccessToken(loginRes);
-    //axiosGet.getNotContainsData("/api/professor/class",getResponse);
+    const user = {
+      id : 'dlwodyd202',
+      pass : 'dlwodyd'
+    }
+    Oauth.getAccessToken(user);
+    axiosGet.getNotContainsData("/api/professor/class",getResponse);
   },[]);
-
-  function loginRes(res){
-    alert(JSON.stringify(res));
-  }
 
   useEffect(()=>{
     dispatch(RedirectActions.isRedirect(false));
@@ -160,7 +160,7 @@ const Main = props => {
 
   useEffect(()=>{
     if(isSideBarUpdate){
-      axiosGet.getNotContainsData("/professor/class",getResponse);
+      axiosGet.getNotContainsData("/api/professor/class",getResponse);
       dispatch(SideBarActions.isUpdate(false));
     }
   },[isSideBarUpdate]);

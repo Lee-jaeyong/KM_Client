@@ -114,7 +114,7 @@ const UpdateClass = () => {
   };
 
   const fileDeleteHandle = () => {
-    axiosDelete.deleteNotContainsData("/uploadFile/"+inputClassInfo['seq']+"/classInfoExcel",fileDeleteResult);
+    axiosDelete.deleteNotContainsData("/api/professor/uploadFile/"+inputClassInfo['seq']+"/classInfoExcel",fileDeleteResult);
   }
 
   const fileDeleteResult = (res) => {
@@ -126,7 +126,7 @@ const UpdateClass = () => {
     if(update_classFileUpload !== null && update_classFileUpload !== undefined){
       let formData = new FormData();
       formData.append("file",update_classFileUpload);
-      axiosPost.postFileUpload("/uploadFile/"+res.seq+"/classInfoExcel",getFileResponse,formData);
+      axiosPost.postFileUpload("/api/professor/uploadFile/"+res.seq+"/classInfoExcel",getFileResponse,formData);
     }
     showMessageBox('수업 수정 완료','',true);
     dispatch(RedirectActions.isRedirect(true,"/class/"+res.seq));
@@ -135,7 +135,7 @@ const UpdateClass = () => {
   }
 
   const getFileResponse = (res) => {
-    dispatch(CLASS_ACTION.fileUpload_class(res));
+    dispatch(CLASS_ACTION.fileUpload_class(res['file']));
   }
 
   const fileUploadHandle = event => {
@@ -198,7 +198,7 @@ const UpdateClass = () => {
         selectMenu: classMenuSelect,
         content:instance.getHtml()
       };
-      axiosPut.putContainsData("/professor/class",getResponse,updateClassInfo);
+      axiosPut.putContainsData("/api/professor/class",getResponse,updateClassInfo);
     }, 1000);
   };
 

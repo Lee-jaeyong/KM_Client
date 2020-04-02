@@ -71,7 +71,7 @@ const ReportInfo = (props) => {
   }
 
   useEffect(()=>{
-    axiosGet.getNotContainsData("/report/"+props.match.params.idx,reportInfoResponse);
+    axiosGet.getNotContainsData("/api/professor/report/"+props.match.params.idx,reportInfoResponse);
   },[]);
 
   useEffect(()=>{

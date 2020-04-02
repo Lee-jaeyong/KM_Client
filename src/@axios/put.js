@@ -16,3 +16,11 @@ export async function putContainsData(URL,func,data){
         }
     }).then(res=>func(res.data));
 }
+
+export async function putNotContainsData(URL,func){
+    axios.put(URL,{},{
+        headers: {
+            Authorization:localStorage.getItem('token_type')+' '+localStorage.getItem('access_token')
+        }
+    }).then(res=>func(res.data)).catch(res=>alert(res));
+}

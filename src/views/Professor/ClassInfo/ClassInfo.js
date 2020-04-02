@@ -16,6 +16,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import CustomTable from '@common/component/CustomTable';
 import CustomConfirmDialog from '@common/component/CustomConfirmDialog';
 import * as RedirectActions from '@store/actions/RedirectActions';
+import * as SHOW_MESSAGE_ACTION from '@store/actions/MessageActions';
 
 import * as CLASS_ACTION from '@store/actions/ClassActions';
 import * as ProgressBarActions from '@store/actions/ProgressBarActions';
@@ -23,6 +24,8 @@ import * as ProgressBarActions from '@store/actions/ProgressBarActions';
 import * as filter from '@common/functions/ConvertNotXssFilter';
 
 import * as axiosGet from '@axios/get';
+import * as axiosPut from '@axios/put';
+
 import Viewer from 'tui-editor/dist/tui-editor-Viewer';
 
 const useStyles = makeStyles(theme => ({
@@ -39,13 +42,23 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const ClassInfo = () => {
+const ClassInfo = (props) => {
   const classes = useStyles();
   const [confirmDialog, setConfirmDialog] = useState(false);
+  const [dialogState,setDialogState] = useState(
+    {
+      title : '',
+      content : '',
+      dialogYseClick:null
+    }
+  );
+
   const selectClassIdx = useSelector(
     state => state['SelectUtil']['selectClass']['classIdx']
   );
+  const [selectSignUp,setSelectSignUp] = useState(-1);
   const [classInfo, setClassInfo] = useState({});
+  const [signUpList,setSignUpList] = useState([]);
   const addClassInfo = useSelector(state => state['Class']['classInfo']);
   const dispatch = useDispatch();
 
@@ -73,6 +86,7 @@ const ClassInfo = () => {
     dispatch(RedirectActions.isRedirect(true, '/class/report/' + idx));
   };
 
+  //수업 정보를 가져오는 메소드
   const requestData = (idx, page, size) => {
     axiosGet.getNotContainsData('/api/professor/class/' + idx, getResponse);
     let data = {
@@ -90,12 +104,17 @@ const ClassInfo = () => {
     );
   };
 
+  //수업 신청 현황을 가져오는 메소드
+  const requestSignUpClassForStu = () => {
+    axiosGet.getNotContainsData('/api/professor/class/'+selectClassIdx+"/signUpList", getResponseSignUpClassForStu);
+  }
+
   const reportListResponse = res => {
-    console.log(res);
     setTableDataList(res['list']);
     setTableDataCount(res['totalCount']);
   };
 
+  //수업 정보 콜백 메소드
   const getResponse = res => {
     setClassInfo(res);
     try {
@@ -107,9 +126,59 @@ const ClassInfo = () => {
     } catch {}
   };
 
+  //수업 신청 현황 콜백 메소드
+  const getResponseSignUpClassForStu = (res) => {
+    console.log(res);
+    let signUpList = [];
+    for(let i =0;i<res['_embedded'].length;i++){
+      signUpList.push({
+        seq : res['_embedded'][i]['seq'],
+        id : res['_embedded'][i]['userId'],
+        date : res['_embedded'][i]['date'],
+        button : (<Button variant="contained" color="secondary" onClick={()=>signUpSeccessHandle(res['_embedded'][i]['seq'],res['_embedded'][i]['userId'])}>
+                수강 승인
+              </Button>)
+      });
+    }
+    setSignUpList(signUpList);
+  }
+
+  const signUpSeccessHandle = (seq,id) => {
+    setDialogState({
+      seq:seq,
+      title:'수업 승인',
+      content:'\''+id+'\' 위 학생을 정말 수업 승인하시겠습니까?',
+      dialogYseClick:signUpSeccessYse
+    });
+    setConfirmDialog(true);
+  }
+
+  const signUpSeccessYse = (seq) => {
+    axiosPut.putNotContainsData("/api/professor/class/"+props.match.params.idx+"/signUpList/"+seq,signUpSeccessResult);
+  }
+
+  const signUpSeccessResult = (res) => {
+    showMessageBox('승인 완료','success',true);
+    requestSignUpClassForStu();
+  }
+
+  const deleteClassYse = () => {
+    alert('fsd');
+  }
+
+  const showMessageBox = (title, level, visible) => {
+    let message = {
+      content: title,
+      level: level,
+      visible: visible
+    };
+    dispatch(SHOW_MESSAGE_ACTION.show_message(message));
+  };
+
   useEffect(() => {
     if (selectClassIdx !== -1) {
       requestData(selectClassIdx, 0, 10);
+      requestSignUpClassForStu();
     }
   }, [selectClassIdx]);
 
@@ -135,12 +204,15 @@ const ClassInfo = () => {
       ) : null}
       <Grid container spacing={3}>
         <CustomConfirmDialog
+          seq={dialogState['seq']}
           open={confirmDialog}
-          closeHandle={() => setConfirmDialog(false)}
-          title={'수업 삭제'}
-          content={
-            '수업 삭제시 일주일(7일)간 보관됩니다. 정말 삭제하시겠습니까?'
-          }
+          closeHandle={() => {
+            setDialogState({title:'',content:''})
+            setConfirmDialog(false)
+          }}
+          title={dialogState['title']}
+          content={dialogState['content']}
+          handleYseClick={dialogState['dialogYseClick']}
         />
         <Grid item lg={8} md={8} xl={8} xs={12}>
           <Paper className={classes.paper}>
@@ -232,7 +304,14 @@ const ClassInfo = () => {
                     variant="contained"
                     color="secondary"
                     fullWidth
-                    onClick={() => setConfirmDialog(true)}>
+                    onClick={() => {
+                      setDialogState({
+                        title:'수업 삭제',
+                        content:'수업 삭제시 일주일(7일)간 보관됩니다. 정말 삭제하시겠습니까?',
+                        dialogYseClick:deleteClassYse
+                      });
+                      setConfirmDialog(true)
+                    }}>
                     수업 삭제
                   </Button>
                 </Grid>
@@ -248,6 +327,24 @@ const ClassInfo = () => {
               tableHeaderList={['이름']}
               noDataMessage={<h3>* 학생 리스트가 존재하지 않습니다.</h3>}
               exclude={''}
+              tableStyle={{
+                minHeight:550
+              }}
+            />
+          </TableContainer>
+          <br/>
+          <TableContainer component={Paper}>
+            <CustomTable
+              rowClickHandle={() => {}}
+              tableDescription={"수강 신청 리스트"}
+              tableHeaderList={['이름','날짜','']}
+              tableDataList={signUpList}
+              noDataMessage={<h3>* 학생 리스트가 존재하지 않습니다.</h3>}
+              exclude={'seq'}
+              notPageInfo
+              tableStyle={{
+                minHeight:550
+              }}
             />
           </TableContainer>
         </Grid>
@@ -269,6 +366,7 @@ const ClassInfo = () => {
           />
         </TableContainer>
       </Grid>
+
     </div>
   );
 };

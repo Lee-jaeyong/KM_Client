@@ -18,7 +18,7 @@ export default function CustomConfirmDialog(props) {
   };
 
   const handleYseClick = () =>{
-    props.handleYseClick();
+    props.handleYseClick(props.seq);
     props.closeHandle();
   }
 

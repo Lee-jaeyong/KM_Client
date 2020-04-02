@@ -24,9 +24,6 @@ const useStyles = makeStyles(theme => ({
   content: {
     padding: 0
   },
-  inner: {
-    minWidth: 1050
-  },
   nameContainer: {
     display: 'flex',
     alignItems: 'center'
@@ -49,7 +46,7 @@ function getJSONKeyList(jsonData){
 }
 
 const CustomTable = props => {
-  const { tableDescription,noDataMessage,tableDataCount,searchSeq,exclude,tableDataList, tableHeaderList, ...rest } = props;
+  const { tableDescription,noDataMessage,tableDataCount,searchSeq,exclude,tableDataList, tableHeaderList,tableStyle, ...rest } = props;
   //const [tableHeader,setTableHeader] = useState(["과제 번호","과제 코드","과제명","과제 시작일","과제 종료일","조회수"]);
   // const [tableData,setTableData] = useState([
   //   {reportIdx:"23" , reportCode:"C3523",reportTitle:"C언어-별짓기",reportStartDate:"2020-03-20",reportEndDate:"2020-07-17",reportHit:"343"},
@@ -80,7 +77,7 @@ const CustomTable = props => {
       <TableRow>
         {headerList.map((title,idx)=>{
           return (
-            <TableCell>{title}</TableCell>
+            <TableCell align="center">{title}</TableCell>
           );
         })}
       </TableRow>
@@ -96,7 +93,7 @@ const CustomTable = props => {
         {
           jsonKeyList.map((key,idx)=>{
             return (
-              exclude !== undefined && exclude.indexOf(key) === -1 ? <TableCell style={{cursor:'pointer'}} onClick={()=>tableCellClickHandle()}>{data[key]}</TableCell> : null
+              exclude !== undefined && exclude.indexOf(key) === -1 ? <TableCell align="center" style={{cursor:'pointer'}} onClick={()=>tableCellClickHandle()}>{data[key]}</TableCell> : null
             )
           })
         }
@@ -130,7 +127,7 @@ const CustomTable = props => {
       <h3 style={{marginTop:10,marginBottom:10}}>&nbsp;<img src="/images/right_arrow.png"/> {tableDescription}</h3>
       <CardContent className={classes.content}>
         <PerfectScrollbar>
-          <div className={classes.inner}>
+          <div className={classes.inner} style={tableStyle}>
             <Table>
               <TableHead>
               {

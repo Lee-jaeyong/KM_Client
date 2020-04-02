@@ -3,7 +3,10 @@ import axios from 'axios';
 export async function getNotContainsData(URL,func){
     axios({
         url: URL,
-        method: 'get'
+        method: 'get',
+        headers : {
+            Authorization:'bearer 47eaaaf3-bfd0-452c-bc75-c4360fb4f54f'
+        }
     }).then(
         res=>func(res.data)
     );

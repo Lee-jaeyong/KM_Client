@@ -98,7 +98,12 @@ const CustomSearchHeader = props => {
   const dispatch = useDispatch();
   const [expanded, setExpanded] = React.useState('panel1');
 
-  const { className, style, ...rest } = props;
+  const { className, style } = props;
+
+  const deleteProps = Object.assign({},props);
+  delete deleteProps.searchHandle;
+  delete deleteProps.disableUnderline;
+  delete deleteProps.title;
 
   const [searchInput, setSearchInput] = useState({
     name: '',
@@ -151,7 +156,7 @@ const CustomSearchHeader = props => {
       <ExpansionPanelSummary
         aria-controls="panel1d-content"
         id="panel1d-header">
-        <Typography>
+        <Typography component={'span'}>
           <h3>== {props.title} == </h3>
         </Typography>
       </ExpansionPanelSummary>
@@ -161,13 +166,11 @@ const CustomSearchHeader = props => {
             <Grid item xs={10} sm={3}>
               <Paper className={classes.paper}>
                 <TextField
-                  {...rest}
+                  {...deleteProps}
                   label="검 색"
-                  defaultValue=""
                   name="name"
                   value={searchInput['name']}
                   className={classes.input}
-                  disableUnderline
                   onChange={event => inputOnChange(event)}
                   fullWidth
                 />

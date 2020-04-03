@@ -11,8 +11,6 @@ import * as SideBarActions from '@store/actions/SideBarActions';
 import Backdrop from '@material-ui/core/Backdrop';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
-import {OauthReceiver} from 'react-oauth-flow';
-
 import {Redirect} from 'react-router-dom';
 
 import * as axiosGet from '@axios/get';

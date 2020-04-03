@@ -180,8 +180,7 @@ const Main = props => {
         onClose={handleSidebarClose}
         open={shouldOpenSidebar}
         otherPage={otherPage}
-        userInfo={userInfo}
-        variant={isDesktop ? 'persistent' : 'temporary'}
+        treeMenu={true}
       />
       <main className={classes.content}>
         {progressBarState ? (

@@ -6,6 +6,8 @@ import { Divider, Drawer } from '@material-ui/core';
 
 import { Profile, SidebarNav } from './components';
 
+import CustomTreeMenu from '@common/component/CustomTreeMenu';
+
 const useStyles = makeStyles(theme => ({
   drawer: {
     width: 240,
@@ -30,7 +32,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const Sidebar = props => {
-  const { open, variant, onClose, className, ...rest } = props;
+  const { treeMenu, open, variant, onClose, className, ...rest } = props;
 
   const deleteProps = Object.assign({}, props);
   delete deleteProps.open;
@@ -40,6 +42,7 @@ const Sidebar = props => {
   delete deleteProps.classIdx;
   delete deleteProps.divider;
   delete deleteProps.userInfo;
+  delete deleteProps.treeMenu;
 
   const classes = useStyles();
 
@@ -57,18 +60,19 @@ const Sidebar = props => {
       >
         <Profile userInfo={props.userInfo} />
         <Divider className={classes.divider} />
-        <SidebarNav
-          classIdx={props.classIdx}
-          className={classes.nav}
-          dropDown
-          pages={props.classList}
-          {...rest}
-        />
+        {treeMenu ? (
+          <CustomTreeMenu
+            pages={props.classList.concat(props.otherPage)}
+          />
+          ) : (
+            <SidebarNav
+              classIdx={props.classIdx}
+              className={classes.nav}
+              pages={props.classList}
+              dropDown
+            />
+        )}
         <Divider className={classes.divider} />
-        <SidebarNav
-          className={classes.nav}
-          pages={props.otherPage}
-        />
       </div>
     </Drawer>
   );

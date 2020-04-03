@@ -73,7 +73,7 @@ const ExpansionPanelDetails = withStyles(theme => ({
 
 export default function CustomizedExpansionPanels(props) {
   const {className,page,...rest} = props;
-   
+
   const [openPanelState,setOpenPanelState] = useState(false);
   const [chageColorState,setChangeColorState] = useState(false);
   const selectClassIdx = useSelector(state=>state['SelectUtil']['selectClass']['classIdx']);
@@ -107,27 +107,29 @@ export default function CustomizedExpansionPanels(props) {
       (
         <ExpansionPanel square expanded={openPanelState} onChange={()=>selectClassHandleChange(className)}>
             <ExpansionPanelSummary_color_Gray aria-controls="panel1d-content">
-            <Typography>
+            <Typography component={'div'}>
               <table>
-                <tr>
-                  <td style={{ width: 100 }}>
-                    <h4>- {className}</h4>
-                  </td>
-                  <td>
-                    {openPanelState ? (
-                      <img src={'/images/arrow_up.png'} />
-                    ) : (
-                      <img src={'/images/arrow_down.png'} />
-                    )}
-                  </td>
-                </tr>
+                <tbody>
+                  <tr>
+                    <td style={{ width: 100 }}>
+                      <h4>- {className}</h4>
+                    </td>
+                    <td>
+                      {openPanelState ? (
+                        <img src={'/images/arrow_up.png'} />
+                      ) : (
+                        <img src={'/images/arrow_down.png'} />
+                      )}
+                    </td>
+                  </tr>
+                </tbody>
               </table>
             </Typography>
             </ExpansionPanelSummary_color_Gray>
             <ExpansionPanelDetails style={{marginLeft:0}}>
-                <Typography>
+                <Typography component={'span'}>
                 {page['pageList'].map((pageInfo,idx)=>
-                    <Link onClick={()=>selectClassMenu(className)} to={pageInfo['href']}>
+                    <Link key={idx} onClick={()=>selectClassMenu(className)} to={pageInfo['href']}>
                         <ExpansionPanelList onClick={()=>window.scrollTo(0,0)}>
                             <Typography>- {pageInfo.pageName}</Typography>
                         </ExpansionPanelList>
@@ -143,27 +145,29 @@ export default function CustomizedExpansionPanels(props) {
           square
         >
           <ExpansionPanelSummary_color_White aria-controls="panel1d-content">
-            <Typography>
+            <Typography component={'span'}>
               <table>
-                <tr>
-                  <td style={{ width: 100 }}>
-                    <h4>- {className}</h4>
-                  </td>
-                  <td>
-                    {openPanelState ? (
-                      <img src={'/images/arrow_up.png'} />
-                    ) : (
-                      <img src={'/images/arrow_down.png'} />
-                    )}
-                  </td>
-                </tr>
+                <tbody>
+                  <tr>
+                    <td style={{ width: 100 }}>
+                      <h4>- {className}</h4>
+                    </td>
+                    <td>
+                      {openPanelState ? (
+                        <img src={'/images/arrow_up.png'} />
+                      ) : (
+                        <img src={'/images/arrow_down.png'} />
+                      )}
+                    </td>
+                  </tr>
+                </tbody>
               </table>
             </Typography>
             </ExpansionPanelSummary_color_White>
             <ExpansionPanelDetails style={{marginLeft:0}}>
-                <Typography>
+                <Typography component={'span'}>
                 {page['pageList'].map((pageInfo,idx)=>
-                    <Link to={pageInfo['href']}>
+                    <Link key={idx} to={pageInfo['href']}>
                         <ExpansionPanelList>
                             <Typography>- {pageInfo.pageName}</Typography>
                         </ExpansionPanelList>

@@ -104,7 +104,7 @@ const ClassInfo = (props) => {
     );
   };
 
-  //수업 신청 현황을 가져오는 메소드
+  //수업 신청 현황 및 수강 학생 현황을 가져오는 메소드
   const requestSignUpClassForStu = () => {
     axiosGet.getNotContainsData('/api/professor/class/'+selectClassIdx+"/signUpList", getResponseSignUpClassForStu);
   }
@@ -126,16 +126,17 @@ const ClassInfo = (props) => {
     } catch {}
   };
 
-  //수업 신청 현황 콜백 메소드
+  //수업 신청 현황 및 수강 학생 현황 콜백 메소드
   const getResponseSignUpClassForStu = (res) => {
     console.log(res);
     let signUpList = [];
-    for(let i =0;i<res['_embedded'].length;i++){
+    const kM_signUpClassForStuVOList = res['_embedded'] !== undefined ? res['_embedded']['kM_signUpClassForStuVOList'] !== undefined ? res['_embedded']['kM_signUpClassForStuVOList'] : [] : [];
+    for(let i =0;i<kM_signUpClassForStuVOList.length;i++){
       signUpList.push({
-        seq : res['_embedded'][i]['seq'],
-        id : res['_embedded'][i]['userId'],
-        date : res['_embedded'][i]['date'],
-        button : (<Button variant="contained" color="secondary" onClick={()=>signUpSeccessHandle(res['_embedded'][i]['seq'],res['_embedded'][i]['userId'])}>
+        seq : kM_signUpClassForStuVOList[i]['seq'],
+        id : kM_signUpClassForStuVOList[i]['km_user']['name'],
+        date : kM_signUpClassForStuVOList[i]['date'],
+        button : (<Button variant="contained" color="secondary" onClick={()=>signUpSeccessHandle(kM_signUpClassForStuVOList[i]['seq'],kM_signUpClassForStuVOList[i]['km_user']['name'])}>
                 수강 승인
               </Button>)
       });
@@ -327,6 +328,7 @@ const ClassInfo = (props) => {
               tableHeaderList={['이름']}
               noDataMessage={<h3>* 학생 리스트가 존재하지 않습니다.</h3>}
               exclude={''}
+              notPageInfo
               tableStyle={{
                 minHeight:550
               }}

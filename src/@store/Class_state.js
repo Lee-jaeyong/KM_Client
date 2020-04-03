@@ -17,10 +17,6 @@ const Class_state = (state = initialState, action) => {
         }
       };
     case FILEUPLOAD_CLASS :
-      console.log({
-        ...state.classInfo,
-        plannerDocName : action.fileInfo
-      });
       return {
         ...state,
         classInfo : {

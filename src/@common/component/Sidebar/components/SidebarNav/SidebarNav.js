@@ -42,22 +42,16 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const CustomRouterLink = forwardRef((props, ref) => (
-  <div
-    ref={ref}
-    style={{ flexGrow: 1 }}
-  >
-    <RouterLink {...props} />
-  </div>
-));
-
 const SidebarNav = props => {
-  const { pages, className, ...rest } = props;
+  const { pages, className } = props;
+
+  const deleteProps = Object.assign({}, props);
+  delete deleteProps.pages;
+  delete deleteProps.className;
 
   const classes = useStyles();
   return (
     <List
-      {...rest}
       className={clsx(classes.root, className)}
     >
       {pages.map((page,idx) => (
@@ -66,7 +60,7 @@ const SidebarNav = props => {
           className={page.title}
           key={idx}
           page={page}
-          {...rest}
+          {...deleteProps}
         />
       ))}
     </List>

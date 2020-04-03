@@ -117,7 +117,6 @@ const CustomTable = props => {
       setTableData(tableDataList);
       setJsonDataKeyList(getJSONKeyList(tableDataList));
     }
-    console.log(tableDataList);
   },[tableDataList]);
 
   return (

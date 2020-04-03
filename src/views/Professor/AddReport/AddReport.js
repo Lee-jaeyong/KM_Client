@@ -188,7 +188,6 @@ const AddReport = () => {
   }
   
   const getFileResponse = (res) => {
-    console.log(res);
     dispatch(REPORT_ACTION.fileUpload_report_FILE(res['fileList']));
   }
 

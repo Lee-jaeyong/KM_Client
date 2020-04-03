@@ -34,6 +34,15 @@ const useStyles = makeStyles(theme => ({
 const Sidebar = props => {
   const { open, variant, onClose, className, ...rest } = props;
 
+  const deleteProps = Object.assign({}, props);
+  delete deleteProps.open;
+  delete deleteProps.variant;
+  delete deleteProps.otherPage;
+  delete deleteProps.classList;
+  delete deleteProps.classIdx;
+  delete deleteProps.divider;
+  delete deleteProps.userInfo;
+
   const classes = useStyles();
 
   return (
@@ -45,7 +54,7 @@ const Sidebar = props => {
       variant={variant}
     >
       <div
-        {...rest}
+        {...deleteProps}
         className={clsx(classes.root, className)}
       >
         <Profile userInfo={props.userInfo} />

@@ -146,7 +146,8 @@ const Main = props => {
 
   useEffect(() => {}, [progressBarState]);
 
-  useEffect(() => {
+  useEffect(()=>{
+    //토큰 테스트
     const user = {
       id: 'dlwodyd202',
       pass: 'dlwodyd'

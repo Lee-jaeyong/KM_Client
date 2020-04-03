@@ -26,9 +26,9 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const ReportList = (props) => {
-  const selectClassIdx = useSelector(state=>state['SelectUtil']['selectClass']['classIdx']);
+  const [selectClassIdx,setSelectClassIdx] = useState(props.match.params.idx);
   const dispatch = useDispatch();
-  const [tableDataList,setTableDataList] = useState();
+  const [tableDataList,setTableDataList] = useState([]);
   const [tableDataCount,setTableDataCount] = useState();
   const [tableDataHeader,setTableDataHeader] = useState(
     ["과제 번호","과제명","과제 시작일","과제 종료일","조회수","마감 이후 제출 여부","제출 과제 관람 여부"]
@@ -80,8 +80,9 @@ const ReportList = (props) => {
   }
 
   useEffect(()=>{
-    requestData(selectClassIdx,0,10);
-  },[selectClassIdx]);
+    requestData(props.match.params.idx,0,10);
+    setSelectClassIdx(props.match.params.idx);
+  },[props.match.params.idx]);
 
   const classes = useStyles();
   return (

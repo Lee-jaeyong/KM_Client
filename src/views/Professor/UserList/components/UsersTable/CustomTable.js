@@ -64,6 +64,7 @@ const CustomTable = props => {
   
   const [tableHeader,setTableHeader] = useState(tableHeaderList);
   const [tableData,setTableData] = useState(tableDataList);
+  const [tableDataCount,setTableDataCount] = useState(tableDataList.length);
 
   const [jsonDataKeyList,setJsonDataKeyList] = useState(getJSONKeyList(tableData));
 
@@ -167,7 +168,7 @@ const CustomTable = props => {
       <CardActions className={classes.actions}>
         <TablePagination
           component="div"
-          count={tableData.length}
+          count={tableDataCount}
           onChangePage={handlePageChange}
           onChangeRowsPerPage={handleRowsPerPageChange}
           page={page}

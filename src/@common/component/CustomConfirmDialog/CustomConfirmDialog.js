@@ -8,14 +8,9 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 
 export default function CustomConfirmDialog(props) {
   const [open, setOpen] = React.useState(props.open);
-
   useEffect(()=>{
-    setOpen(props.open)
+    setOpen(props.open);
   },[props.open]); 
-
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
 
   const handleYseClick = () =>{
     props.handleYseClick(props.seq);

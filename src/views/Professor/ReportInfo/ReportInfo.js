@@ -33,7 +33,7 @@ const useStyles = makeStyles(theme => ({
 const ReportInfo = (props) => {
   const classes = useStyles();
   const [confirmDialog,setConfirmDialog] = useState(false);
-  const selectClassIdx = useSelector(state=>state['SelectUtil']['selectClass']['classIdx']);
+  const [selectClassIdx,setSelectClassIdx] = useState(props.match.params.idx);
   const selectReport = useSelector(state=>state['Report']['reportInfo']);
   const [reportInfo,setReportInfo] = useState(JSON.stringify(selectReport) !== '{}' ? 
   {
@@ -62,7 +62,7 @@ const ReportInfo = (props) => {
   const dispatch = useDispatch();
 
   const redirectPage_updateClass = () => {
-    dispatch(RedirectActions.isRedirect(true,"/class/"+props.match.params.idx+"/report/update"));
+    dispatch(RedirectActions.isRedirect(true,"/class/"+selectClassIdx+"/report/update"));
   }
   
   const reportInfoResponse = (res) => {
@@ -71,7 +71,7 @@ const ReportInfo = (props) => {
   }
 
   useEffect(()=>{
-    axiosGet.getNotContainsData("/api/professor/report/"+props.match.params.idx,reportInfoResponse);
+    axiosGet.getNotContainsData("/api/professor/report/"+selectClassIdx,reportInfoResponse);
   },[]);
 
   useEffect(()=>{
@@ -182,7 +182,7 @@ const ReportInfo = (props) => {
       <br/>
       <Grid item lg={12} md={12} xl={12} xs={12}>
           <TableContainer component={Paper}>
-            <CustomTable />
+            {/* <CustomTable /> */}
           </TableContainer>
         </Grid>
     </div>

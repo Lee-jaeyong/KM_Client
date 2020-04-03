@@ -62,7 +62,7 @@ const ClassInfo = (props) => {
   const addClassInfo = useSelector(state => state['Class']['classInfo']);
   const dispatch = useDispatch();
 
-  const [tableDataList, setTableDataList] = useState();
+  const [tableDataList, setTableDataList] = useState([]);
   const [tableDataCount, setTableDataCount] = useState();
   const [tableDataHeader, setTableDataHeader] = useState([
     '과제 번호',
@@ -106,7 +106,7 @@ const ClassInfo = (props) => {
 
   //수업 신청 현황 및 수강 학생 현황을 가져오는 메소드
   const requestSignUpClassForStu = () => {
-    axiosGet.getNotContainsData('/api/professor/class/'+selectClassIdx+"/signUpList", getResponseSignUpClassForStu);
+    axiosGet.getNotContainsData('/api/professor/class/'+props.match.params.idx+"/signUpList", getResponseSignUpClassForStu);
   }
 
   const reportListResponse = res => {
@@ -128,7 +128,6 @@ const ClassInfo = (props) => {
 
   //수업 신청 현황 및 수강 학생 현황 콜백 메소드
   const getResponseSignUpClassForStu = (res) => {
-    console.log(res);
     let signUpList = [];
     const kM_signUpClassForStuVOList = res['_embedded'] !== undefined ? res['_embedded']['kM_signUpClassForStuVOList'] !== undefined ? res['_embedded']['kM_signUpClassForStuVOList'] : [] : [];
     for(let i =0;i<kM_signUpClassForStuVOList.length;i++){
@@ -177,11 +176,9 @@ const ClassInfo = (props) => {
   };
 
   useEffect(() => {
-    if (selectClassIdx !== -1) {
-      requestData(selectClassIdx, 0, 10);
-      requestSignUpClassForStu();
-    }
-  }, [selectClassIdx]);
+    requestData(props.match.params.idx, 0, 10);
+    requestSignUpClassForStu();
+  }, [props.match.params.idx]);
 
   useEffect(() => {
     if (
@@ -200,15 +197,11 @@ const ClassInfo = (props) => {
 
   return (
     <div className={classes.root}>
-      {selectClassIdx === -1 && JSON.stringify(addClassInfo) === '{}' ? (
-        <Redirect to={'/dashboard'} />
-      ) : null}
       <Grid container spacing={3}>
         <CustomConfirmDialog
           seq={dialogState['seq']}
           open={confirmDialog}
           closeHandle={() => {
-            setDialogState({title:'',content:''})
             setConfirmDialog(false)
           }}
           title={dialogState['title']}
@@ -218,17 +211,17 @@ const ClassInfo = (props) => {
         <Grid item lg={8} md={8} xl={8} xs={12}>
           <Paper className={classes.paper}>
             <Paper className={classes.paper}>
-              <Grid xs={12} sm={12}>
+              <Grid item xs={12} sm={12}>
                 <br/>
                 <h2>* 수업 정보</h2>
                 <br/>
               </Grid>
             </Paper>
             <Grid container style={{ marginTop: 25 }}>
-              <Grid xs={4} sm={4} style={{ marginTop: 15 }}>
+              <Grid item xs={4} sm={4} style={{ marginTop: 15 }}>
                 <h3>수업명</h3>
               </Grid>
-              <Grid xs={8} sm={8}>
+              <Grid item xs={8} sm={8}>
                 <TextField
                   fullWidth
                   variant="outlined"
@@ -239,10 +232,10 @@ const ClassInfo = (props) => {
             </Grid>
             <Grid container>
               <Grid container style={{ marginTop: 15 }}>
-                <Grid xs={4} sm={4} style={{ marginTop: 15 }}>
+                <Grid item xs={4} sm={4} style={{ marginTop: 15 }}>
                   <h3>수업 시작일</h3>
                 </Grid>
-                <Grid xs={8} sm={8}>
+                <Grid item xs={8} sm={8}>
                   <TextField
                     type="date"
                     fullWidth
@@ -253,10 +246,10 @@ const ClassInfo = (props) => {
                 </Grid>
               </Grid>
               <Grid container style={{ marginTop: 15 }}>
-                <Grid xs={4} sm={4} style={{ marginTop: 15 }}>
+                <Grid item xs={4} sm={4} style={{ marginTop: 15 }}>
                   <h3>수업 종료일</h3>
                 </Grid>
-                <Grid xs={8} sm={8}>
+                <Grid item xs={8} sm={8}>
                   <TextField
                     type="date"
                     fullWidth
@@ -267,10 +260,10 @@ const ClassInfo = (props) => {
                 </Grid>
               </Grid>
               <Grid container style={{ marginTop: 35 }}>
-                <Grid xs={4} sm={4} style={{ marginTop: 15 }}>
+                <Grid item xs={4} sm={4} style={{ marginTop: 15 }}>
                   <h3>강의계획서</h3>
                 </Grid>
-                <Grid xs={8} sm={8}>
+                <Grid item xs={8} sm={8}>
                   {classInfo['plannerDocName'] ? (
                     <a href="#">{classInfo['plannerDocName']}</a>
                   ) : (
@@ -279,10 +272,10 @@ const ClassInfo = (props) => {
                 </Grid>
               </Grid>
               <Grid container style={{ marginTop: 55 }}>
-                <Grid xs={4} sm={4} style={{ marginTop: 15 }}>
+                <Grid item xs={4} sm={4} style={{ marginTop: 15 }}>
                   <h3>수업 내용</h3>{' '}
                 </Grid>
-                <Grid xs={8} sm={8}>
+                <Grid item xs={8} sm={8}>
                   <div style={{overflow:'scroll', height:700}}>
                     <Paper style={{padding:20}}>
                       <div id="classInfoContent"></div>
@@ -291,7 +284,7 @@ const ClassInfo = (props) => {
                 </Grid>
               </Grid>
               <Grid container style={{ marginTop: 100 }}>
-                <Grid xs={12} sm={6} style={{ marginTop: 15 }}>
+                <Grid item xs={12} sm={6} style={{ marginTop: 15 }}>
                   <Button
                     variant="contained"
                     color="primary"
@@ -300,7 +293,7 @@ const ClassInfo = (props) => {
                     수업 수정
                   </Button>
                 </Grid>
-                <Grid xs={12} sm={6} style={{ marginTop: 15 }}>
+                <Grid item xs={12} sm={6} style={{ marginTop: 15 }}>
                   <Button
                     variant="contained"
                     color="secondary"
@@ -326,6 +319,7 @@ const ClassInfo = (props) => {
               rowClickHandle={() => {}}
               tableDescription={"수강 학생 리스트"}
               tableHeaderList={['이름']}
+              tableDataList={[]}
               noDataMessage={<h3>* 학생 리스트가 존재하지 않습니다.</h3>}
               exclude={''}
               notPageInfo

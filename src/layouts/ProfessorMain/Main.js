@@ -179,6 +179,7 @@ const Main = props => {
         userInfo={userInfo}
         classList={classList}
         otherPage={otherPage}
+        treeMenu={true}
       />
       <main className={classes.content}>
         {

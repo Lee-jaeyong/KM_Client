@@ -32,7 +32,7 @@ const useStyles = makeStyles(theme => ({
   },
   backdrop: {
     zIndex: theme.zIndex.drawer + 1,
-    color: '#ffffff'
+    color: '#fff',
   }
 }));
 
@@ -144,7 +144,8 @@ const Main = props => {
     }
   }
 
-  useEffect(() => {}, [progressBarState]);
+  useEffect(()=>{
+  },[progressBarState]);
 
   useEffect(()=>{
     //토큰 테스트
@@ -183,18 +184,15 @@ const Main = props => {
         treeMenu={true}
       />
       <main className={classes.content}>
-        {progressBarState ? (
-          <Backdrop
-            className={classes.backdrop}
-            onClick={handleClose}
-            open={open}
-          >
-            <CircularProgress
-              className={classes.progress}
-              color="secondary"
-            />
-          </Backdrop>
-        ) : null}
+        {
+          progressBarState ? (
+            <Backdrop className={classes.backdrop} open={open}>
+              <CircularProgress color="inherit"/>
+            </Backdrop>
+          )
+          :
+            null
+        }
         {children}
         {isRedirect ? <Redirect to={redirectURL} /> : null}
         <CustomMessageBox />

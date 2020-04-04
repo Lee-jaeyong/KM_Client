@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{useEffect} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import List from '@material-ui/core/List';
@@ -103,6 +103,14 @@ export default function TransferList({ handleChange,leftData,rightData }) {
     setLeft(left.concat(right));
     setRight([]);
   };
+
+  useEffect(()=>{
+    rightData ? setRight(rightData.filter(value=>value!=='')) : setRight([]);
+  },[rightData]);
+
+  useEffect(()=>{
+    leftData ? setLeft(leftData) : setLeft([]);
+  },[leftData]);
 
   const customList = items => (
     <Paper className={classes.paper}>

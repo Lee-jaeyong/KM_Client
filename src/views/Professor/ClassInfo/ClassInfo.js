@@ -77,7 +77,7 @@ const ClassInfo = (props) => {
   const redirectPage_updateClass = () => {
     dispatch(CLASS_ACTION.save_class(classInfo));
     dispatch(
-      RedirectActions.isRedirect(true, '/class/' + selectClassIdx + '/update')
+      RedirectActions.isRedirect(true, '/class/' + props.match.params.idx + '/update')
     );
   };
 

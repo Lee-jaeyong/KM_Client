@@ -1,9 +1,17 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { makeStyles } from '@material-ui/styles';
+import { makeStyles, withStyles } from '@material-ui/styles';
 import { Grid, TextField } from '@material-ui/core';
 
 import { useDispatch } from 'react-redux';
+import CloudUploadIcon from '@material-ui/icons/CloudUpload';
+import { FormLabel, Card, CardHeader, CardContent } from '@material-ui/core';
 
+import Divider from '@material-ui/core/Divider';
+
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
+import FormHelperText from '@material-ui/core/FormHelperText';
+import Select from '@material-ui/core/Select';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -31,10 +39,21 @@ import * as ProgressBarActions from '@store/actions/ProgressBarActions';
 import * as SideBarActions from '@store/actions/SideBarActions';
 import { compareToDate } from '@common/functions/CompareToDate';
 
+import TransferList from '@common/component/CustomTransferList';
 import 'tui-editor/dist/tui-editor-contents.css';
 import 'highlight.js/styles/github.css';
- 
+import Chip from '@material-ui/core/Chip';
+
 import * as axiosPost from '@axios/post';
+
+const ValidationTextField = withStyles({
+  root: {
+    '& input:valid:focus + fieldset': {
+      borderLeftWidth: 6,
+      padding: '4px !important' // override inline-style
+    }
+  }
+})(TextField);
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -44,10 +63,18 @@ const useStyles = makeStyles(theme => ({
     color: 'red'
   },
   paper: {
-    padding: theme.spacing(1),
-    textAlign: 'center',
-    color: theme.palette.text.secondary
-  }
+    padding: theme.spacing(1)
+  },
+  innerPaper: {
+    padding: theme.spacing(4)
+  },
+  chip: {
+    margin: theme.spacing(0.5)
+  },
+  formControl: {
+    margin: theme.spacing(1),
+    minWidth: 120,
+  },
 }));
 
 function createButton(iconClassName) {
@@ -68,13 +95,7 @@ const AddClass = () => {
   const [instance, setInstance] = useState();
 
   const classes = useStyles();
-  const [state, setState] = React.useState({
-    REPORT: true,
-    NOTICE: false,
-    REFERENCE: false,
-    QnA: false,
-    submitCheck: false
-  });
+  const [submitCheck, setSubmitCheck] = React.useState(false);
 
   const [checkedMenuResult, setCheckedMenuResult] = useState([]);
   const [classFileUpload, setClassFileUpload] = useState();
@@ -117,15 +138,8 @@ const AddClass = () => {
     setClassFileUpload(event.target.files[0]);
   };
 
-  const handleChange = event => {
-    let menuArr = checkedMenuResult;
-    if (event.target.checked) {
-      menuArr.push(event.target.value);
-    } else {
-      menuArr.splice(menuArr.indexOf(event.target.value), 1);
-    }
-    setCheckedMenuResult(menuArr);
-    setState({ ...state, [event.target.name]: event.target.checked });
+  const handleChange = value => {
+    setCheckedMenuResult(value);
   };
 
   const addClassSubmit = event => {
@@ -142,7 +156,7 @@ const AddClass = () => {
       showMessageBox('수업 종료일을 선택해주세요.', '', true);
       endDate.current.focus();
       return;
-    } else if (!state['submitCheck']) {
+    } else if (!submitCheck) {
       showMessageBox('동의란을 체크해주세요.', '', true);
       return;
     }
@@ -160,7 +174,11 @@ const AddClass = () => {
         selectMenu: classMenuSelect,
         content: instance.getHtml()
       };
-      axiosPost.postContainsData('/api/professor/class', getResponse, addClassInfo);
+      axiosPost.postContainsData(
+        '/api/professor/class',
+        getResponse,
+        addClassInfo
+      );
     }, 1000);
   };
 
@@ -177,6 +195,7 @@ const AddClass = () => {
     }
     showMessageBox('수업 등록 완료', '', true);
     dispatch(RedirectActions.isRedirect(true, '/class/' + res.seq));
+    dispatch(ProgressBarActions.isProgressBar(false));
     dispatch(SideBarActions.isUpdate(true));
     window.scrollTo(0, 0);
   };
@@ -228,284 +247,233 @@ const AddClass = () => {
 
   return (
     <div className={classes.root}>
-      <Paper className={classes.paper}>
-        <Grid spacing={2} container>
-          <Grid xs={12} sm={12}>
-            <Paper className={classes.paper}>
-              <h1>* 수 업 등 록</h1>
-              <span className={classes.requireFont}>
-                *5분마다 자동으로 임시저장 됩니다.
-              </span>
-            </Paper>
-          </Grid>
-          <Grid item container style={{ marginTop: 35 }}>
-            <Grid xs={6} sm={4}>
-                <h2>수업명</h2>
-                <span className={classes.requireFont}>*필수 입력 값입니다</span>
-            </Grid>
-            <Grid xs={6} sm={8}>
-                <TextField
-                  inputRef={name}
-                  fullWidth
-                  variant="outlined"
-                  name="name"
-                  onChange={event => inputChangeHandle(event)}
-                />
-            </Grid>
-          </Grid>
-          <Grid item container style={{ marginTop: 35 }}>
-            <Grid xs={6} sm={2}>
-                <h2>수업 시작일</h2>
-                <span className={classes.requireFont}>*필수 입력 값입니다</span>
-            </Grid>
-            <Grid xs={6} sm={4}>
-                <TextField
-                  inputRef={startDate}
-                  fullWidth
-                  type="date"
-                  name="startDate"
-                  onChange={event => {
-                    if (inputClassInfo['endDate'] === '') {
-                      inputChangeHandle(event);
-                      return;
-                    }
-                    if (
-                      inputClassInfo['endDate'] !== '' &&
-                      compareToDate(
-                        event.target.value,
-                        inputClassInfo['endDate']
-                      )
-                    )
-                      inputChangeHandle(event);
-                    else {
-                      showMessageBox(
-                        '수업 시작일은 종료일보다 작아야합니다.',
-                        'error',
-                        true
-                      );
-                      startDate.current.value = '';
-                    }
-                  }}
-                  variant="outlined"
-                />
-            </Grid>
-            <Grid xs={6} sm={2}>
-                <h2>수업 종료일</h2>
-                <span className={classes.requireFont}>*필수 입력 값입니다</span>
-            </Grid>
-            <Grid xs={6} sm={4}>
-                <TextField
-                  inputRef={endDate}
-                  fullWidth
-                  type="date"
-                  name="endDate"
-                  onChange={event => {
-                    {
-                      if (inputClassInfo['startDate'] === '') {
+      <Grid container spacing={4}>
+        <Grid item lg={2} md={2} xl={2} xs={12} />
+        <Grid item lg={8} md={8} xl={8} xs={12}>
+          <Card>
+            <CardHeader
+              subheader="수업에 대한 기본정보를 등록합니다."
+              title="수업 등록"
+            />
+            <Divider />
+            <CardContent>
+              <Grid container spacing={3}>
+                <Grid item xs={12} sm={12}>
+                  <ValidationTextField
+                    inputRef={name}
+                    variant="outlined"
+                    name="name"
+                    fullWidth
+                    label="수업명*"
+                    helperText="수업명은 필수 항목입니다."
+                    placeholder="수업명을 입력하세요."
+                    onChange={event => inputChangeHandle(event)}
+                  />
+                </Grid>
+                <Grid item xs={6} sm={6}>
+                  <ValidationTextField
+                    inputRef={startDate}
+                    fullWidth
+                    type="date"
+                    helperText="수업 시작일자는 필수 항목입니다."
+                    name="startDate"
+                    onChange={event => {
+                      if (inputClassInfo['endDate'] === '') {
                         inputChangeHandle(event);
                         return;
                       }
                       if (
-                        inputClassInfo['startDate'] !== '' &&
+                        inputClassInfo['endDate'] !== '' &&
                         compareToDate(
-                          inputClassInfo['startDate'],
-                          event.target.value
+                          event.target.value,
+                          inputClassInfo['endDate']
                         )
                       )
                         inputChangeHandle(event);
                       else {
                         showMessageBox(
-                          '수업 종료일은 시작일보다 커야합니다.',
+                          '수업 시작일은 종료일보다 작아야합니다.',
                           'error',
                           true
                         );
-                        endDate.current.value = '';
+                        startDate.current.value = '';
                       }
-                    }
-                  }}
-                  variant="outlined"
-                />
-            </Grid>
-          </Grid>
-          <Grid container style={{ marginTop: 35 }}>
-            <Grid xs={6} sm={4}>
-                <h2>강의계획서 등록</h2>
-                <br />
-                <Button variant="contained" color="secondary">
-                  계획서 양식 다운로드
-                </Button>
-            </Grid>
-            <Grid xs={6} sm={2}>
-                <input
-                  type="file"
-                  onChange={event => fileUploadHandle(event)}
-                />
-            </Grid>
-          </Grid>
-          <Grid container style={{ marginTop: 35 }}>
-            <Grid xs={6} sm={4}>
-                <br />
-                <h2>수업 타입</h2>
-            </Grid>
-            <Grid xs={6} sm={2}>
-                <FormControl component="fieldset">
-                  <RadioGroup
-                    value={inputClassInfo.type}
-                    row
-                    aria-label="position"
-                    name="type"
-                    onChange={event => inputChangeHandle(event)}>
+                    }}
+                    variant="outlined"
+                  />
+                </Grid>
+                <Grid item xs={6} sm={6}>
+                  
+                  <ValidationTextField
+                    inputRef={endDate}
+                    fullWidth
+                    type="date"
+                    helperText="수업 종료일자는 필수 항목입니다."
+                    name="endDate"
+                    onChange={event => {
+                      {
+                        if (inputClassInfo['startDate'] === '') {
+                          inputChangeHandle(event);
+                          return;
+                        }
+                        if (
+                          inputClassInfo['startDate'] !== '' &&
+                          compareToDate(
+                            inputClassInfo['startDate'],
+                            event.target.value
+                          )
+                        )
+                          inputChangeHandle(event);
+                        else {
+                          showMessageBox(
+                            '수업 종료일은 시작일보다 커야합니다.',
+                            'error',
+                            true
+                          );
+                          endDate.current.value = '';
+                        }
+                      }
+                    }}
+                    variant="outlined"
+                  />
+                  <Grid item xs={2} sm={2} />
+                </Grid>
+              </Grid>
+              <Grid container style={{ marginTop: 15 }}>
+                <Grid item xs={12} sm={12}>
+                  <label htmlFor="contained-button-file">
+                    <Button
+                      variant="contained"
+                      fullWidth
+                      component="span">
+                      <CloudUploadIcon />
+                      &nbsp;강의계획서 등록
+                    </Button>
+                  </label>
+                  <input
+                    id="contained-button-file"
+                    type="file"
+                    onChange={event => fileUploadHandle(event)}
+                    style={{
+                      display: 'none'
+                    }}
+                  />
+                </Grid>
+                <Grid item xs={2} sm={2} />
+                <Grid item xs={2} sm={2} />
+                <Grid item xs={8} sm={8}>
+                  <br />
+                  {classFileUpload ? (
+                    <Chip
+                      label={classFileUpload['name']}
+                      onDelete={() => setClassFileUpload(null)}
+                      className={classes.chip}
+                    />
+                  ) : null}
+                </Grid>
+              </Grid>
+              <Grid container style={{marginTop:50}}>
+                <Grid xs={6} sm={6} style={{textAlign:'center'}}>
+                  <FormControl className={classes.formControl}>
+                    <InputLabel shrink>
+                      수업 타입
+                    </InputLabel>
+                    <Select
+                      value={inputClassInfo.type}
+                      onChange={event => inputChangeHandle(event)}
+                      name={'type'}
+                      className={classes.selectEmpty}
+                    >
+                      <MenuItem value={'MAJOR'}>전 공</MenuItem>
+                      <MenuItem value={'CULTURE'}>교 양</MenuItem>
+                    </Select>
+                    <FormHelperText>수업 타입을 선택해주세요.</FormHelperText>
+                  </FormControl>
+                </Grid>
+                <Grid xs={6} sm={6} style={{textAlign:'center'}}>
+                  <FormControl className={classes.formControl}>
+                    <InputLabel shrink>
+                      수업 타입
+                    </InputLabel>
+                    <Select
+                      value={inputClassInfo.use_state}
+                      onChange={event => inputChangeHandle(event)}
+                      name={'use_state'}
+                      className={classes.selectEmpty}
+                    >
+                      <MenuItem value={'YSE'}>개 시</MenuItem>
+                      <MenuItem value={'NO'}>미개시</MenuItem>
+                    </Select>
+                    <FormHelperText>수업 타입을 선택해주세요.</FormHelperText>
+                  </FormControl>
+                </Grid>
+              </Grid>
+              <Grid container style={{ marginTop: 35 }}>
+                <Grid item xs={12} sm={12}>
+                  <Paper className={classes.paper} style={{ minHeight: 105 }}>
+                    <h4> - 수업 내용</h4>
+                    <br />
+                    <div id="editorSection"></div>
+                  </Paper>
+                </Grid>
+              </Grid>
+              <Grid container style={{ marginTop: 35 }}>
+                <Grid item xs={12} sm={12}>
+                  <TransferList leftData={['공지사항','참고자료','Q/A']} handleChange={handleChange}/>
+                </Grid>
+              </Grid>
+              <Grid container style={{ marginTop: 35 }}>
+                <Grid item xs={2} sm={2} />
+                <Grid item xs={8} sm={8}>
+                  <Paper className={classes.paper}>
                     <FormControlLabel
-                      value="MAJOR"
-                      control={<Radio color="primary" />}
-                      label="전공"
+                      control={
+                        <Checkbox
+                          checked={submitCheck}
+                          onChange={()=>setSubmitCheck(!submitCheck)}
+                          name="submitCheck"
+                        />
+                      }
+                      label="입력한 대로 수업을 등록합니다."
                     />
-                    <FormControlLabel
-                      value="CULTURE"
-                      control={<Radio color="primary" />}
-                      label="교양"
-                    />
-                  </RadioGroup>
-                </FormControl>
-            </Grid>
-          </Grid>
-          <Grid container style={{ marginTop: 35 }}>
-            <Grid xs={6} sm={4}>
-                <br />
-                <br />
-                <br />
-                <h2>수업 내용</h2>
-            </Grid>
-            <Grid xs={6} sm={8}>
-              <Paper className={classes.paper} style={{ minHeight: 105 }}>
-                <div id="editorSection"></div>
-              </Paper>
-            </Grid>
-          </Grid>
-          <Grid container style={{ marginTop: 35 }}>
-            <Grid xs={6} sm={4}>
-              <br />
-              <h2>메뉴 종류</h2>
-            </Grid>
-            <Grid xs={6} sm={8} style={{ minHeight: 105 }}>
-              <FormGroup row>
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      value="REPORT"
-                      checked={state.REPORT}
-                      onChange={handleChange}
-                      name="REPORT"
-                      disabled
-                    />
-                  }
-                  label="과 제"
-                />
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      value="NOTICE"
-                      checked={state.NOTICE}
-                      onChange={handleChange}
-                      name="NOTICE"
-                    />
-                  }
-                  label="공지사항"
-                />
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      value="REFERENCE"
-                      checked={state.REFERENCE}
-                      onChange={handleChange}
-                      name="REFERENCE"
-                    />
-                  }
-                  label="참고자료"
-                />
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      value="QnA"
-                      checked={state.QnA}
-                      onChange={handleChange}
-                      name="QnA"
-                    />
-                  }
-                  label="Q/A"
-                />
-              </FormGroup>
-            </Grid>
-          </Grid>
-          <Grid container style={{ marginTop: 5 }}>
-            <Grid xs={6} sm={4}>
-              <h2>수업 개시 여부</h2>
-            </Grid>
-            <Grid xs={6} sm={8}>
-              <RadioGroup
-                value={inputClassInfo.use_state}
-                row
-                aria-label="position"
-                name="use_state"
-                onChange={event => inputChangeHandle(event)}>
-                <FormControlLabel
-                  value={'YSE'}
-                  control={<Radio color="primary" />}
-                  label="개시"
-                />
-                <FormControlLabel
-                  value={'NO'}
-                  control={<Radio color="primary" />}
-                  label="미개시"
-                />
-              </RadioGroup>
-            </Grid>
-          </Grid>
-          <Grid container style={{ marginTop: 35 }}>
-            <Grid xs={12} sm={12}>
-              <Paper className={classes.paper}>
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      checked={state.submitCheck}
-                      onChange={handleChange}
-                      name="submitCheck"
-                    />
-                  }
-                  label="입력한 대로 수업을 등록합니다."
-                />
-              </Paper>
-            </Grid>
-          </Grid>
-          <Grid container style={{ marginTop: 5 }}>
-            <Grid xs={12} sm={12}>
-              <Paper className={classes.paper}>
-                <Button
-                  variant="contained"
-                  color="secondary"
-                  fullWidth
-                  style={{ minHeight: 50 }}>
-                  임시 저장
-                </Button>
-              </Paper>
-            </Grid>
-          </Grid>
-          <Grid container style={{ marginTop: 5 }}>
-            <Grid xs={12} sm={12}>
-              <Paper className={classes.paper}>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  fullWidth
-                  style={{ minHeight: 70 }}
-                  onClick={event => addClassSubmit(event)}>
-                  수업 등록
-                </Button>
-              </Paper>
-            </Grid>
-          </Grid>
+                  </Paper>
+                  <br />
+                </Grid>
+              </Grid>
+              <Grid container style={{ marginTop: 5 }}>
+                <Grid item xs={2} sm={2} />
+                <Grid item xs={8} sm={8}>
+                  <Paper className={classes.paper}>
+                    <Button
+                      variant="contained"
+                      color="secondary"
+                      fullWidth
+                      style={{ minHeight: 50 }}>
+                      임시 저장
+                    </Button>
+                  </Paper>
+                </Grid>
+              </Grid>
+              <Grid container style={{ marginTop: 5 }}>
+                <Grid item xs={2} sm={2} />
+                <Grid item xs={8} sm={8}>
+                  <Paper className={classes.paper}>
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      fullWidth
+                      style={{ minHeight: 70 }}
+                      onClick={event => addClassSubmit(event)}>
+                      수업 등록
+                    </Button>
+                  </Paper>
+                  <br />
+                </Grid>
+              </Grid>
+            </CardContent>
+          </Card>
         </Grid>
-      </Paper>
+      </Grid>
     </div>
   );
 };

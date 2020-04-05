@@ -8,7 +8,6 @@ export { default as SignIn } from './SignIn';
 export { default as SignUp } from './SignUp';
 export { default as Typography } from './Typography';
 export { default as UserList } from './UserList';
-export { default as AddClass } from './AddClass';
 export { default as ClassInfo } from './ClassInfo';
 export { default as AddReport } from './AddReport';
 export { default as AddRefereceData } from './AddRefereceData';

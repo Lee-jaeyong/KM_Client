@@ -4,11 +4,15 @@ import { useSelector,useDispatch } from 'react-redux';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/styles';
-import { AppBar, Toolbar, Badge, Hidden, IconButton } from '@material-ui/core';
+import { AppBar, Toolbar, Badge, Hidden, IconButton,Fab,Tooltip  } from '@material-ui/core';
+import EditIcon from '@material-ui/icons/Edit';
 import MenuIcon from '@material-ui/icons/Menu';
+import BuildIcon from '@material-ui/icons/Build';
+
 import NotificationsIcon from '@material-ui/icons/NotificationsOutlined';
 import LinearProgress from '@material-ui/core/LinearProgress';
-import * as ProgressBarActions from '@store/actions/ProgressBarActions';
+
+import AddClass from './component/AddClass';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -26,10 +30,15 @@ const Topbar = props => {
   const { className, onSidebarOpen, ...rest } = props;
 
   const classes = useStyles();
-
+  const [addClassShowState,setAddClassShowState] = useState(false);
+  
   const [notifications] = useState([]);
   const progressBarState = useSelector(state=>state['ProgressBar']['visible']);
   const dispatch = useDispatch();
+
+  const showAddClassForm = () =>{
+    setAddClassShowState(true);
+  }
 
   useEffect(()=>{
   },[progressBarState]);
@@ -50,23 +59,41 @@ const Topbar = props => {
           />
         </RouterLink>
         <div className={classes.flexGrow} />
+        <Tooltip title="수업 등록">
+          <IconButton color="inherit" onClick={()=>showAddClassForm()}>
+            <EditIcon />
+          </IconButton>
+        </Tooltip>
         <Hidden mdDown>
+        <Tooltip title="알 림">
           <IconButton color="inherit">
             <Badge
               badgeContent={notifications.length}
               color="primary"
               variant="dot"
-            >
+              >
               <NotificationsIcon />
             </Badge>
           </IconButton>
+        </Tooltip>
+        <Tooltip title="설 정">
+          <IconButton color="inherit">
+            <Badge
+              badgeContent={notifications.length}
+              color="primary"
+              variant="dot"
+              >
+              <BuildIcon />
+            </Badge>
+          </IconButton>
+        </Tooltip>
         </Hidden>
         <Hidden lgUp>
           <IconButton
             color="inherit"
             onClick={onSidebarOpen}
           >
-            <MenuIcon />
+          <MenuIcon/>
           </IconButton>
         </Hidden>
       </Toolbar>
@@ -80,6 +107,7 @@ const Topbar = props => {
         :
           null
       }
+      <AddClass open={addClassShowState} handleClose={()=>setAddClassShowState(false)}/>
     </AppBar>
   );
 };

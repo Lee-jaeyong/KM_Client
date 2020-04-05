@@ -12,7 +12,6 @@ import {
   SignUp as SignUpView,
   SignIn as SignInView,
   NotFound as NotFoundView,
-  AddClass as AddClassView,
   ClassInfo as ClassInfoView,
   AddReport as AddReportView,
   AddRefereceData as AddRefereceDataView,
@@ -70,12 +69,6 @@ const Professor = () => {
         exact
         layout={MainLayout}
         path="/class/:idx/reportList"
-      />
-      <ProfessorRoute
-        component={AddClassView}
-        exact
-        layout={MainLayout}
-        path="/class/add"
       />
       <ProfessorRoute
         component={ClassInfoView}

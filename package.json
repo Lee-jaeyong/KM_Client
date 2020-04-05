@@ -29,7 +29,7 @@
   },
   "dependencies": {
     "@material-ui/core": "^4.9.7",
-    "@material-ui/icons": "^4.2.1",
+    "@material-ui/icons": "^4.9.1",
     "@material-ui/lab": "^4.0.0-alpha.47",
     "@material-ui/styles": "^4.2.1",
     "axios": "^0.19.2",
@@ -42,6 +42,7 @@
     "react": "^16.8.6",
     "react-chartjs-2": "^2.7.6",
     "react-dom": "^16.8.6",
+    "react-dropzone": "^10.2.2",
     "react-infinite-calendar": "^2.3.1",
     "react-oauth-flow": "^1.2.0",
     "react-perfect-scrollbar": "^1.5.3",

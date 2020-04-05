@@ -104,14 +104,6 @@ export default function TransferList({ handleChange,leftData,rightData }) {
     setRight([]);
   };
 
-  useEffect(()=>{
-    rightData ? setRight(rightData.filter(value=>value!=='')) : setRight([]);
-  },[rightData]);
-
-  useEffect(()=>{
-    leftData ? setLeft(leftData) : setLeft([]);
-  },[leftData]);
-
   const customList = items => (
     <Paper className={classes.paper}>
       <List dense component="div" role="list">

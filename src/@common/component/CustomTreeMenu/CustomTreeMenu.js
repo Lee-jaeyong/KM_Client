@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
+import {useDispatch} from 'react-redux';
 import TreeView from '@material-ui/lab/TreeView';
 import TreeItem from '@material-ui/lab/TreeItem';
 import Typography from '@material-ui/core/Typography';
@@ -12,6 +13,7 @@ import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import ArrowRightIcon from '@material-ui/icons/ArrowRight';
 import { Link } from 'react-router-dom';
 import { Divider } from '@material-ui/core';
+import * as RedirectActions from '@store/actions/RedirectActions';
 
 const useTreeItemStyles = makeStyles((theme) => ({
   root: {
@@ -58,6 +60,7 @@ const useTreeItemStyles = makeStyles((theme) => ({
     marginRight: theme.spacing(1),
   },
   labelText: {
+    fontSize:15,
     fontWeight: 'inherit',
     flexGrow: 1,
   },
@@ -114,6 +117,7 @@ const useStyles = makeStyles({
 });
 
 export default function GmailTreeView(props) {
+    const dispatch = useDispatch();
     const {pages} = props; 
     const classes = useStyles();
     const colorList = [
@@ -133,25 +137,25 @@ export default function GmailTreeView(props) {
         {pages.map((page,idx)=>{
             return (
                 page['pageList'] ? (
-                    <Link key={idx} to={"/class/"+page['classIdx']}>
-                        <StyledTreeItem nodeId={''+idx} labelText={page['title']} labelIcon={Label}>
-                            {page['pageList'].map((pageInfo,_idx)=>{
-                                return(
-                                    <Link key={_idx} to={pageInfo['href']}>
-                                        <StyledTreeItem
-                                            key={_idx}
-                                            nodeId={pageInfo['href']+'_'+_idx}
-                                            labelText={pageInfo['pageName']}
-                                            labelIcon={SupervisorAccountIcon}
-                                            labelInfo="<"
-                                            color={colorList[idx%colorList.length]['color']}
-                                            bgColor={colorList[idx%colorList.length]['bgColor']}
-                                        />
-                                    </Link>
-                                );
-                            })}
-                        </StyledTreeItem>
-                    </Link>
+                      <StyledTreeItem key={idx} nodeId={''+idx} labelText={page['title']} labelIcon={Label} onClick={()=>
+                        dispatch(RedirectActions.isRedirect(true,"/class/"+page['classIdx']))
+                      }>
+                          {page['pageList'].map((pageInfo,_idx)=>{
+                              return(
+                                  <Link key={_idx} to={pageInfo['href']}>
+                                      <StyledTreeItem
+                                          key={_idx}
+                                          nodeId={pageInfo['href']+'_'+_idx}
+                                          labelText={pageInfo['pageName']}
+                                          labelIcon={SupervisorAccountIcon}
+                                          labelInfo="<"
+                                          color={colorList[idx%colorList.length]['color']}
+                                          bgColor={colorList[idx%colorList.length]['bgColor']}
+                                      />
+                                  </Link>
+                              );
+                          })}
+                      </StyledTreeItem>
                     ) 
                     :
                     <div key={idx}>

@@ -81,33 +81,10 @@ const ClassInfo = (props) => {
     );
   };
 
-  const rowClickHandle = idx => {
-    dispatch(ProgressBarActions.isProgressBar(true));
-    dispatch(RedirectActions.isRedirect(true, '/class/report/' + idx));
-  };
-
   //수업 정보를 가져오는 메소드
   const requestData = (idx, page, size) => {
     axiosGet.getNotContainsData('/api/professor/class/' + idx, getResponse);
-    let data = {
-      page: page,
-      size: size,
-      name: '',
-      startDate: '',
-      endDate: '',
-      searchType: ''
-    };
-    axiosGet.getContainsData(
-      '/api/professor/report/class/' + idx + '/list',
-      reportListResponse,
-      data
-    );
   };
-
-  //수업 신청 현황 및 수강 학생 현황을 가져오는 메소드
-  const requestSignUpClassForStu = () => {
-    axiosGet.getNotContainsData('/api/professor/class/'+props.match.params.idx+"/signUpList", getResponseSignUpClassForStu);
-  }
 
   const reportListResponse = res => {
     setTableDataList(res['list']);
@@ -126,42 +103,6 @@ const ClassInfo = (props) => {
     } catch {}
   };
 
-  //수업 신청 현황 및 수강 학생 현황 콜백 메소드
-  const getResponseSignUpClassForStu = (res) => {
-    let signUpList = [];
-    const kM_signUpClassForStuVOList = res['_embedded'] !== undefined ? res['_embedded']['kM_signUpClassForStuVOList'] !== undefined ? res['_embedded']['kM_signUpClassForStuVOList'] : [] : [];
-    for(let i =0;i<kM_signUpClassForStuVOList.length;i++){
-      signUpList.push({
-        seq : kM_signUpClassForStuVOList[i]['seq'],
-        id : kM_signUpClassForStuVOList[i]['km_user']['name'],
-        date : kM_signUpClassForStuVOList[i]['date'],
-        button : (<Button variant="contained" color="secondary" onClick={()=>signUpSeccessHandle(kM_signUpClassForStuVOList[i]['seq'],kM_signUpClassForStuVOList[i]['km_user']['name'])}>
-                수강 승인
-              </Button>)
-      });
-    }
-    setSignUpList(signUpList);
-  }
-
-  const signUpSeccessHandle = (seq,id) => {
-    setDialogState({
-      seq:seq,
-      title:'수업 승인',
-      content:'\''+id+'\' 위 학생을 정말 수업 승인하시겠습니까?',
-      dialogYseClick:signUpSeccessYse
-    });
-    setConfirmDialog(true);
-  }
-
-  const signUpSeccessYse = (seq) => {
-    axiosPut.putNotContainsData("/api/professor/class/"+props.match.params.idx+"/signUpList/"+seq,signUpSeccessResult);
-  }
-
-  const signUpSeccessResult = (res) => {
-    showMessageBox('승인 완료','success',true);
-    requestSignUpClassForStu();
-  }
-
   const deleteClassYse = () => {
     alert('fsd');
   }
@@ -177,7 +118,6 @@ const ClassInfo = (props) => {
 
   useEffect(() => {
     requestData(props.match.params.idx, 0, 10);
-    requestSignUpClassForStu();
   }, [props.match.params.idx]);
 
   useEffect(() => {
@@ -313,56 +253,7 @@ const ClassInfo = (props) => {
             </Grid>
           </Paper>
         </Grid>
-        <Grid item lg={4} md={4} xl={4} xs={12}>
-          <TableContainer component={Paper}>
-            <CustomTable
-              rowClickHandle={() => {}}
-              tableDescription={"수강 학생 리스트"}
-              tableHeaderList={['이름']}
-              tableDataList={[]}
-              noDataMessage={<h3>* 학생 리스트가 존재하지 않습니다.</h3>}
-              exclude={''}
-              notPageInfo
-              tableStyle={{
-                minHeight:550
-              }}
-            />
-          </TableContainer>
-          <br/>
-          <TableContainer component={Paper}>
-            <CustomTable
-              rowClickHandle={() => {}}
-              tableDescription={"수강 신청 리스트"}
-              tableHeaderList={['이름','날짜','']}
-              tableDataList={signUpList}
-              noDataMessage={<h3>* 학생 리스트가 존재하지 않습니다.</h3>}
-              exclude={'seq'}
-              notPageInfo
-              tableStyle={{
-                minHeight:550
-              }}
-            />
-          </TableContainer>
-        </Grid>
       </Grid>
-      <br />
-      <Grid item lg={12} md={12} xl={12} xs={12}>
-        <TableContainer component={Paper}>
-          <CustomTable
-            rowClickHandle={rowClickHandle}
-            tableDescription={"최신 과제 10건"}
-            tableHeaderList={tableDataHeader}
-            noDataMessage={<h3>* 과제 리스트가 존재하지 않습니다.</h3>}
-            tableDataList={tableDataList}
-            tableDataCount={tableDataCount}
-            searchSeq={selectClassIdx}
-            exclude={['classIdx', 'links', 'fileList', 'imgList', 'content']}
-            requestData={requestData}
-            notPageInfo
-          />
-        </TableContainer>
-      </Grid>
-
     </div>
   );
 };

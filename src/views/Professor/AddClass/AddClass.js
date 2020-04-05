@@ -85,6 +85,7 @@ function parseDate(number){
 }
 
 const AddClass = () => {
+  console.log("rendered");
   const dispatch = useDispatch();
 
   const name = useRef();
@@ -100,6 +101,7 @@ const AddClass = () => {
   const endDateFormat = nowDate.getFullYear() + "-" + parseDate(nowDate.getMonth() + 4) + "-" + parseDate(nowDate.getDate());
 
   const [checkedMenuResult, setCheckedMenuResult] = useState([]);
+  const [checkedLeftMenuResult,setCheckedLeftMenuResult] = useState(['공지사항','참고자료','Q/A']);
   const [classFileUpload, setClassFileUpload] = useState();
   const [inputClassInfo, setInputClassInfo] = useState({
     name: '',
@@ -140,8 +142,8 @@ const AddClass = () => {
     setClassFileUpload(event.target.files[0]);
   };
 
-  const handleChange = value => {
-    setCheckedMenuResult(value);
+  const handleChange = (right,left) => {
+    setCheckedMenuResult(right);
   };
 
   const addClassSubmit = event => {
@@ -426,7 +428,7 @@ const AddClass = () => {
               </Grid>
               <Grid container style={{ marginTop: 35 }}>
                 <Grid item xs={12} sm={12}>
-                  <TransferList leftData={['공지사항','참고자료','Q/A']} handleChange={handleChange}/>
+                  <TransferList leftData={['공지사항','참고자료','Q/A']} rightData={[]} handleChange={handleChange}/>
                 </Grid>
               </Grid>
               <Grid container style={{ marginTop: 35 }}>

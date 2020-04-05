@@ -69,7 +69,7 @@ export default function TransferList({ handleChange,leftData,rightData }) {
         resultArray.push(
             dataParse(concatData[i])
         );
-    handleChange(right.concat(resultArray));
+    handleChange(right.concat(resultArray),[]);
     setRight(right.concat(left));
     setLeft([]);
   };
@@ -79,7 +79,7 @@ export default function TransferList({ handleChange,leftData,rightData }) {
     let concatData = right.concat(leftChecked);
     for(let i =0;i<concatData.length;i++)
         resultArray.push(dataParse(concatData[i]));
-    handleChange(resultArray);
+    handleChange(resultArray,not(left, leftChecked));
     setRight(right.concat(leftChecked));
     setLeft(not(left, leftChecked));
     setChecked(not(checked, leftChecked));
@@ -92,14 +92,14 @@ export default function TransferList({ handleChange,leftData,rightData }) {
         resultArray.push(
             dataParse(concatData[i])
         );
-    handleChange(resultArray);
+    handleChange(resultArray,left.concat(rightChecked));
     setLeft(left.concat(rightChecked));
     setRight(not(right, rightChecked));
     setChecked(not(checked, rightChecked));
   };
 
   const handleAllLeft = () => {
-    handleChange([]);
+    handleChange([],left.concat(right));
     setLeft(left.concat(right));
     setRight([]);
   };

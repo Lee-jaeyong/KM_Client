@@ -183,16 +183,16 @@ const Main = props => {
         open={shouldOpenSidebar}
         otherPage={otherPage}
       />
+      {
+        progressBarState ? (
+          <Backdrop style={{zIndex:9999}} className={classes.backdrop} open={open}>
+            <CircularProgress color="inherit"/>
+          </Backdrop>
+        )
+        :
+        null
+      }
       <main className={classes.content}>
-        {
-          progressBarState ? (
-            <Backdrop className={classes.backdrop} open={open}>
-              <CircularProgress color="inherit"/>
-            </Backdrop>
-          )
-          :
-            null
-        }
         {children}
         {isRedirect ? <Redirect to={redirectURL} /> : null}
         <CustomMessageBox />

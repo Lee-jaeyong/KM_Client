@@ -15,7 +15,13 @@ import Button from '@material-ui/core/Button';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
-import Checkbox from '@material-ui/core/Checkbox';
+import {
+  Checkbox
+  ,Card
+  , CardHeader
+  , CardContent
+  , Divider
+} from '@material-ui/core';
 
 import Editor from 'tui-editor'; /* ES6 */
 import 'tui-editor/dist/tui-editor.css'; // editor's ui
@@ -243,73 +249,77 @@ const UpdateClass = () => {
 
   return (
     <div className={classes.root}>
-        {JSON.stringify(inputClassInfo) === "{}" ? <Redirect to={"/dashboard"}/> : null} 
+      <Grid container spacing={4}>
         <Grid
           item
-          lg={12}
-          md={12}
-          xl={12}
+          lg={2}
+          md={2}
+          xl={2}
+          xs={12}
+        />
+        <Grid 
+          item
+          lg={8}
+          md={8}
+          xl={8}
           xs={12}
         >
-          <TableContainer component={Paper}>
-            <Table aria-label="simple table">
-              <TableHead>
-                <TableRow>
-                  <TableCell colSpan="4" align="center"><h1>* 수 업 수 정</h1></TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                <TableRow>
-                  <TableCell align="center"><h2>수업명</h2></TableCell>
-                  <TableCell colSpan="3" align="left">
-                    <TextField
-                      fullWidth
-                      inputRef={name}
-                      value={inputClassInfo['name']}
-                      variant="outlined"
-                      name="name"
-                      onChange={(event)=>setInputClassInfo({
-                        ...inputClassInfo,
-                        [event.target.name]:event.target.value
-                      })} 
-                    />
-                  </TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell align="center"><h2>수업 시작일</h2></TableCell>
-                  <TableCell align="left">
-                    <TextField
-                      fullWidth
-                      inputRef={startDate}
-                      type="date"
-                      value={inputClassInfo['startDate']}
-                      variant="outlined"
-                      name="startDate"
-                      onChange={(event)=>{
-                        {
-                          if(inputClassInfo['endDate'] === '')
+          <Card>
+            <CardHeader
+              subheader="수업에 대한 기본정보를 수정합니다."
+              title="수업 수정"
+            />
+            <Divider />
+            <CardContent>
+              <Grid container spacing={3}>
+                <Grid item xs={12} sm={12}>
+                  <TextField
+                    fullWidth
+                    label="수업명*"
+                    helperText="수업명은 필수 항목입니다."
+                    placeholder="수업명을 입력하세요."
+                    inputRef={name}
+                    value={inputClassInfo['name']}
+                    variant="outlined"
+                    name="name"
+                    onChange={(event)=>setInputClassInfo({
+                      ...inputClassInfo,
+                      [event.target.name]:event.target.value
+                    })} 
+                  />
+                </Grid>
+                <Grid item xs={6} sm={6}>
+                  <TextField
+                        fullWidth
+                        inputRef={startDate}
+                        type="date"
+                        value={inputClassInfo['startDate']}
+                        variant="outlined"
+                        name="startDate"
+                        onChange={(event)=>{
                           {
-                            inputChangeHandle(event)
-                            return;
+                            if(inputClassInfo['endDate'] === '')
+                            {
+                              inputChangeHandle(event)
+                              return;
+                            }
+                            if(inputClassInfo['endDate'] !== '' && compareToDate(event.target.value,inputClassInfo['endDate']))
+                              inputChangeHandle(event)
+                            else
+                            {
+                              showMessageBox('수업 시작일은 종료일보다 작아야합니다.','error',true);
+                              setInputClassInfo({
+                                ...inputClassInfo,
+                                startDate:''
+                              })
+                              startDate.current.value='';
+                            }
                           }
-                          if(inputClassInfo['endDate'] !== '' && compareToDate(event.target.value,inputClassInfo['endDate']))
-                            inputChangeHandle(event)
-                          else
-                          {
-                            showMessageBox('수업 시작일은 종료일보다 작아야합니다.','error',true);
-                            setInputClassInfo({
-                              ...inputClassInfo,
-                              startDate:''
-                            })
-                            startDate.current.value='';
-                          }
-                        }
-                      }} 
-                    />
-                  </TableCell>
-                  <TableCell align="center"><h2>수업 종료일</h2></TableCell>
-                  <TableCell align="left">
-                    <TextField
+                        }} 
+                      />
+                </Grid>
+                <Grid item xs={6} sm={6}>
+                <TextField
                       fullWidth
                       inputRef={endDate}
                       type="date"
@@ -336,48 +346,36 @@ const UpdateClass = () => {
                           }
                         } 
                       }}   
-                    /></TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell align="center"><h2>강의계획서 등록</h2><br/>
-                  </TableCell>
-                  <TableCell colSpan="3" align="left">
-                    {classFileUpload ? <div><a href="#">{classFileUpload}</a>&nbsp;&nbsp;
+                    />
+                </Grid>
+                <Grid item xs={12} sm={12}>
+                    {classFileUpload ? <span><a href="#">{classFileUpload}</a>&nbsp;&nbsp;
                     <Button variant="contained" color="primary" style={{minHeight:20}} onClick={()=>setDialogState(true)}>
                       삭 제
                     </Button>
-                    </div>
+                    </span>
                     : 
                     <input type="file" onChange={(event)=>fileUploadHandle(event)}/>
                     }
-                  </TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell align="center"><h2>수업 타입</h2></TableCell>
-                  <TableCell colSpan="3" align="left">
-                    <RadioGroup row aria-label="position" name="type" value={inputClassInfo['type']} onChange={event => inputChangeHandle(event)}>
-                      <FormControlLabel
-                        value="MAJOR"
-                        control={<Radio color="primary"/>}
-                        label="전공"
-                      />
-                      <FormControlLabel
-                        value="CULTURE"
-                        control={<Radio color="primary" />}
-                        label="교양"
-                      />
-                    </RadioGroup>
-                  </TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell align="center"><h2>수업 내용</h2></TableCell>
-                  <TableCell colSpan="3" align="center">
-                    <div id="editorSection"></div>
-                  </TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell align="center"><h2>댓글 사용 여부</h2></TableCell>
-                  <TableCell colSpan="3" align="left">
+                </Grid>
+                <Grid item xs={12} sm={12}>
+                  <RadioGroup row aria-label="position" name="type" value={inputClassInfo['type']} onChange={event => inputChangeHandle(event)}>
+                    <FormControlLabel
+                      value="MAJOR"
+                      control={<Radio color="primary"/>}
+                      label="전공"
+                    />
+                    <FormControlLabel
+                      value="CULTURE"
+                      control={<Radio color="primary" />}
+                      label="교양"
+                    />
+                </RadioGroup>
+                </Grid>
+                <Grid item xs={12} sm={12}>
+                  <div id="editorSection"></div>
+                </Grid>
+                <Grid item xs={12} sm={12}>
                     <RadioGroup
                       row
                       value={inputClassInfo['replyPermit_state']}
@@ -396,12 +394,9 @@ const UpdateClass = () => {
                         label="미허용"
                       />
                     </RadioGroup>
-                  </TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell align="center"><h2>메뉴 종류</h2></TableCell>
-                  <TableCell colSpan="3" align="left">
-                    <FormGroup row>
+                </Grid>
+                <Grid item xs={12} sm={12}>
+                <FormGroup row>
                       <FormControlLabel
                         control={
                           <Checkbox
@@ -448,11 +443,8 @@ const UpdateClass = () => {
                         label="Q/A"
                       />
                     </FormGroup>
-                  </TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell align="center"><h2>수업 개시 여부</h2></TableCell>
-                  <TableCell colSpan="3" align="left">
+                </Grid>
+                <Grid item xs={12} sm={12}>
                     <RadioGroup
                       row
                       aria-label="position"
@@ -471,8 +463,13 @@ const UpdateClass = () => {
                         label="미개시"
                       />
                     </RadioGroup>
-                  </TableCell>
-                </TableRow>
+                </Grid>
+              </Grid>
+            </CardContent>
+          </Card>
+          <TableContainer component={Paper}>
+            <Table aria-label="simple table">
+              <TableBody>
                 <TableRow>
                   <TableCell colSpan="4" align="center">
                     <FormControlLabel
@@ -498,6 +495,7 @@ const UpdateClass = () => {
             closeHandle={()=>setDialogState(false)}
             handleYseClick={fileDeleteHandle}
           />
+        </Grid>
         </Grid>
     </div>
   );

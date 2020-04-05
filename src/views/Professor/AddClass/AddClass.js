@@ -12,17 +12,9 @@ import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import Select from '@material-ui/core/Select';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Radio from '@material-ui/core/Radio';
-import RadioGroup from '@material-ui/core/RadioGroup';
 import Checkbox from '@material-ui/core/Checkbox';
 import FormControl from '@material-ui/core/FormControl';
 
@@ -31,7 +23,6 @@ import 'tui-editor/dist/tui-editor.css'; // editor's ui
 import 'tui-editor/dist/tui-editor-contents.css'; // editor's content
 import 'codemirror/lib/codemirror.css'; // codemirror
 import 'highlight.js/styles/github.css'; // code block highlight
-import FormGroup from '@material-ui/core/FormGroup';
 import * as SHOW_MESSAGE_ACTION from '@store/actions/MessageActions';
 import * as CLASS_ACTION from '@store/actions/ClassActions';
 import * as RedirectActions from '@store/actions/RedirectActions';
@@ -57,7 +48,7 @@ const ValidationTextField = withStyles({
 
 const useStyles = makeStyles(theme => ({
   root: {
-    padding: theme.spacing(4)
+    padding: theme.spacing(4),
   },
   requireFont: {
     color: 'red'
@@ -86,7 +77,15 @@ function createButton(iconClassName) {
   return button;
 }
 
+function parseDate(number){
+  if(parseInt(number / 10) === 0){
+    return "0"+number;
+  }
+  return number;
+}
+
 const AddClass = () => {
+  console.log("rendered");
   const dispatch = useDispatch();
 
   const name = useRef();
@@ -97,12 +96,17 @@ const AddClass = () => {
   const classes = useStyles();
   const [submitCheck, setSubmitCheck] = React.useState(false);
 
+  const nowDate = new Date();
+  const nowDateFormat = nowDate.getFullYear() + "-" + parseDate(nowDate.getMonth() + 1) + "-" + parseDate(nowDate.getDate());
+  const endDateFormat = nowDate.getFullYear() + "-" + parseDate(nowDate.getMonth() + 4) + "-" + parseDate(nowDate.getDate());
+
   const [checkedMenuResult, setCheckedMenuResult] = useState([]);
+  const [checkedLeftMenuResult,setCheckedLeftMenuResult] = useState(['공지사항','참고자료','Q/A']);
   const [classFileUpload, setClassFileUpload] = useState();
   const [inputClassInfo, setInputClassInfo] = useState({
     name: '',
-    startDate: '',
-    endDate: '',
+    startDate: nowDateFormat,
+    endDate: endDateFormat,
     type: 'MAJOR',
     content: '',
     replyPermit_state: 'YSE',
@@ -138,13 +142,13 @@ const AddClass = () => {
     setClassFileUpload(event.target.files[0]);
   };
 
-  const handleChange = value => {
-    setCheckedMenuResult(value);
+  const handleChange = (right,left) => {
+    setCheckedMenuResult(right);
   };
 
   const addClassSubmit = event => {
     event.preventDefault();
-    if (name.current.value === '') {
+    if (name.current.value.trim() === '') {
       showMessageBox('수업명을 입력해주세요.', '', true);
       name.current.focus();
       return;
@@ -265,6 +269,7 @@ const AddClass = () => {
                     name="name"
                     fullWidth
                     label="수업명*"
+                    defaultValue=" "
                     helperText="수업명은 필수 항목입니다."
                     placeholder="수업명을 입력하세요."
                     onChange={event => inputChangeHandle(event)}
@@ -275,8 +280,10 @@ const AddClass = () => {
                     inputRef={startDate}
                     fullWidth
                     type="date"
+                    label="수업 시작일*"
                     helperText="수업 시작일자는 필수 항목입니다."
                     name="startDate"
+                    defaultValue={inputClassInfo['startDate']}
                     onChange={event => {
                       if (inputClassInfo['endDate'] === '') {
                         inputChangeHandle(event);
@@ -308,7 +315,9 @@ const AddClass = () => {
                     inputRef={endDate}
                     fullWidth
                     type="date"
+                    label="수업 종료일*"
                     helperText="수업 종료일자는 필수 항목입니다."
+                    defaultValue={inputClassInfo['endDate']}
                     name="endDate"
                     onChange={event => {
                       {
@@ -419,7 +428,7 @@ const AddClass = () => {
               </Grid>
               <Grid container style={{ marginTop: 35 }}>
                 <Grid item xs={12} sm={12}>
-                  <TransferList leftData={['공지사항','참고자료','Q/A']} handleChange={handleChange}/>
+                  <TransferList leftData={['공지사항','참고자료','Q/A']} rightData={[]} handleChange={handleChange}/>
                 </Grid>
               </Grid>
               <Grid container style={{ marginTop: 35 }}>

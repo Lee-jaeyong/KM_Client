@@ -155,7 +155,7 @@ const Main = props => {
         onClose={handleSidebarClose}
         open={shouldOpenSidebar}
         otherPage={otherPage}
-        student
+        student={'true'}
         userInfo={userInfo}
         variant={isDesktop ? 'persistent' : 'temporary'}
       />

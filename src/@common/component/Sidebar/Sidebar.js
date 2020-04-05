@@ -62,7 +62,7 @@ const Sidebar = props => {
         <Divider className={classes.divider} />
         <CustomTreeMenu
           pages={props.classList.concat(props.otherPage)}
-          student
+          {...rest}
         />
         <Divider className={classes.divider} />
       </div>

@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
-import {useDispatch} from 'react-redux';
+import { useDispatch } from 'react-redux';
 import TreeView from '@material-ui/lab/TreeView';
 import TreeItem from '@material-ui/lab/TreeItem';
 import Typography from '@material-ui/core/Typography';
@@ -14,6 +14,7 @@ import ArrowRightIcon from '@material-ui/icons/ArrowRight';
 import { Link } from 'react-router-dom';
 import { Divider } from '@material-ui/core';
 import * as RedirectActions from '@store/actions/RedirectActions';
+import RemoveSharpIcon from '@material-ui/icons/RemoveSharp';
 
 const useTreeItemStyles = makeStyles(theme => ({
   root: {
@@ -60,7 +61,7 @@ const useTreeItemStyles = makeStyles(theme => ({
     marginRight: theme.spacing(1)
   },
   labelText: {
-    fontSize:15,
+    fontSize: 17,
     fontWeight: 'inherit',
     flexGrow: 1
   }
@@ -108,7 +109,8 @@ function StyledTreeItem(props) {
       }
       style={{
         '--tree-view-color': color,
-        '--tree-view-bg-color': bgColor
+        '--tree-view-bg-color': bgColor,
+        marginTop: 5
       }}
       {...other}
     />
@@ -132,15 +134,18 @@ const useStyles = makeStyles({
 });
 
 export default function GmailTreeView(props) {
-    const dispatch = useDispatch();
-    const {pages} = props; 
-    const classes = useStyles();
-    const colorList = [
-        {color:'#1a73e8',bgColor:'#e8f0fe'},
-        {color:'#e3742f',bgColor:'#fcefe3'},
-        {color:'#a250f5',bgColor:'#f3e8fd'},
-        {color:'#3c8039',bgColor:'#e6f4ea'}
-    ]
+  const [selectExpanded, setSelectExpanded] = useState([]);
+  const dispatch = useDispatch();
+  const { pages } = props;
+  const classes = useStyles();
+  const colorList = [
+    { color: '#1a73e8', bgColor: '#e8f0fe' },
+    { color: '#e3742f', bgColor: '#fcefe3' },
+    { color: '#a250f5', bgColor: '#f3e8fd' },
+    { color: '#3c8039', bgColor: '#e6f4ea' }
+  ];
+
+  useEffect(() => {}, [selectExpanded]);
 
   return (
     <TreeView
@@ -148,43 +153,65 @@ export default function GmailTreeView(props) {
       defaultCollapseIcon={<ArrowDropDownIcon />}
       defaultEndIcon={<div style={{ width: 30 }} />}
       defaultExpandIcon={<ArrowRightIcon />}
+      expanded={selectExpanded}
     >
-        {pages.map((page,idx)=>{
-            return (
-                page['pageList'] ? (
-                      <StyledTreeItem key={idx} nodeId={''+idx} labelText={page['title']} labelIcon={Label} onClick={()=>
-                        dispatch(RedirectActions.isRedirect(true,"/class/"+page['classIdx']))
-                      }>
-                          {page['pageList'].map((pageInfo,_idx)=>{
-                              return(
-                                  <Link key={_idx} to={pageInfo['href']}>
-                                      <StyledTreeItem
-                                          key={_idx}
-                                          nodeId={pageInfo['href']+'_'+_idx}
-                                          labelText={pageInfo['pageName']}
-                                          labelIcon={SupervisorAccountIcon}
-                                          labelInfo="<"
-                                          color={colorList[idx%colorList.length]['color']}
-                                          bgColor={colorList[idx%colorList.length]['bgColor']}
-                                      />
-                                  </Link>
-                              );
-                          })}
-                      </StyledTreeItem>
-                    ) 
-                    :
-                    <div key={idx}>
-                        <Divider/>
-                        <Link to={page['href']}>
-                            <StyledTreeItem nodeId={'sub'+idx} labelText={page['title']} 
-                            labelIcon={
-                                page['title'] === '수업 등록' ? LocalOfferIcon : ForumIcon
-                                }>
-                            </StyledTreeItem>
-                        </Link>
-                    </div>
-            );
-        })}
+      {pages.map((page, idx) => {
+        return page['pageList'] ? (
+          <StyledTreeItem
+            key={idx}
+            labelIcon={Label}
+            labelText={page['title']}
+            nodeId={'' + idx}
+            onClick={() => {
+              if (selectExpanded[0] === '' + idx) {
+                setSelectExpanded([]);
+              } else {
+                setSelectExpanded(['' + idx]);
+              }
+              dispatch(
+                RedirectActions.isRedirect(
+                  true,
+                  props['student'] === 'true'
+                    ? '/stu/class/' + page['classIdx']
+                    : '/class/' + page['classIdx']
+                )
+              );
+            }}
+          >
+            {page['pageList'].map((pageInfo, _idx) => {
+              return (
+                <Link
+                  key={_idx}
+                  to={pageInfo['href']}
+                >
+                  <StyledTreeItem
+                    bgColor={colorList[idx % colorList.length]['bgColor']}
+                    color={colorList[idx % colorList.length]['color']}
+                    key={_idx}
+                    labelIcon={RemoveSharpIcon}
+                    labelInfo="<"
+                    labelText={pageInfo['pageName']}
+                    nodeId={pageInfo['href'] + '_' + _idx}
+                  />
+                </Link>
+              );
+            })}
+          </StyledTreeItem>
+        ) : (
+          <div key={idx}>
+            <Divider />
+            <Link to={page['href']}>
+              <StyledTreeItem
+                labelIcon={
+                  page['title'] === '수업 등록' ? LocalOfferIcon : ForumIcon
+                }
+                labelText={page['title']}
+                nodeId={'sub' + idx}
+              />
+            </Link>
+          </div>
+        );
+      })}
     </TreeView>
   );
 }

@@ -13,19 +13,19 @@ import ArrowRightIcon from '@material-ui/icons/ArrowRight';
 import { Link } from 'react-router-dom';
 import { Divider } from '@material-ui/core';
 
-const useTreeItemStyles = makeStyles((theme) => ({
+const useTreeItemStyles = makeStyles(theme => ({
   root: {
     color: theme.palette.text.secondary,
     '&:hover > $content': {
-      backgroundColor: theme.palette.action.hover,
+      backgroundColor: theme.palette.action.hover
     },
     '&:focus > $content, &$selected > $content': {
       backgroundColor: `var(--tree-view-bg-color, ${theme.palette.grey[400]})`,
-      color: 'var(--tree-view-color)',
+      color: 'var(--tree-view-color)'
     },
     '&:focus > $content $label, &:hover > $content $label, &$selected > $content $label': {
-      backgroundColor: 'transparent',
-    },
+      backgroundColor: 'transparent'
+    }
   },
   content: {
     color: theme.palette.text.secondary,
@@ -34,63 +34,78 @@ const useTreeItemStyles = makeStyles((theme) => ({
     paddingRight: theme.spacing(1),
     fontWeight: theme.typography.fontWeightMedium,
     '$expanded > &': {
-      fontWeight: theme.typography.fontWeightRegular,
-    },
+      fontWeight: theme.typography.fontWeightRegular
+    }
   },
   group: {
     marginLeft: 0,
     '& $content': {
-      paddingLeft: theme.spacing(2),
-    },
+      paddingLeft: theme.spacing(2)
+    }
   },
   expanded: {},
   selected: {},
   label: {
     fontWeight: 'inherit',
-    color: 'inherit',
+    color: 'inherit'
   },
   labelRoot: {
     display: 'flex',
     alignItems: 'center',
-    padding: theme.spacing(0.5, 0),
+    padding: theme.spacing(0.5, 0)
   },
   labelIcon: {
-    marginRight: theme.spacing(1),
+    marginRight: theme.spacing(1)
   },
   labelText: {
     fontWeight: 'inherit',
-    flexGrow: 1,
-  },
+    flexGrow: 1
+  }
 }));
 
 function StyledTreeItem(props) {
   const classes = useTreeItemStyles();
-  const { labelText, labelIcon: LabelIcon, labelInfo, color, bgColor, ...other } = props;
-  
+  const {
+    labelText,
+    labelIcon: LabelIcon,
+    labelInfo,
+    color,
+    bgColor,
+    ...other
+  } = props;
   return (
     <TreeItem
-      label={
-        <div className={classes.labelRoot}>
-          <LabelIcon color="inherit" className={classes.labelIcon} />
-          <Typography variant="body2" className={classes.labelText}>
-            {labelText}
-          </Typography>
-          <Typography variant="caption" color="inherit">
-            {labelInfo}
-          </Typography>
-        </div>
-      }
-      style={{
-        '--tree-view-color': color,
-        '--tree-view-bg-color': bgColor,
-      }}
       classes={{
         root: classes.root,
         content: classes.content,
         expanded: classes.expanded,
         selected: classes.selected,
         group: classes.group,
-        label: classes.label,
+        label: classes.label
+      }}
+      label={
+        <div className={classes.labelRoot}>
+          <LabelIcon
+            className={classes.labelIcon}
+            color="inherit"
+          />
+          <Typography
+            className={classes.labelText}
+            variant="body2"
+          >
+            {labelText}
+          </Typography>
+          <Typography
+            color="inherit"
+            variant="caption"
+          >
+            {labelInfo}
+          </Typography>
+        </div>
+      }
+      style={{
+        '--tree-view-color': color,
+        '--tree-view-bg-color': bgColor
       }}
       {...other}
     />
@@ -102,70 +117,84 @@ StyledTreeItem.propTypes = {
   color: PropTypes.string,
   labelIcon: PropTypes.elementType.isRequired,
   labelInfo: PropTypes.string,
-  labelText: PropTypes.string.isRequired,
+  labelText: PropTypes.string.isRequired
 };
 
 const useStyles = makeStyles({
   root: {
     height: 264,
     flexGrow: 1,
-    maxWidth: 400,
-  },
+    maxWidth: 400
+  }
 });
 
 export default function GmailTreeView(props) {
-    const {pages} = props; 
-    const classes = useStyles();
-    const colorList = [
-        {color:'#1a73e8',bgColor:'#e8f0fe'},
-        {color:'#e3742f',bgColor:'#fcefe3'},
-        {color:'#a250f5',bgColor:'#f3e8fd'},
-        {color:'#3c8039',bgColor:'#e6f4ea'}
-    ]
+  const { pages, student } = props;
+  const classes = useStyles();
+  const colorList = [
+    { color: '#1a73e8', bgColor: '#e8f0fe' },
+    { color: '#e3742f', bgColor: '#fcefe3' },
+    { color: '#a250f5', bgColor: '#f3e8fd' },
+    { color: '#3c8039', bgColor: '#e6f4ea' }
+  ];
 
   return (
     <TreeView
       className={classes.root}
       defaultCollapseIcon={<ArrowDropDownIcon />}
-      defaultExpandIcon={<ArrowRightIcon />}
       defaultEndIcon={<div style={{ width: 30 }} />}
+      defaultExpandIcon={<ArrowRightIcon />}
     >
-        {pages.map((page,idx)=>{
-            return (
-                page['pageList'] ? (
-                    <Link key={idx} to={"/class/"+page['classIdx']}>
-                        <StyledTreeItem nodeId={''+idx} labelText={page['title']} labelIcon={Label}>
-                            {page['pageList'].map((pageInfo,_idx)=>{
-                                return(
-                                    <Link key={_idx} to={pageInfo['href']}>
-                                        <StyledTreeItem
-                                            key={_idx}
-                                            nodeId={pageInfo['href']+'_'+_idx}
-                                            labelText={pageInfo['pageName']}
-                                            labelIcon={SupervisorAccountIcon}
-                                            labelInfo="<"
-                                            color={colorList[idx%colorList.length]['color']}
-                                            bgColor={colorList[idx%colorList.length]['bgColor']}
-                                        />
-                                    </Link>
-                                );
-                            })}
-                        </StyledTreeItem>
-                    </Link>
-                    ) 
-                    :
-                    <div key={idx}>
-                        <Divider/>
-                        <Link to={page['href']}>
-                            <StyledTreeItem nodeId={'sub'+idx} labelText={page['title']} 
-                            labelIcon={
-                                page['title'] === '수업 등록' ? LocalOfferIcon : ForumIcon
-                                }>
-                            </StyledTreeItem>
-                        </Link>
-                    </div>
-            );
-        })}
+      {pages.map((page, idx) => {
+        return page['pageList'] ? (
+          <Link
+            key={idx}
+            to={
+              student
+                ? '/stu/class/' + page['classIdx']
+                : '/class/' + page['classIdx']
+            }
+          >
+            <StyledTreeItem
+              labelIcon={Label}
+              labelText={page['title']}
+              nodeId={'' + idx}
+            >
+              {page['pageList'].map((pageInfo, _idx) => {
+                return (
+                  <Link
+                    key={_idx}
+                    to={pageInfo['href']}
+                  >
+                    <StyledTreeItem
+                      bgColor={colorList[idx % colorList.length]['bgColor']}
+                      color={colorList[idx % colorList.length]['color']}
+                      key={_idx}
+                      labelIcon={SupervisorAccountIcon}
+                      labelInfo="<"
+                      labelText={pageInfo['pageName']}
+                      nodeId={pageInfo['href'] + '_' + _idx}
+                    />
+                  </Link>
+                );
+              })}
+            </StyledTreeItem>
+          </Link>
+        ) : (
+          <div key={idx}>
+            <Divider />
+            <Link to={page['href']}>
+              <StyledTreeItem
+                labelIcon={
+                  page['title'] === '수업 등록' ? LocalOfferIcon : ForumIcon
+                }
+                labelText={page['title']}
+                nodeId={'sub' + idx}
+              />
+            </Link>
+          </div>
+        );
+      })}
     </TreeView>
   );
 }

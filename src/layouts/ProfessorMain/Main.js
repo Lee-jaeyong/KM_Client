@@ -177,11 +177,11 @@ const Main = props => {
     >
       <Topbar onSidebarOpen={handleSidebarOpen} />
       <Sidebar
+        userInfo={userInfo}
         classList={classList}
         onClose={handleSidebarClose}
         open={shouldOpenSidebar}
         otherPage={otherPage}
-        treeMenu={true}
       />
       <main className={classes.content}>
         {

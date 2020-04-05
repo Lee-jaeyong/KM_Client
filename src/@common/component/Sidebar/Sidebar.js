@@ -60,18 +60,10 @@ const Sidebar = props => {
       >
         <Profile userInfo={props.userInfo} />
         <Divider className={classes.divider} />
-        {treeMenu ? (
-          <CustomTreeMenu
-            pages={props.classList.concat(props.otherPage)}
-          />
-          ) : (
-            <SidebarNav
-              classIdx={props.classIdx}
-              className={classes.nav}
-              pages={props.classList}
-              dropDown
-            />
-        )}
+        <CustomTreeMenu
+          pages={props.classList.concat(props.otherPage)}
+          student
+        />
         <Divider className={classes.divider} />
       </div>
     </Drawer>

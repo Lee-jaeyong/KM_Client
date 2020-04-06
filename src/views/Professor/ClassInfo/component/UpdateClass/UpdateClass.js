@@ -1,21 +1,6 @@
 import React, { useEffect, useRef,useState } from 'react';
 import { withStyles } from '@material-ui/core/styles';
-import {
-  Button,
-  Grid,
-  TextField,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
-  FormHelperText,
-  FormControlLabel,
-  Checkbox,
-  FormLabel,
-  Chip,
-  LinearProgress
-} from '@material-ui/core';
-
+import {Button,Grid,TextField,FormControl,InputLabel,Select,MenuItem,FormHelperText,FormControlLabel,Checkbox,FormLabel,Card,CardContent,Chip} from '@material-ui/core';
 import Dialog from '@material-ui/core/Dialog';
 import MuiDialogTitle from '@material-ui/core/DialogTitle';
 import MuiDialogContent from '@material-ui/core/DialogContent';
@@ -71,7 +56,8 @@ const DialogActions = withStyles((theme) => ({
   },
 }))(MuiDialogActions);
 
-export default function AddClass(props) {
+export default function UpdateClass(props) {
+  const {classInfo} = props;
   const dispatch = useDispatch();
 
   const name = useRef([]);
@@ -79,7 +65,6 @@ export default function AddClass(props) {
   const content = useRef([]);
 
   const [open, setOpen] = React.useState(false);
-  const [progressState,setProgressState] = useState(false);
   const [files,setFiles] = useState([]);
 
   const handleClose = () => {
@@ -123,14 +108,14 @@ export default function AddClass(props) {
     }
     console.log(addClassInfo);
     console.log(files);
-    setTimeout(() => {
-      axiosPost.postContainsData(
-        '/api/professor/class',
-        getResponse,
-        addClassInfo
-      );
-    },1000);
-    handleClose();
+    // setTimeout(() => {
+    //   axiosPost.postContainsData(
+    //     '/api/professor/class',
+    //     getResponse,
+    //     addClassInfo
+    //   );
+    // },1000);
+    // handleClose();
   }
 
   const getResponse = res => {
@@ -145,7 +130,7 @@ export default function AddClass(props) {
     }
     dispatch(
       SHOW_MESSAGE_ACTION.show_message({
-        content: '수업 등록 완료',
+        content: '수업 수정 완료',
         visible: true
       })
     );
@@ -153,7 +138,6 @@ export default function AddClass(props) {
   };
 
   const fileUpload = file => {
-    console.log(file.length)
     const fileName = file[0]['name'];
     let _fileLen = fileName.length;
     let _lastDot = fileName.lastIndexOf('.');
@@ -170,11 +154,7 @@ export default function AddClass(props) {
       );
       return;
     }
-    setTimeout(() => {
-      setFiles(file[0]);
-      setProgressState(false);
-    }, 1000);
-    setProgressState(true);
+    setFiles(file[0]);
   }
 
   const fileUploadResult = (res) => {
@@ -183,19 +163,17 @@ export default function AddClass(props) {
 
   const handleDelete = () => {
     setFiles([]);
-  }
+  };
 
   useEffect(()=>{
     setOpen(props['open']);
-    setFiles([]);
   },[props['open']]);
 
   return (
     <div>
       <Dialog onClose={handleClose} aria-labelledby="customized-dialog-title" open={open}>
         <DialogTitle id="customized-dialog-title" onClose={handleClose}>
-          수업 등록<br/>
-          <span style={{fontSize:15}}>수업의 기본 정보를 입력합니다.</span>
+          수업 수정<br/>
         </DialogTitle>
         <DialogContent dividers>
           <Grid container spacing={4}>
@@ -206,7 +184,7 @@ export default function AddClass(props) {
                 name="name"
                 fullWidth
                 label="수업명*"
-                defaultValue=" "
+                defaultValue={classInfo['name']}
                 helperText="수업명은 필수 항목입니다."
                 placeholder="수업명을 입력하세요."
               />
@@ -216,7 +194,7 @@ export default function AddClass(props) {
                 <InputLabel shrink>
                   수업 타입
                 </InputLabel>
-                <Select inputRef={type} defaultValue={"MAJOR"}>
+                <Select inputRef={type} defaultValue={classInfo['type']}>
                   <MenuItem value={'MAJOR'}>전 공</MenuItem>
                   <MenuItem value={'CULTURE'}>교 양</MenuItem>
                 </Select>
@@ -236,12 +214,6 @@ export default function AddClass(props) {
                     />
                 </div>
               ): null}
-              {
-                progressState ? 
-                <LinearProgress color="secondary" style={{marginTop:5}}/>
-                :
-                null
-              }
             </Grid>            
             <Grid item lg={12} md={12} xl={12} xs={12}>
               <TextField
@@ -250,7 +222,7 @@ export default function AddClass(props) {
                 multiline
                 fullWidth
                 rows="6"
-                defaultValue=" "
+                defaultValue={classInfo['content']}
                 variant="outlined"
               />
             </Grid>            
@@ -271,6 +243,7 @@ export default function AddClass(props) {
               <FormControlLabel
                 control={
                   <Checkbox
+                    checked={classInfo['selectMenu'].indexOf("NOTICE") !== -1 ? true : false}
                     value="NOTICE"
                     name="selectMenu"
                     color="primary"
@@ -281,6 +254,7 @@ export default function AddClass(props) {
               <FormControlLabel
                 control={
                   <Checkbox
+                    checked={classInfo['selectMenu'].indexOf("REFERENCE") !== -1 ? true : false}
                     value="REFERENCE"
                     name="selectMenu"
                     color="primary"
@@ -293,7 +267,7 @@ export default function AddClass(props) {
         </DialogContent>
         <DialogActions>
           <Button autoFocus onClick={btnSubmit} color="primary">
-            등 록
+            수 정
           </Button>
         </DialogActions>
       </Dialog>

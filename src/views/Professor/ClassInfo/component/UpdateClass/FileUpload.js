@@ -22,7 +22,7 @@ class FileUpload extends React.Component {
           {({getRootProps, getInputProps}) => (
             <section>
               <div {...getRootProps()}>
-                <input {...getInputProps()} />
+                <input {...getInputProps()}/>
                 <p>엑셀 형식의 파일을 Drag&Drop 혹은 <mark><strong>텍스트</strong></mark>를 누른 후 선택해주세요.</p>
               </div>
             </section>

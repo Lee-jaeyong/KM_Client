@@ -1,259 +1,215 @@
 import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/styles';
 import { Grid, TextField } from '@material-ui/core';
-import { Redirect } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import Paper from '@material-ui/core/Paper';
-import Button from '@material-ui/core/Button';
+import {
+  Card,
+  CardMedia,
+  CardContent,
+  Typography,
+  Tab,
+  Tabs,
+  IconButton,
+  Tooltip,
+  Box,
+  CircularProgress
+} from '@material-ui/core';
 import { useSelector, useDispatch } from 'react-redux';
-
-import CustomTable from '@common/component/CustomTable';
-import CustomConfirmDialog from '@common/component/CustomConfirmDialog';
-import * as RedirectActions from '@store/actions/RedirectActions';
-import * as SHOW_MESSAGE_ACTION from '@store/actions/MessageActions';
-
-import * as CLASS_ACTION from '@store/actions/ClassActions';
-import * as ProgressBarActions from '@store/actions/ProgressBarActions';
-
+import CreateIcon from '@material-ui/icons/Create';
 import * as filter from '@common/functions/ConvertNotXssFilter';
-
+import mockData from './data';
+import JoinStuList from './component/JoinStuList/UserTable';
+import Toolbar from './component/Toolbar/ToolBar';
+import UpdateClass from './component/UpdateClass/UpdateClass';
+import CustomConfirmDialog from '@common/component/CustomConfirmDialog';
 import * as axiosGet from '@axios/get';
 import * as axiosPut from '@axios/put';
+import uuid from 'uuid/v1';
+import Fade from '@material-ui/core/Fade';
 
-import Viewer from 'tui-editor/dist/tui-editor-Viewer';
+function TabPanel(props) {
+  const { children, value, index, ...other } = props;
+
+  return (
+    <Typography
+      component="div"
+      role="tabpanel"
+      hidden={value !== index}
+      id={`simple-tabpanel-${index}`}
+      aria-labelledby={`simple-tab-${index}`}
+      {...other}
+    >
+      {value === index && <Box p={3}>{children}</Box>}
+    </Typography>
+  );
+}
+
+TabPanel.propTypes = {
+  children: PropTypes.node,
+  index: PropTypes.any.isRequired,
+  value: PropTypes.any.isRequired,
+};
+
+function a11yProps(index) {
+  return {
+    id: `simple-tab-${index}`,
+    'aria-controls': `simple-tabpanel-${index}`
+  };
+}
 
 const useStyles = makeStyles(theme => ({
   root: {
-    padding: theme.spacing(4)
+    padding: theme.spacing(1)
   },
-  requireFont: {
-    color: 'red'
-  },
-  paper: {
-    padding: theme.spacing(1),
-    textAlign: 'center',
-    color: theme.palette.text.secondary
+  appBar: {
+    flexGrow: 1,
   }
 }));
 
-const ClassInfo = (props) => {
-  const classes = useStyles();
-  const [confirmDialog, setConfirmDialog] = useState(false);
-  const [dialogState,setDialogState] = useState(
+const ClassInfo = props => {
+  const [classInfo,setClassInfo] = useState(
     {
-      title : '',
-      content : '',
-      dialogYseClick:null
+      seq : 1,
+      name : "C언어",
+      content : "C언어 수업은 ..... 진행됩니다.",
+      type:'MAJOR',
+      selectMenu:[
+        "REPORT","NOTICE"
+      ]
     }
-  );
+  );  
+  const [users,setUsers] = useState(mockData);
+  const classes = useStyles();
+  const [value, setValue] = React.useState(0);
+  const [signUpClassForStuPage,setSignUpClassForStuPage] = useState(0);
+  const [loaddingData,setLoaddingData] = useState(false);
+  
+  const [updateClass,setUpdateClass] = useState(false);
+  const [confirmDialog,setConfirmDialog] = useState({
+    open : false,
+    title : "",
+    content : ""
+  });
 
-  const selectClassIdx = useSelector(
-    state => state['SelectUtil']['selectClass']['classIdx']
-  );
-  const [selectSignUp,setSelectSignUp] = useState(-1);
-  const [classInfo, setClassInfo] = useState({});
-  const [signUpList,setSignUpList] = useState([]);
-  const addClassInfo = useSelector(state => state['Class']['classInfo']);
-  const dispatch = useDispatch();
-
-  const [tableDataList, setTableDataList] = useState([]);
-  const [tableDataCount, setTableDataCount] = useState();
-  const [tableDataHeader, setTableDataHeader] = useState([
-    '과제 번호',
-    '과제명',
-    '과제 시작일',
-    '과제 종료일',
-    '조회수',
-    '마감 이후 제출 여부',
-    '제출 과제 관람 여부'
-  ]);
-
-  const redirectPage_updateClass = () => {
-    dispatch(CLASS_ACTION.save_class(classInfo));
-    dispatch(
-      RedirectActions.isRedirect(true, '/class/' + props.match.params.idx + '/update')
-    );
+  const handleChange = (event, newValue) => {
+    setUsers(mockData);
+    setSignUpClassForStuPage(0);
+    setValue(newValue);
   };
 
-  //수업 정보를 가져오는 메소드
-  const requestData = (idx, page, size) => {
-    axiosGet.getNotContainsData('/api/professor/class/' + idx, getResponse);
-  };
-
-  const reportListResponse = res => {
-    setTableDataList(res['list']);
-    setTableDataCount(res['totalCount']);
-  };
-
-  //수업 정보 콜백 메소드
-  const getResponse = res => {
-    setClassInfo(res);
-    try {
-      const instance = new Viewer({
-        el: document.querySelector('#classInfoContent'),
-        height: '500px',
-        initialValue: filter.ConvertNotXssFilter(res['content'])
-      });
-    } catch {}
-  };
-
-  const deleteClassYse = () => {
-    alert('fsd');
+  const getSignUpClassForStu = (event) => {
+    if(event.target.scrollTop + 700 >= event.target.scrollHeight){
+      setSignUpClassForStuPage(1+signUpClassForStuPage);
+      let result = users;
+      for(let i =0;i<10;i++){
+        result = result.concat({
+          id: uuid(),
+          name: 'Merrile Burgett',
+          address: {
+            country: 'USA',
+            state: 'Utah',
+            city: 'Salt Lake City',
+            street: '368 Lamberts Branch Road'
+          },
+          email: 'merrile.burgett@devias.io',
+          phone: '801-301-7894',
+          avatarUrl: '/images/avatars/avatar_10.png',
+        });
+      }
+      setTimeout(() => {
+        setUsers(result);
+        setLoaddingData(false);
+      }, 1000);
+      setLoaddingData(true);
+    }
   }
 
-  const showMessageBox = (title, level, visible) => {
-    let message = {
-      content: title,
-      level: level,
-      visible: visible
-    };
-    dispatch(SHOW_MESSAGE_ACTION.show_message(message));
-  };
+  const signUpClassSuccessHandle = () => {
+    setConfirmDialog({
+      open : true,
+      title : "수업 승인",
+      content :"체크된 위 학생들을 모두 수업 승인하시겠습니까?"
+    });
+  }
 
-  useEffect(() => {
-    requestData(props.match.params.idx, 0, 10);
-  }, [props.match.params.idx]);
-
-  useEffect(() => {
-    if (
-      addClassInfo !== undefined &&
-      addClassInfo !== null &&
-      JSON.stringify(addClassInfo) !== '{}'
-    ) {
-      setClassInfo(addClassInfo);
-      const instance = new Viewer({
-        el: document.querySelector('#classInfoContent'),
-        height: '500px',
-        initialValue: filter.ConvertNotXssFilter(addClassInfo['content'])
-      });
-    }
-  }, [addClassInfo]);
+  const signUpClassFaildHandle = () => {
+    setConfirmDialog({
+      open : true,
+      title : "수업 취소",
+      content :"체크된 위 학생들을 모두 수업 취소하시겠습니까?"
+    });
+  }
 
   return (
     <div className={classes.root}>
-      <Grid container spacing={3}>
-        <CustomConfirmDialog
-          seq={dialogState['seq']}
-          open={confirmDialog}
-          closeHandle={() => {
-            setConfirmDialog(false)
-          }}
-          title={dialogState['title']}
-          content={dialogState['content']}
-          handleYseClick={dialogState['dialogYseClick']}
-        />
-        <Grid item lg={8} md={8} xl={8} xs={12}>
-          <Paper className={classes.paper}>
-            <Paper className={classes.paper}>
-              <Grid item xs={12} sm={12}>
-                <br/>
-                <h2>* 수업 정보</h2>
-                <br/>
-              </Grid>
-            </Paper>
-            <Grid container style={{ marginTop: 25 }}>
-              <Grid item xs={4} sm={4} style={{ marginTop: 15 }}>
-                <h3>수업명</h3>
-              </Grid>
-              <Grid item xs={8} sm={8}>
-                <TextField
-                  fullWidth
-                  variant="outlined"
-                  value={classInfo['name'] ? classInfo['name'] : ''}
-                  disabled
-                />
-              </Grid>
-            </Grid>
-            <Grid container>
-              <Grid container style={{ marginTop: 15 }}>
-                <Grid item xs={4} sm={4} style={{ marginTop: 15 }}>
-                  <h3>수업 시작일</h3>
-                </Grid>
-                <Grid item xs={8} sm={8}>
-                  <TextField
-                    type="date"
-                    fullWidth
-                    variant="outlined"
-                    value={classInfo['startDate'] ? classInfo['startDate'] : ''}
-                    disabled
-                  />
-                </Grid>
-              </Grid>
-              <Grid container style={{ marginTop: 15 }}>
-                <Grid item xs={4} sm={4} style={{ marginTop: 15 }}>
-                  <h3>수업 종료일</h3>
-                </Grid>
-                <Grid item xs={8} sm={8}>
-                  <TextField
-                    type="date"
-                    fullWidth
-                    variant="outlined"
-                    value={classInfo['endDate'] ? classInfo['endDate'] : ''}
-                    disabled
-                  />
-                </Grid>
-              </Grid>
-              <Grid container style={{ marginTop: 35 }}>
-                <Grid item xs={4} sm={4} style={{ marginTop: 15 }}>
-                  <h3>강의계획서</h3>
-                </Grid>
-                <Grid item xs={8} sm={8}>
-                  {classInfo['plannerDocName'] ? (
-                    <a href="#">{classInfo['plannerDocName']}</a>
-                  ) : (
-                    '미등록'
-                  )}
-                </Grid>
-              </Grid>
-              <Grid container style={{ marginTop: 55 }}>
-                <Grid item xs={4} sm={4} style={{ marginTop: 15 }}>
-                  <h3>수업 내용</h3>{' '}
-                </Grid>
-                <Grid item xs={8} sm={8}>
-                  <div style={{overflow:'scroll', height:700}}>
-                    <Paper style={{padding:20}}>
-                      <div id="classInfoContent"></div>
-                    </Paper>
+      <Grid container direction="column-reverse" justify="flex-start">
+        <Grid>
+          <Grid item xs={12}>
+            <Card className={classes.root}>
+              <CardMedia
+                component="img"
+                alt="Contemplative Reptile"
+                height="140"
+                image="/images/1.png"
+              />
+              <CardContent>
+                <Typography gutterBottom variant="h5" component="h2">
+                  {classInfo ? classInfo['name'] : null}
+                  <Tooltip title="수업 수정" placement="right">
+                    <IconButton onClick={()=>setUpdateClass(true)}>
+                      <CreateIcon/>
+                    </IconButton>
+                  </Tooltip>
+                </Typography>
+                <Typography variant="body2" color="textSecondary" component="p">
+                  {classInfo ? classInfo['content'] : null}
+                </Typography>
+              </CardContent>
+              <div className={classes.appBar}>
+                  <Tabs
+                    value={value}
+                    onChange={handleChange}
+                    aria-label="simple tabs example">
+                    <Tab label="수업 참여 인원" {...a11yProps(0)} />
+                    <Tab label="수업 신청 인원" {...a11yProps(1)} />
+                  </Tabs>
+              </div>
+              <TabPanel value={value} index={0}>
+                <Toolbar type={"signUpClassSuccess"} toolbarBtnHandle={signUpClassSuccessHandle}/>
+                {loaddingData ? (
+                  <div>
+                    <CircularProgress />
                   </div>
-                </Grid>
-              </Grid>
-              <Grid container style={{ marginTop: 100 }}>
-                <Grid item xs={12} sm={6} style={{ marginTop: 15 }}>
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    fullWidth
-                    onClick={() => redirectPage_updateClass()}>
-                    수업 수정
-                  </Button>
-                </Grid>
-                <Grid item xs={12} sm={6} style={{ marginTop: 15 }}>
-                  <Button
-                    variant="contained"
-                    color="secondary"
-                    fullWidth
-                    onClick={() => {
-                      setDialogState({
-                        title:'수업 삭제',
-                        content:'수업 삭제시 일주일(7일)간 보관됩니다. 정말 삭제하시겠습니까?',
-                        dialogYseClick:deleteClassYse
-                      });
-                      setConfirmDialog(true)
-                    }}>
-                    수업 삭제
-                  </Button>
-                </Grid>
-              </Grid>
-            </Grid>
-          </Paper>
+                ):
+                null
+                }
+                <Fade in timeout={600}>
+                  <div style={{overflowY:'scroll',height:700}} onScroll={getSignUpClassForStu}>
+                    <JoinStuList users={users}/>
+                  </div>
+                </Fade>
+              </TabPanel>
+              <TabPanel value={value} index={1}>
+                <Toolbar type={"signUpClassFaild"} toolbarBtnHandle={signUpClassFaildHandle}/>
+                <Fade in>
+                  <div style={{overflow:'scroll',height:700}}>
+
+                  </div>
+                </Fade>
+              </TabPanel>
+            </Card>
+          </Grid>
         </Grid>
       </Grid>
+      <UpdateClass open={updateClass} handleClose={()=>setUpdateClass(false)} classInfo={classInfo}/>
+      <CustomConfirmDialog
+        open={confirmDialog['open']} 
+        closeHandle={()=>setConfirmDialog({...confirmDialog,open:false})}
+        handleYseClick={()=>setConfirmDialog({...confirmDialog,open:false})}
+        title={confirmDialog['title']} 
+        content={confirmDialog['content']}
+      />
     </div>
   );
 };

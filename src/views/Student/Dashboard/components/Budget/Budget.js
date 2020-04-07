@@ -1,10 +1,20 @@
+/*
+ * 각classMain 최상단 컬러카드
+ */
 import React from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/styles';
-import { Card, CardContent, Grid, Typography, Avatar } from '@material-ui/core';
+import {
+  Card,
+  CardContent,
+  Grid,
+  Typography,
+  Avatar,
+  Button
+} from '@material-ui/core';
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
-import MoneyIcon from '@material-ui/icons/Money';
+import GetAppIcon from '@material-ui/icons/GetApp';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -23,6 +33,8 @@ const useStyles = makeStyles(theme => ({
     width: 56
   },
   icon: {
+    marginRight: 10,
+    marginLeft: 5,
     height: 32,
     width: 32
   },
@@ -47,6 +59,10 @@ const Budget = props => {
 
   return (
     <Card
+      //style={{ backgroundColor: '#e1bee7' }}
+      style={{
+        background: 'linear-gradient(to right bottom, #fff59d, #FFFFFF)'
+      }}
       {...rest}
       className={clsx(classes.root, className)}
     >
@@ -58,18 +74,18 @@ const Budget = props => {
           <Grid item>
             <Typography
               className={classes.title}
-              color="textSecondary"
               gutterBottom
-              variant="body2"
+              variant="h5"
             >
-              강의정보
+              JAVA활용 프로젝트
             </Typography>
-            <Typography variant="h3">SPRING 기초</Typography>
+            <Typography variant="subtitle1">교수 : 박남일</Typography>
           </Grid>
           <Grid item>
-            <Avatar className={classes.avatar}>
-              <MoneyIcon className={classes.icon} />
-            </Avatar>
+            <Button>
+              <span>강의계획서</span>
+              <GetAppIcon className={classes.icon} />
+            </Button>
           </Grid>
         </Grid>
         <div className={classes.difference}>
@@ -77,7 +93,8 @@ const Budget = props => {
             className={classes.differenceValue}
             variant="body2"
           >
-            교수 : 박남일
+            수업내용 부분입니다. 3학년 1학기 자바 활용 프로젝트기반
+            수업입니다.엄청 길면 더보기눌러서 더 볼수있습니다람쥐 ...더보기
           </Typography>
         </div>
       </CardContent>

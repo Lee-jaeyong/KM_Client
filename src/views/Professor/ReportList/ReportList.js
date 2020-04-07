@@ -1,109 +1,101 @@
 import React, { useState,useEffect } from 'react';
 import { makeStyles } from '@material-ui/styles';
+import Grid from '@material-ui/core/Grid';
+import Button from '@material-ui/core/Button';
+import Backdrop from '@material-ui/core/Backdrop';
+import SpeedDial from '@material-ui/lab/SpeedDial';
+import SpeedDialIcon from '@material-ui/lab/SpeedDialIcon';
+import SpeedDialAction from '@material-ui/lab/SpeedDialAction';
+import FileCopyIcon from '@material-ui/icons/FileCopyOutlined';
+import SaveIcon from '@material-ui/icons/Save';
+import PrintIcon from '@material-ui/icons/Print';
+import ShareIcon from '@material-ui/icons/Share';
+import FavoriteIcon from '@material-ui/icons/Favorite';
+
 
 import { useDispatch,useSelector } from 'react-redux';
 
-import CustomSearchHeader from '@common/component/CustomSearchHeader';
-import CustomTable from '@common/component/CustomTable';
-import * as RedirectActions from '@store/actions/RedirectActions';
-import * as ProgressBarActions from '@store/actions/ProgressBarActions';
+import ReportListTable from './component/ReportList/ReportList';
 
 import * as axiosGet from '@axios/get';
 
+function createData(classInfo,name,remainDate,content) {
+  return { classInfo, name, remainDate, content};
+}
+
+const rows = [
+  createData('C언어', 'C언어 레포트 1',20, 'C언어 레포트 콘텐츠 영역'),
+  createData('C언어', 'C언어 레포트 2',20, 'C언어 레포트 콘텐츠 영역'),
+  createData('C언어', 'C언어 레포트 3',20, 'C언어 레포트 콘텐츠 영역'),
+  createData('C언어', 'C언어 레포트 4', 20,'C언어 레포트 콘텐츠 영역'),
+  createData('C언어', 'C언어 레포트 5', 20,'C언어 레포트 콘텐츠 영역'),
+  createData('C언어', 'C언어 레포트 11',20, 'C언어 레포트 콘텐츠 영역'),
+  createData('C언어', 'C언어 레포트 12',20, 'C언어 레포트 콘텐츠 영역'),
+  createData('C언어', 'C언어 레포트 13',20, 'C언어 레포트 콘텐츠 영역'),
+];
+
 const useStyles = makeStyles(theme => ({
   root: {
-    padding: theme.spacing(3)
+    flexGrow: 1,
+    padding:20
   },
-  content: {
-    marginTop: theme.spacing(2)
+  speedDial: {
+    position: 'fixed',
+    bottom: theme.spacing(10),
+    right: theme.spacing(10),
   },
-  pagination: {
-    marginTop: theme.spacing(3),
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'flex-end'
-  }
 }));
 
+const actions = [
+  { icon: <FileCopyIcon />, name: 'Copy' },
+  { icon: <SaveIcon />, name: 'Save' },
+  { icon: <PrintIcon />, name: 'Print' },
+  { icon: <ShareIcon />, name: 'Share' },
+  { icon: <FavoriteIcon />, name: 'Like' },
+];
+
 const ReportList = (props) => {
-  const [selectClassIdx,setSelectClassIdx] = useState(props.match.params.idx);
-  const dispatch = useDispatch();
-  const [tableDataList,setTableDataList] = useState([]);
-  const [tableDataCount,setTableDataCount] = useState();
-  const [tableDataHeader,setTableDataHeader] = useState(
-    ["과제 번호","과제명","과제 시작일","과제 종료일","조회수","마감 이후 제출 여부","제출 과제 관람 여부"]
-  );
-
-  const [searchInput,setSearchInput] = useState({
-    name : '',
-    startDate :'',
-    endDate : '',
-    searchType : ''
-  });
-
-  const rowClickHandle = (idx) => {
-    dispatch(RedirectActions.isRedirect(true, '/class/report/' + idx));
-  }
-
-  const requestData = (idx,page,size,searchData) => {
-    let data = {
-      page : page,
-      size : size,
-      name : searchInput['name'] ? searchInput['name'] : '',
-      startDate :searchInput['startDate'] ? searchInput['startDate'] : '',
-      endDate : searchInput['endDate'] ? searchInput['endDate'] : '',
-      searchType : searchInput['searchType'] ? searchInput['searchType'] : '',
-    }
-    if(searchData !== undefined){
-      data = {
-        ...data,
-        name :searchData['name'],
-        startDate :searchData['startDate'],
-        endDate : searchData['endDate'],
-        searchType : searchData['searchType'],
-      }
-    }
-    dispatch(ProgressBarActions.isProgressBar(true));
-    setTimeout(() => {
-      axiosGet.getContainsData("/api/professor/report/class/"+idx+"/list",reportListResponse,data);
-    }, 300);
-  }
-
-  const reportListResponse = (res) => {
-    setTableDataList(res['list']);
-    setTableDataCount(res['totalCount']);
-  }
-
-  const searchHandle = (searchData) => {
-    setSearchInput(searchData);
-    requestData(selectClassIdx,0,10,searchData);
-  }
-
-  useEffect(()=>{
-    requestData(props.match.params.idx,0,10);
-    setSelectClassIdx(props.match.params.idx);
-  },[props.match.params.idx]);
-
   const classes = useStyles();
+  const [open, setOpen] = React.useState(false);
+  const [hidden, setHidden] = React.useState(false);
+
+  const handleOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   return (
     <div className={classes.root}>
-      <br />
-      <CustomSearchHeader searchHandle={searchHandle} title="과제 검색" />
-      <div>
-        <br />
-        <br />
-      </div>
-      <CustomTable
-        tableDescription={"과제 정보"}
-        rowClickHandle={rowClickHandle}
-        noDataMessage={<h3>* 과제 리스트가 존재하지 않습니다.</h3>}
-        tableHeaderList={tableDataHeader}
-        tableDataList={tableDataList}
-        tableDataCount={tableDataCount}
-        searchSeq={selectClassIdx}
-        exclude={['classIdx','links','fileList','imgList','content']}
-        requestData={requestData}
-      />
+      <Grid container spacing={3}>
+        <Grid item xs={2}/>
+        <Grid item xs={8}>
+          <ReportListTable data={rows}/>
+        </Grid>
+        <Grid>
+            <SpeedDial
+              ariaLabel="SpeedDial tooltip example"
+              className={classes.speedDial}
+              hidden={hidden}
+              icon={<SpeedDialIcon />}
+              onClose={handleClose}
+              onOpen={handleOpen}
+              open={open}
+            >
+            {actions.map((action) => (
+              <SpeedDialAction
+                key={action.name}
+                icon={action.icon}
+                tooltipTitle={action.name}
+                tooltipOpen
+                onClick={handleClose}
+              />
+            ))}
+          </SpeedDial>
+        </Grid>
+      </Grid>
     </div>
   );
 };

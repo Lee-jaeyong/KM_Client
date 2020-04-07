@@ -58,6 +58,7 @@ const DialogActions = withStyles((theme) => ({
 
 export default function UpdateClass(props) {
   const {classInfo} = props;
+  const [originFile,setOriginFile] = useState(classInfo['file'] ? classInfo['file'] : null);
   const dispatch = useDispatch();
 
   const name = useRef([]);
@@ -165,6 +166,10 @@ export default function UpdateClass(props) {
     setFiles([]);
   };
 
+  const fileDelete = () => {
+    setOriginFile(null);
+  }
+
   useEffect(()=>{
     setOpen(props['open']);
   },[props['open']]);
@@ -202,9 +207,24 @@ export default function UpdateClass(props) {
               </FormControl>
             </Grid>            
             <Grid item lg={12} md={12} xl={12} xs={12}>
-              <FileUpload addFile={fileUpload} files={files}/>
-              {files.length !== 0 ? (
-                <div style={{textAlign:"center"}}>
+              {
+                originFile ? (
+                  <div style={{textAlign:"center"}}>
+                  <br/>
+                    <Chip
+                      variant="outlined"
+                      label={originFile}
+                      color="primary" 
+                      onDelete={fileDelete}
+                    />
+                </div>
+                ) : (
+                  <FileUpload addFile={fileUpload} files={files}/>
+                )
+              }
+              {
+                files.length !== 0 ? (
+                  <div style={{textAlign:"center"}}>
                   <br/>
                     <Chip
                       variant="outlined"
@@ -212,8 +232,8 @@ export default function UpdateClass(props) {
                       color="secondary" 
                       onDelete={handleDelete}
                     />
-                </div>
-              ): null}
+                </div>) : null
+              }
             </Grid>            
             <Grid item lg={12} md={12} xl={12} xs={12}>
               <TextField

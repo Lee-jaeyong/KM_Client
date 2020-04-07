@@ -119,11 +119,10 @@ const UsersTable = props => {
                   >
                     <TableCell padding="checkbox">
                       <Checkbox
-                        name="joinStuListChk"
                         checked={selectedUsers.indexOf(user.id) !== -1}
                         color="primary"
                         onChange={event => handleSelectOne(event, user.id)}
-                        value={user['id']}
+                        value="true"
                       />
                     </TableCell>
                     <TableCell>

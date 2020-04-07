@@ -139,15 +139,15 @@ const Main = props => {
 
   useEffect(() => {}, [progressBarState]);
 
-  useEffect(() => {
-    //토큰 테스트
-    const user = {
-      id: 'dlwodyd202',
-      pass: 'dlwodyd'
-    };
-    Oauth.getAccessToken(user);
-    axiosGet.getNotContainsData('/api/professor/class', getResponse);
-  }, []);
+  // useEffect(() => {
+  //   //토큰 테스트
+  //   const user = {
+  //     id: 'dlwodyd202',
+  //     pass: 'dlwodyd'
+  //   };
+  //   Oauth.getAccessToken(user);
+  //   axiosGet.getNotContainsData('/api/professor/class', getResponse);
+  // }, []);
 
   useEffect(() => {
     dispatch(RedirectActions.isRedirect(false));

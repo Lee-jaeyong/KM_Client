@@ -6,15 +6,12 @@ import SpeedDial from '@material-ui/lab/SpeedDial';
 import SpeedDialIcon from '@material-ui/lab/SpeedDialIcon';
 import SpeedDialAction from '@material-ui/lab/SpeedDialAction';
 import FileCopyIcon from '@material-ui/icons/FileCopyOutlined';
-import SaveIcon from '@material-ui/icons/Save';
-import PrintIcon from '@material-ui/icons/Print';
-import ShareIcon from '@material-ui/icons/Share';
-import FavoriteIcon from '@material-ui/icons/Favorite';
 
 import { useDispatch,useSelector } from 'react-redux';
 
 import ReportReply from './component/ReportReply/ReportReply';
 import ReportListTable from './component/ReportList/ReportList';
+import AddReport from './component/AddReport/AddReport';
 
 import * as axiosGet from '@axios/get';
 
@@ -57,17 +54,19 @@ const ReportList = (props) => {
   const [reportListPage,setReportListPage] = useState(0);
   const [loaddingData,setLoaddingData] = useState(false);
   const [replyModal,setReplyModal] = useState(false);
+  const [addReportModal,setAddReportModal] = useState(false);
 
   const handleOpen = () => {
     setOpen(true);
   };
 
   const handleClose = (value) => {
+    setAddReportModal(true);
     setOpen(false);
   };
 
   const getReportList = (event) => {
-    if(event.target.scrollTop + 1000 >= event.target.scrollHeight){
+    if(event.target.scrollHeight > 2000 && event.target.scrollTop + 1000 >= event.target.scrollHeight){
       setReportListPage(1+reportListPage);
       let result = reportListData;
       for(let i =0;i<10;i++){
@@ -96,7 +95,7 @@ const ReportList = (props) => {
         <Grid item xs={2}/>
         <Grid item xs={8}>
           <div>
-              <ReportListTable data={reportListData} replyShowClick={()=>showReply}/>
+              <ReportListTable data={reportListData} replyShowClick={()=>showReply} {...props}/>
               {loaddingData ? (
                     <div>
                       <CircularProgress />
@@ -113,7 +112,7 @@ const ReportList = (props) => {
               className={classes.speedDial}
               hidden={hidden}
               icon={<SpeedDialIcon />}
-              onClose={handleClose}
+              onClose={()=>setOpen(false)}
               onOpen={handleOpen}
               open={open}
             >
@@ -129,6 +128,7 @@ const ReportList = (props) => {
           </SpeedDial>
         </Grid>
       </Grid>
+      <AddReport open={addReportModal} handleClose={()=>{setAddReportModal(false);setOpen(false)}}/>
     </div>
   );
 };

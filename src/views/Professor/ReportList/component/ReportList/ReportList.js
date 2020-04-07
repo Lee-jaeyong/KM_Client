@@ -1,4 +1,5 @@
 import React, { useEffect, useState,useMemo  } from 'react';
+import {Link} from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import {
   Card,
@@ -32,7 +33,8 @@ const useStyles = makeStyles({
   }
 });
 
-export default function ReportList({ data, replyShowClick }) {
+export default function ReportList(props) {
+  const {data,replyShowClick} = props;
   const getCheckedArr = () => {
     let checkedArr = [];
     for (let i = 0; i < data.length; i++) {
@@ -78,50 +80,43 @@ export default function ReportList({ data, replyShowClick }) {
                     <DeleteForeverIcon />
                   </IconButton>
                 </div>
-                <CardActionArea>
-                  <Typography
-                    variant="h5"
-                    component="h2"
-                    style={{ marginTop: 10 }}>
-                    {report['name']}
-                  </Typography>
-                  <Typography className={classes.pos} color="textSecondary">
-                    {report['remainDate']} 일 남음
-                  </Typography>
-                </CardActionArea>
-                <Typography variant="body2" component="p">
-                  {checked[idx] ? (
-                    checked[idx]['isChecked'] ? (
-                      report['content']
-                    ) : (
-                      <span>
-                        {report['content'].substring(0, 20)}
-                        <span
-                          style={{
-                            marginLeft: 10,
-                            fontSize: 12,
-                            color: '#6799FF'
-                          }}
-                          onClick={() => contentHandle(idx)}>
-                          ....더보기
-                        </span>
-                      </span>
-                    )
-                  ) : (
-                    <span>
-                      {report['content'].substring(0, 20)}
-                      <span
-                        style={{
-                          marginLeft: 10,
-                          fontSize: 12,
-                          color: '#6799FF'
-                        }}
-                        onClick={() => contentHandle(idx)}>
-                        ....더보기
-                      </span>
-                    </span>
-                  )}
-                </Typography>
+                  <CardActionArea>
+                    <Link to={"/class/"+props.match.params.idx}>
+                        <Typography
+                          variant="h5"
+                          component="h2"
+                          style={{ marginTop: 10 }}>
+                          {report['name']}
+                        </Typography>
+                        <Typography className={classes.pos} color="textSecondary">
+                          {report['remainDate']} 일 남음
+                        </Typography>
+                      <Typography variant="body2" component="p">
+                        {checked[idx] ? (
+                          checked[idx]['isChecked'] ? (
+                            report['content']
+                          ) : (
+                            <span>
+                              {report['content'].substring(0, 20)}
+                            </span>
+                          )
+                        ) : (
+                          <span>
+                            {report['content'].substring(0, 20)}
+                            <span
+                              style={{
+                                marginLeft: 10,
+                                fontSize: 12,
+                                color: '#6799FF'
+                              }}
+                              onClick={() => contentHandle(idx)}>
+                              ....더보기
+                            </span>
+                          </span>
+                        )}
+                        </Typography>
+                    </Link>
+                  </CardActionArea>
               </CardContent>
               <Divider light />
               <CardActions>
@@ -129,7 +124,7 @@ export default function ReportList({ data, replyShowClick }) {
                   size="small"
                   style={{ marginTop: 5, marginLeft: 5 }}
                   onClick={replyShowClick(idx)}>
-                  수업 댓글 보기
+                  과제 댓글 보기
                   <Badge
                     badgeContent={99}
                     color="secondary"

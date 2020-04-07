@@ -1,4 +1,4 @@
-import React, { useEffect,useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/styles';
 import { Grid } from '@material-ui/core';
 
@@ -26,18 +26,16 @@ const Dashboard = () => {
   const classes = useStyles();
 
   const dispatch = useDispatch();
-  const storeData = useSelector(state=>state['messageState']);
-  const [prevStoreData,setPrevStoreData] = useState(storeData);
-  
-  useEffect(()=>{
-    },[]);
-    
-  useEffect(()=>{
-    if(prevStoreData !== storeData)
-    {
+  const storeData = useSelector(state => state['messageState']);
+  const [prevStoreData, setPrevStoreData] = useState(storeData);
+
+  useEffect(() => {}, []);
+
+  useEffect(() => {
+    if (prevStoreData !== storeData) {
       setPrevStoreData(storeData);
     }
-  },[storeData]);
+  }, [storeData]);
 
   return (
     <div className={classes.root}>
@@ -47,40 +45,14 @@ const Dashboard = () => {
       >
         <Grid
           item
-          lg={3}
-          sm={6}
-          xl={3}
+          lg={12}
+          sm={12}
+          xl={12}
           xs={12}
         >
           <Budget />
         </Grid>
-        <Grid
-          item
-          lg={3}
-          sm={6}
-          xl={3}
-          xs={12}
-        >
-          <TotalUsers />
-        </Grid>
-        <Grid
-          item
-          lg={3}
-          sm={6}
-          xl={3}
-          xs={12}
-        >
-          <TasksProgress />
-        </Grid>
-        <Grid
-          item
-          lg={3}
-          sm={6}
-          xl={3}
-          xs={12}
-        >
-          <TotalProfit />
-        </Grid>
+
         <Grid
           item
           lg={8}

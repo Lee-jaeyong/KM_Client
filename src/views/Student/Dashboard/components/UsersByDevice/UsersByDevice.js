@@ -15,6 +15,9 @@ import LaptopMacIcon from '@material-ui/icons/LaptopMac';
 import PhoneIphoneIcon from '@material-ui/icons/PhoneIphone';
 import RefreshIcon from '@material-ui/icons/Refresh';
 import TabletMacIcon from '@material-ui/icons/TabletMac';
+import GroupSharpIcon from '@material-ui/icons/GroupSharp';
+
+import UserTable from './component/UserTable/UserTable';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -110,37 +113,19 @@ const UsersByDevice = props => {
       className={clsx(classes.root, className)}
     >
       <CardHeader
-        action={
-          <IconButton size="small">
-            <RefreshIcon />
-          </IconButton>
+        title={
+          <div>
+            <GroupSharpIcon
+              style={{ marginRight: 10, top: 2, position: 'relative' }}
+            />
+            수강 학생
+          </div>
         }
-        title="Users By Device"
       />
       <Divider />
       <CardContent>
-        <div className={classes.chartContainer}>
-          <Doughnut
-            data={data}
-            options={options}
-          />
-        </div>
-        <div className={classes.stats}>
-          {devices.map(device => (
-            <div
-              className={classes.device}
-              key={device.title}
-            >
-              <span className={classes.deviceIcon}>{device.icon}</span>
-              <Typography variant="body1">{device.title}</Typography>
-              <Typography
-                style={{ color: device.color }}
-                variant="h2"
-              >
-                {device.value}%
-              </Typography>
-            </div>
-          ))}
+        <div style={{ overflowY: 'scroll', height: 500 }}>
+          <UserTable />
         </div>
       </CardContent>
     </Card>

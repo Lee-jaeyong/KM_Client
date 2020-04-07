@@ -101,8 +101,7 @@ export default function ReportList({data}) {
                     </Button>
                     </CardActions>
                     <Divider/>
-                    <Collapse in={checked[idx]['isChecked']} style={{padding:10}}>
-                        <Table key={idx} className={classes.table} aria-label="simple table">
+                        {/* <Table key={idx} className={classes.table} aria-label="simple table">
                             <TableBody>
                                 {replyData.map((reply,idx)=>{
                                     return (
@@ -129,8 +128,7 @@ export default function ReportList({data}) {
                                     </TableCell>
                                 </TableRow>
                             </TableBody>
-                        </Table>
-                    </Collapse>
+                        </Table> */}
                 </Card>
                 )
             ):null}

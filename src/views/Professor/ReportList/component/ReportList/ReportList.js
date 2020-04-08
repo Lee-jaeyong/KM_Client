@@ -20,6 +20,7 @@ import CreateIcon from '@material-ui/icons/Create';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import UpdateReportMoal from './UpdateReport/UpdateReportMoal';
 import CustomConfirmDialog from '@common/component/CustomConfirmDialog';
+import FingerprintIcon from '@material-ui/icons/Fingerprint';
 
 const useStyles = makeStyles({
   bullet: {
@@ -93,6 +94,15 @@ export default function ReportList(props) {
     alert('fdsfds');
   }
 
+  const readReport = (idx) => {
+    for(let i =0;i<data.length;i++){
+      if(data[i]['seq'] === idx){
+        props.readReportHandle(data[i]);
+        break;
+      }
+    }
+  }
+
   useEffect(() => {
     setChecked(getCheckedArr());
   }, [data]);
@@ -116,8 +126,9 @@ export default function ReportList(props) {
                     <DeleteForeverIcon />
                   </IconButton>
                 </div>
-                  <CardActionArea>
-                    <Link to={"/class/"+props.match.params.idx}>
+                  <CardActionArea 
+                    onClick={()=>readReport(report['seq'])}
+                  >
                         <Typography
                           variant="h5"
                           component="h2"
@@ -128,30 +139,15 @@ export default function ReportList(props) {
                           {report['remainDate']} 일 남음
                         </Typography>
                       <Typography variant="body2" component="p">
-                        {checked[idx] ? (
-                          checked[idx]['isChecked'] ? (
-                            report['content']
-                          ) : (
-                            <span>
-                              {report['content'].substring(0, 20)}
+                          {report['content'].substring(0, 20)}<br/><br/>
+                           <FingerprintIcon style={{position:"relative",top:5}}/>
+                           <span 
+                            onMouseOver={(event)=>event.target.style.textDecoration = 'underline'}
+                            onMouseLeave={(event)=>event.target.style.textDecoration = ''}
+                           >
+                            과제 정보 및 제출자 명단 보 기
                             </span>
-                          )
-                        ) : (
-                          <span>
-                            {report['content'].substring(0, 20)}
-                            <span
-                              style={{
-                                marginLeft: 10,
-                                fontSize: 12,
-                                color: '#6799FF'
-                              }}
-                              onClick={() => contentHandle(idx)}>
-                              ....더보기
-                            </span>
-                          </span>
-                        )}
                         </Typography>
-                    </Link>
                   </CardActionArea>
               </CardContent>
               <Divider light />

@@ -12,6 +12,7 @@ import { useDispatch,useSelector } from 'react-redux';
 import ReportReply from './component/ReportReply/ReportReply';
 import ReportListTable from './component/ReportList/ReportList';
 import AddReport from './component/AddReport/AddReport';
+import ReadReport from './component/ReadReport/ReadReport';
 
 import * as axiosGet from '@axios/get';
 
@@ -55,6 +56,8 @@ const ReportList = (props) => {
   const [loaddingData,setLoaddingData] = useState(false);
   const [replyModal,setReplyModal] = useState(false);
   const [addReportModal,setAddReportModal] = useState(false);
+  const [readReportModal,setReadReportModal] = useState(false);
+  const [readReportInfo,setReadReportInfo] = useState({});
 
   const handleOpen = () => {
     setOpen(true);
@@ -85,6 +88,11 @@ const ReportList = (props) => {
     }
   }
 
+  const readReportHandle = (value) => {
+    setReadReportModal(true);
+    setReadReportInfo(value);
+  }
+
   const showReply = (idx) => {
     setReplyModal(true);
   }
@@ -95,7 +103,11 @@ const ReportList = (props) => {
         <Grid item xs={2}/>
         <Grid item xs={8}>
           <div>
-              <ReportListTable data={reportListData} replyShowClick={()=>showReply} {...props}/>
+              <ReportListTable
+                readReportHandle={readReportHandle}
+                data={reportListData}
+                replyShowClick={()=>showReply}
+                {...props}/>
               {loaddingData ? (
                     <div>
                       <CircularProgress />
@@ -129,6 +141,7 @@ const ReportList = (props) => {
         </Grid>
       </Grid>
       <AddReport open={addReportModal} handleClose={()=>{setAddReportModal(false);setOpen(false)}}/>
+      <ReadReport open={readReportModal} handleClose={()=>setReadReportModal(false)}/>
     </div>
   );
 };

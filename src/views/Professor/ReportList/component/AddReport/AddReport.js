@@ -92,6 +92,7 @@ export default function AddReport(props) {
   };
   
   const btnSubmit = event => {
+    console.log(imgs);
     const selectMenu = document.getElementsByName('selectMenu');
     let resultSelectMenu = [];
     for(let i =0;i<selectMenu.length;i++){
@@ -172,13 +173,13 @@ export default function AddReport(props) {
       );
       return;
     }
-
-    for(let i =0;i<file.length;i++){
-      getImgSource(file[i]);
-    }
-
+    setImgs(imgs.concat(file));
+    let imgByte = [];
     setTimeout(() => {
-      setImgs(imgs.concat(file));
+      for(let i =0;i<file.length;i++){
+        imgByte.push(getImgSource(file[i]));
+      }
+      console.log(imgByte);
       setImgProgressState(false);
     }, 1000);
     setImgProgressState(true);
@@ -186,11 +187,13 @@ export default function AddReport(props) {
 
   async function getImgSource(file){
     const reader = new FileReader();
-    reader.onload = function(e){
-      let domImg = document.createElement("IMG");
-      domImg.src = e.target.result;
-      domImg.style.cssText = "width:100px;height:100px;" 
-      document.getElementById('imgSection').appendChild(domImg);
+    reader.onload = await function(e){
+      // let domImg = document.createElement("IMG");
+      // domImg.src = e.target.result;
+      // domImg.id = file['name'];
+      // domImg.style.cssText = "width:100px;height:100px;" 
+      // document.getElementById('imgSection').appendChild(domImg);
+      return e.target.result;
     }
     reader.readAsDataURL(file);
   }

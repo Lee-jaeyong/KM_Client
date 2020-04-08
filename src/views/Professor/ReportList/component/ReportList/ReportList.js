@@ -18,6 +18,8 @@ import MailIcon from '@material-ui/icons/Mail';
 import AssignmentIcon from '@material-ui/icons/Assignment';
 import CreateIcon from '@material-ui/icons/Create';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
+import UpdateReportMoal from './UpdateReport/UpdateReportMoal';
+import CustomConfirmDialog from '@common/component/CustomConfirmDialog';
 
 const useStyles = makeStyles({
   bullet: {
@@ -35,6 +37,17 @@ const useStyles = makeStyles({
 
 export default function ReportList(props) {
   const {data,replyShowClick} = props;
+  const [selectReport,setSelectReport] = useState(-1);
+  const [updateReportState,setUpdateReportState] = useState(false);
+  const [deleteReportState,setDeleteReportState] = useState(-1);
+  const [deleteConfirmDialogState,setDeleteConfirmDialogState] = useState(
+    {
+      open : false,
+      title : '',
+      content : ''
+    }
+  ); 
+
   const getCheckedArr = () => {
     let checkedArr = [];
     for (let i = 0; i < data.length; i++) {
@@ -57,6 +70,29 @@ export default function ReportList(props) {
     setSelectIdx(idx);
   };
 
+  const updateReport = idx => {
+    for(let i =0;i<data.length;i++){
+      if(data[i]['seq'] === idx){
+        setSelectReport(data[i]);
+        setUpdateReportState(true);
+        break;
+      }
+    }
+  }
+
+  const deleteReport = idx => {
+    setDeleteReportState(idx);
+    setDeleteConfirmDialogState({
+      open:true,
+      title:'과제 삭제',
+      content :'과제 삭제시 복구가 불가하며 제출했던 모든 기록 또한 삭제됩니다. 해당 과제를 정말 삭제하시겠습니까?'
+    })
+  }
+
+  const deleteYseClickHandle = () => {
+    alert('fdsfds');
+  }
+
   useEffect(() => {
     setChecked(getCheckedArr());
   }, [data]);
@@ -73,10 +109,10 @@ export default function ReportList(props) {
                   <AssignmentIcon />
                 </Avatar>
                 <div style={{ marginTop: 5 }}>
-                  <IconButton aria-label="update" className={classes.margin}>
+                  <IconButton aria-label="update" className={classes.margin} onClick={()=>updateReport(report['seq'])}>
                     <CreateIcon />
                   </IconButton>
-                  <IconButton aria-label="delete" className={classes.margin}>
+                  <IconButton aria-label="delete" className={classes.margin} onClick={()=>deleteReport(report['seq'])}>
                     <DeleteForeverIcon />
                   </IconButton>
                 </div>
@@ -136,6 +172,19 @@ export default function ReportList(props) {
             </Card>
           ))
         : null}
+        <UpdateReportMoal open={updateReportState} reportInfo={selectReport} handleClose={()=>setUpdateReportState(false)}/>
+        <CustomConfirmDialog 
+          open={deleteConfirmDialogState['open']} 
+          title={deleteConfirmDialogState['title']} 
+          content={deleteConfirmDialogState['content']} 
+          handleYseClick={deleteYseClickHandle}
+          closeHandle={()=>{
+            setDeleteConfirmDialogState({
+              ...deleteConfirmDialogState,
+              open : false,
+            });
+          }}
+        />
     </div>
   );
 }

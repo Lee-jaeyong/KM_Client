@@ -15,19 +15,19 @@ import AddReport from './component/AddReport/AddReport';
 
 import * as axiosGet from '@axios/get';
 
-function createData(classInfo,name,remainDate,content) {
-  return { classInfo, name, remainDate, content};
+function createData(seq,classInfo,name,startDate,endDate,useSubmitDates,content) {
+  return { seq,classInfo, name, startDate,endDate,useSubmitDates, content};
 }
 
 const rows = [
-  createData('C언어', 'C언어 레포트 1',20, 'C언어 레포트 콘텐츠 영역'),
-  createData('C언어', 'C언어 레포트 2',20, 'C언어 레포트 콘텐츠 영역'),
-  createData('C언어', 'C언어 레포트 3',20, 'C언어 레포트 콘텐츠 영역'),
-  createData('C언어', 'C언어 레포트 4', 20,'C언어 레포트 콘텐츠 영dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd역'),
-  createData('C언어', 'C언어 레포트 5', 20,'C언어 레포트 콘텐츠 영역'),
-  createData('C언어', 'C언어 레포트 11',20, 'C언어 레포트 콘텐츠 영역'),
-  createData('C언어', 'C언어 레포트 12',20, 'C언어 레포트 콘텐츠 영역'),
-  createData('C언어', 'C언어 레포트 13',20, 'C언어 레포트 콘텐츠 영역'),
+  createData(1,'C언어', 'C언어 레포트 1','null','null','NO', 'C언어 레포트 콘텐츠 영역'),
+  createData(2,'C언어', 'C언어 레포트 2','2020-01-10','2020-10-10','YES', 'C언어 레포트 콘텐츠 영역'),
+  createData(3,'C언어', 'C언어 레포트 3','2020-01-10','2020-10-10','YES', 'C언어 레포트 콘텐츠 영역'),
+  createData(4,'C언어', 'C언어 레포트 4', '2020-01-10','2020-10-10','YES','C언어 레포트 콘텐츠 영dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd역'),
+  createData(5,'C언어', 'C언어 레포트 5', '2020-01-10','2020-10-10','YES','C언어 레포트 콘텐츠 영역'),
+  createData(6,'C언어', 'C언어 레포트 11','2020-01-10','2020-10-10','YES', 'C언어 레포트 콘텐츠 영역'),
+  createData(7,'C언어', 'C언어 레포트 12','2020-01-10','2020-10-10','YES', 'C언어 레포트 콘텐츠 영역'),
+  createData(8,'C언어', 'C언어 레포트 13','2020-01-10','2020-10-10','YES', 'C언어 레포트 콘텐츠 영역'),
 ];
 
 const useStyles = makeStyles(theme => ({

@@ -1,6 +1,7 @@
 import React, { useState,useEffect } from 'react';
 import { makeStyles } from '@material-ui/styles';
 import Grid from '@material-ui/core/Grid';
+import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import SpeedDial from '@material-ui/lab/SpeedDial';
 import SpeedDialIcon from '@material-ui/lab/SpeedDialIcon';
@@ -16,13 +17,13 @@ import ReadReport from './component/ReadReport/ReadReport';
 
 import * as axiosGet from '@axios/get';
 
-function createData(seq,classInfo,name,startDate,endDate,useSubmitDates,content) {
-  return { seq,classInfo, name, startDate,endDate,useSubmitDates, content};
+function createData(seq,classInfo,name,startDate,endDate,useSubmitDates,content,fileList) {
+  return { seq,classInfo, name, startDate,endDate,useSubmitDates, content,fileList};
 }
 
 const rows = [
-  createData(1,'C언어', 'C언어 레포트 1','null','null','NO', 'C언어 레포트 콘텐츠 영역'),
-  createData(2,'C언어', 'C언어 레포트 2','2020-01-10','2020-10-10','YES', 'C언어 레포트 콘텐츠 영역'),
+  createData(1,'C언어', '제 1강에 대한 Quiz 입니다','null','null','NO', '동영상을 시청 한 후 다음의 Quiz를 꼭 풀어보세요 Quiz는 아래의 Google 설문지로 작성되었습니다.',[{name:'abc.xlxs',type:'FILE'},{name:'abc12.xlxs',type:'FILE'},{name:'abcdsadsa.xlxs',type:'FILE'}]),
+  createData(2,'C언어', '1주차_과제(아두이노와 라즈베리파이비교)','2020-01-10','2020-10-10','YES', '아두이노 와 라즈베리파이 비교를 해주세요 장점 단점'),
   createData(3,'C언어', 'C언어 레포트 3','2020-01-10','2020-10-10','YES', 'C언어 레포트 콘텐츠 영역'),
   createData(4,'C언어', 'C언어 레포트 4', '2020-01-10','2020-10-10','YES','C언어 레포트 콘텐츠 영dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd역'),
   createData(5,'C언어', 'C언어 레포트 5', '2020-01-10','2020-10-10','YES','C언어 레포트 콘텐츠 영역'),
@@ -98,7 +99,7 @@ const ReportList = (props) => {
   }
 
   return (
-    <div className={classes.root} style={{overflowY:'scroll',height:1000}} onScroll={getReportList}>
+    <div id="reportListTable" className={classes.root} style={{overflowY:'scroll',height:1000}} onScroll={getReportList}>
       <Grid container spacing={3}>
         <Grid item xs={2}/>
         <Grid item xs={8}>
@@ -141,7 +142,7 @@ const ReportList = (props) => {
         </Grid>
       </Grid>
       <AddReport open={addReportModal} handleClose={()=>{setAddReportModal(false);setOpen(false)}}/>
-      <ReadReport open={readReportModal} handleClose={()=>setReadReportModal(false)}/>
+      <ReadReport reportInfo={readReportInfo} open={readReportModal} handleClose={()=>setReadReportModal(false)}/>
     </div>
   );
 };

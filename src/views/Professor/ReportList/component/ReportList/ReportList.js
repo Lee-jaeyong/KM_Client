@@ -18,6 +18,7 @@ import MailIcon from '@material-ui/icons/Mail';
 import AssignmentIcon from '@material-ui/icons/Assignment';
 import CreateIcon from '@material-ui/icons/Create';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
+import FileCopyIcon from '@material-ui/icons/FileCopy';
 import UpdateReportMoal from './UpdateReport/UpdateReportMoal';
 import CustomConfirmDialog from '@common/component/CustomConfirmDialog';
 import FingerprintIcon from '@material-ui/icons/Fingerprint';
@@ -41,6 +42,18 @@ export default function ReportList(props) {
   const [selectReport,setSelectReport] = useState(-1);
   const [updateReportState,setUpdateReportState] = useState(false);
   const [deleteReportState,setDeleteReportState] = useState(-1);
+  let remainDataArr = [];
+  for(let i =0;i<data.length;i++){
+    if(data[i]['useSubmitDates'] !== 'NO'){
+      let startDate = new Date(data[i]['startDate']).getTime();
+      let endDate = new Date(data[i]['endDate']).getTime();
+      remainDataArr.push(((endDate - startDate)/86400000) + "일 남음");
+    }else{
+      remainDataArr.push('과제 기한 없음');
+    }
+  }
+  const [remainData] = useState(remainDataArr);
+
   const [deleteConfirmDialogState,setDeleteConfirmDialogState] = useState(
     {
       open : false,
@@ -48,7 +61,6 @@ export default function ReportList(props) {
       content : ''
     }
   ); 
-
   const getCheckedArr = () => {
     let checkedArr = [];
     for (let i = 0; i < data.length; i++) {
@@ -134,12 +146,19 @@ export default function ReportList(props) {
                           component="h2"
                           style={{ marginTop: 10 }}>
                           {report['name']}
+                          {report['fileList'] ?
+                          (
+                          <Tooltip title="파일 혹은 이미지가 첨부됨" placement="right">
+                            <FileCopyIcon style={{position:'relative', top:3}}/> 
+                          </Tooltip>
+                          )
+                          : null}
                         </Typography>
                         <Typography className={classes.pos} color="textSecondary">
-                          {report['remainDate']} 일 남음
+                          {remainData[idx]}
                         </Typography>
                       <Typography variant="body2" component="p">
-                          {report['content'].substring(0, 20)}<br/><br/>
+                          {report['content'].substring(0, 20)} .....더보기<br/><br/>
                            <FingerprintIcon style={{position:"relative",top:5}}/>
                            <span 
                             onMouseOver={(event)=>event.target.style.textDecoration = 'underline'}

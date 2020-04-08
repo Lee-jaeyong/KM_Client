@@ -150,7 +150,7 @@ export default function AddReport(props) {
     }
     dispatch(
       SHOW_MESSAGE_ACTION.show_message({
-        content: '과제 등록 완료',
+        content: '과제 수정 완료',
         visible: true
       })
     );
@@ -280,9 +280,8 @@ export default function AddReport(props) {
         aria-labelledby="customized-dialog-title"
         open={open}>
         <DialogTitle id="customized-dialog-title" onClose={handleClose}>
-          과제 등록
+          과제 수정
           <br />
-          <span style={{ fontSize: 15 }}>과제의 기본 정보를 입력합니다.</span>
         </DialogTitle>
         <DialogContent dividers>
           <Grid container spacing={4}>
@@ -395,7 +394,7 @@ export default function AddReport(props) {
         </DialogContent>
         <DialogActions>
           <Button autoFocus onClick={btnSubmit} color="primary">
-            등 록
+            수 정
           </Button>
         </DialogActions>
       </Dialog>

@@ -9,10 +9,12 @@ import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import CloseIcon from '@material-ui/icons/Close';
 import Slide from '@material-ui/core/Slide';
+import Zoom from '@material-ui/core/Zoom';
 
 import ReportInfo from './ReportInfo';
 import ReportSubmitInfo from './ReportSubmitInfo';
 import ReportSubmitUserList from './ReportSubmitUserList';
+import { Fade } from '@material-ui/core';
 
 const reportSubmitUserListData = [
   {seq : 1,id : '14731060',name:"이재용",submitDate : '2020-04-09'},
@@ -33,6 +35,15 @@ const reportSubmitInfoData = [
   {seq : 6,id:'14731065',content : '개발환경 구축하는법 알게되었습니다. 과정들이 리눅스 TUI환경이라 생소하지만 신기했어요!',date:'2020-02-01',fileList:[{name:'fsdkjfhsdfkjsdh',type:'FILE'}]},
   {seq : 7,id:'14731066',content : '라즈베리를 수령하지 못해 진행하기 어렵습니다',date:'2020-11-01'},
 ];
+
+const reportReply = [
+  {seq:1,name:'이재용',content:'안녕하세요',date:'2020-10-10'},
+  {seq:2,name:'윤지원',content:'안녕하세요',date:'2020-10-10'},
+  {seq:3,name:'장유나',content:'안녕하세요',date:'2020-10-10'},
+  {seq:4,name:'박선규',content:'안녕하세요',date:'2020-10-10'},
+  {seq:5,name:'홍지환',content:'안녕하세요',date:'2020-10-10'},
+  {seq:6,name:'오병일',content:'안녕하세요',date:'2020-10-10'},
+]
 
 const useStyles = makeStyles((theme) => ({
   appBar: {
@@ -60,6 +71,7 @@ export default function FullScreenDialog(props) {
 
   const handleClose = () => {
     setOpen(false);
+    setShowReport(null);
     props.handleClose();
   };
 
@@ -100,9 +112,11 @@ export default function FullScreenDialog(props) {
             <Grid item xs={6} sm={2}>
               <ReportSubmitUserList showSubmitReport={showSubmitReport} userList={reportSubmitUserListData}/>
             </Grid>
-            <Grid item xs={6} sm={6}>
-              <ReportSubmitInfo reportInfo={showReport}/>
-            </Grid>
+            <Zoom in={showReport ? true : false}>
+              <Grid item xs={6} sm={6}>
+                <ReportSubmitInfo reportReply={reportReply} reportInfo={showReport}/>
+              </Grid>
+            </Zoom>
           </Grid>
         </div>
       </Dialog>

@@ -19,7 +19,6 @@ import {
   AddNotice as AddNoticeView,
   NoticeList as NoticeListView,
   UpdateClass as UpdateClassView,
-  ReportInfo as ReportInfoView,
   ReferenceDataInfo as ReferenceDataInfoView,
   UpdateRefereceData as UpdateRefereceDataView,
   UpdateReport as UpdateReportView,
@@ -57,12 +56,6 @@ const Professor = () => {
         exact
         layout={MainLayout}
         path="/class/:idx/report/update"
-      />
-      <ProfessorRoute
-        component={ReportInfoView}
-        exact
-        layout={MainLayout}
-        path="/class/report/:idx"
       />
       <ProfessorRoute
         component={ReportListView}

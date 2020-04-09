@@ -14,17 +14,6 @@ import SendIcon from '@material-ui/icons/Send';
 import ReportReply from './ReportReply';
 import ImageIcon from '@material-ui/icons/Image';
 
-const reportReply = [
-  {seq:1,name:'윤지원',content:'안녕하세요 댓글한번 남깁니다.',date:'2020-01-01'},
-  {seq:2,name:'윤지원',content:'안녕하세요 댓글한번 남깁니다.',date:'2020-01-01'},
-  {seq:3,name:'윤지원',content:'안녕하세요 댓글한번 남깁니다.',date:'2020-01-01'},
-  {seq:4,name:'윤지원',content:'안녕하세요 댓글한번 남깁니다.',date:'2020-01-01'},
-  {seq:5,name:'윤지원',content:'안녕하세요 댓글한번 남깁니다.',date:'2020-01-01'},
-  {seq:6,name:'윤지원',content:'안녕하세요 댓글한번 남깁니다.',date:'2020-01-01'},
-  {seq:7,name:'윤지원',content:'안녕하세요 댓글한번 남깁니다.',date:'2020-01-01'},
-  {seq:8,name:'윤지원',content:'안녕하세요 댓글한번 남깁니다.',date:'2020-01-01'}
-]
-
 const useStyles = makeStyles({
   root: {
     minWidth: 275,
@@ -43,9 +32,8 @@ const useStyles = makeStyles({
 });
 
 export default function ReportSubmitList(props) {
-  const {reportInfo} = props;
+  const {reportInfo,reportReply} = props;
   const classes = useStyles();
-  const bull = <span className={classes.bullet}>•</span>;
 
   return (
     <Card className={classes.root}>

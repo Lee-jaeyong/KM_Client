@@ -5,9 +5,18 @@ import React, { useRef, useEffect, useState } from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/styles';
-import { Card, CardContent, Grid, Typography, Button } from '@material-ui/core';
+import {
+  Card,
+  CardContent,
+  Grid,
+  Typography,
+  Button,
+  CardHeader,
+  Divider
+} from '@material-ui/core';
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
 import GetAppIcon from '@material-ui/icons/GetApp';
+import MenuBookIcon from '@material-ui/icons/MenuBook';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -71,57 +80,42 @@ export default function CustomJumbotron(props) {
 
   return (
     <Card
-      //style={{ backgroundColor: '#e1bee7' }}
-      style={{
-        background: 'linear-gradient(to right bottom, #fff59d, #FFFFFF)'
-      }}
+      elevation={1}
       {...objProps}
       className={clsx(classes.root, className)}
     >
+      <CardHeader style={{ backgroundColor: '#f3e5f5' }} />
       <CardContent>
         <Grid
           container
           justify="space-between"
+          style={{ padding: 10 }}
         >
           <Grid item>
-            <Typography
-              className={classes.title}
-              gutterBottom
-              variant="h5"
-            >
-              {props.title}
-            </Typography>
-            <Typography variant="subtitle1">
-              교수 : {props.professor}
-            </Typography>
+            <MenuBookIcon style={{ marginRight: 10 }} />
+            <strong style={{ fontSize: 30 }}>{props.title}</strong>&nbsp; (교수
+            : {props.professor})
           </Grid>
-          <Grid item>
-            <Button>
-              {/*props로 Button url 다운로드로이동*/}
-              <span>강의계획서</span>
-              <GetAppIcon className={classes.icon} />
-            </Button>
-          </Grid>
+          <Button>
+            <span>강의계획서</span>
+            <GetAppIcon className={classes.icon} />
+          </Button>
         </Grid>
+        <Divider style={{ marginTop: 10 }} />
         <div className={classes.difference}>
-          <Typography
-            className={classes.differenceValue}
-            variant="body2"
+          {props.prevContents}
+          <span
+            ref={plusViewContent}
+            style={{ display: contentDisplay }}
           >
-            {props.prevContents}
-            <span
-              ref={plusViewContent}
-              style={{ display: contentDisplay }}
-            >
-              {props.plusContents}
-            </span>
-            <a
-              href=""
-              onClick={plusViewContentHandle}
-            >
-              {aText}
-            </a>
-          </Typography>
+            {props.plusContents}
+          </span>
+          <a
+            href=""
+            onClick={plusViewContentHandle}
+          >
+            {aText}
+          </a>
         </div>
       </CardContent>
     </Card>

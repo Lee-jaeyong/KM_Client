@@ -16,18 +16,20 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import Divider from '@material-ui/core/Divider';
 import { Redirect } from 'react-router-dom';
+import { Grid } from '@material-ui/core';
+import Paper from '@material-ui/core/Paper';
 
 const useStyles = makeStyles(theme => ({
   root: {
-    maxWidth: 1000,
-    maxHeight: 163
+    marginBottom: 20
   },
   avatar: {
     backgroundColor: red[500]
   },
   replyMargin: {
-    marginTop: 6,
-    marginLeft: 6
+    marginTop: 15,
+    marginLeft: 6,
+    height: 1
   }
 }));
 
@@ -56,11 +58,13 @@ export default function CustomListCard() {
       <CardContent style={{ bottom: 20, position: 'relative' }}>
         <Typography
           component="p"
+          style={{ fontSize: 17 }}
           variant="body2"
         >
-          This impressive paella is a perfect party dish and a fun meal to cook
-          together with your guests. Add 1 cup of frozen peas along with the
-          mussels, if you like.
+          오늘의 과제 강의에 있는 과제를 캡쳐해서 제출하세요. 이미지파일은
+          압축하지 않고 제출합니다. 열심히하세요오늘의 과제 강의에 있는 과제를
+          캡쳐해서 제출하세요. 이미지파일은 압축하지 않고 제출합니다.
+          열심히하세요
         </Typography>
         <br />
         <Divider />
@@ -76,7 +80,7 @@ export default function CustomListCard() {
               e.preventDefault();
             }}
             onMouseLeave={e => (e.target.style.textDecoration = 'none')}
-            onMouseOver={e => (e.target.style.textDecoration = '')}
+            onMouseOver={e => (e.target.style.textDecoration = 'underline')}
             style={{ color: 'gray', textDecoration: 'none' }}
           >
             댓글 (0개)

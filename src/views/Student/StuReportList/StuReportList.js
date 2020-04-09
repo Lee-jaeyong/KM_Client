@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import * as RedirectActions from '@store/actions/RedirectActions';
 import CustomJumbotron from '@common/component/CustomJumbotron';
 import Button from '@material-ui/core/Button';
+import Grid from '@material-ui/core/Grid';
 import CustomListCard from '@common/component/CustomListCard';
 
 const useStyles = makeStyles(theme => ({
@@ -107,25 +108,36 @@ const StuReportList = props => {
 
   return (
     <div className={classes.root}>
-      <CustomJumbotron
-        plusContents={testContents.substr(41)}
-        prevContents={testContents.substr(0, 40)}
-        professor="이재용"
-        title="JAVA 활용"
-      />
-      <br />
-      <CustomListCard />
-      {/* <CustomTable
-        exclude={''}
-        requestData={testRequestData}
-        //tableDataList={tableDataList}
-        rowClickHandle={rowClickHandle}
-        searchSeq={selectClassIdx}
-        tableDataCount={tableDataCount}
-        tableDataList={testData}
-        tableDescription="과제 목록"
-        tableHeaderList={tableDataHeader}
-      /> */}
+      <Grid container>
+        <Grid
+          item
+          xs={1}
+        />
+        <Grid
+          item
+          xs={10}
+        >
+          <CustomJumbotron
+            plusContents={testContents.substr(41)}
+            prevContents={testContents.substr(0, 40)}
+            professor="이재용"
+            title="JAVA 활용"
+          />
+        </Grid>
+      </Grid>
+      <Grid container>
+        <Grid
+          item
+          xs={1}
+        />
+        <Grid
+          item
+          style={{ marginTop: 20 }}
+          xs={10}
+        >
+          <CustomListCard />
+        </Grid>
+      </Grid>
     </div>
   );
 };

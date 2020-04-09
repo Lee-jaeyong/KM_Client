@@ -3,8 +3,9 @@ import { makeStyles } from '@material-ui/styles';
 import CustomTable from '@common/component/CustomTable';
 import { useDispatch, useSelector } from 'react-redux';
 import * as RedirectActions from '@store/actions/RedirectActions';
-import CustomSearchHeader from '@common/component/CustomSearchHeader';
+import CustomJumbotron from '@common/component/CustomJumbotron';
 import Button from '@material-ui/core/Button';
+import CustomListCard from '@common/component/CustomListCard';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -31,6 +32,10 @@ const StuReportList = props => {
     '제출 과제 관람 여부',
     '확인상태'
   ]);
+
+  const [testContents, setTestContents] = useState(
+    '수업내용의 앞 부분입니다 이건 엄청 길지않아요 한 20자정도?//////수업내용의 뒷 부분입니다 이건 엄청 길어서 숨겨져있어요ㅎㅎㅎㅎ'
+  );
 
   const testData = [
     {
@@ -102,9 +107,15 @@ const StuReportList = props => {
 
   return (
     <div className={classes.root}>
-      <CustomSearchHeader title="과제 검색" />
+      <CustomJumbotron
+        plusContents={testContents.substr(41)}
+        prevContents={testContents.substr(0, 40)}
+        professor="이재용"
+        title="JAVA 활용"
+      />
       <br />
-      <CustomTable
+      <CustomListCard />
+      {/* <CustomTable
         exclude={''}
         requestData={testRequestData}
         //tableDataList={tableDataList}
@@ -114,7 +125,7 @@ const StuReportList = props => {
         tableDataList={testData}
         tableDescription="과제 목록"
         tableHeaderList={tableDataHeader}
-      />
+      /> */}
     </div>
   );
 };

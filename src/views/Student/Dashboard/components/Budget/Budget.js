@@ -1,7 +1,7 @@
 /*
  * 각classMain 최상단 컬러카드
  */
-import React from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/styles';
@@ -53,9 +53,25 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const Budget = props => {
+  const plusViewContent = useRef();
+
   const { className, ...rest } = props;
+  const [aText, setAText] = useState('...더보기');
 
   const classes = useStyles();
+
+  const plusViewContentHandle = event => {
+    event.preventDefault();
+    if (plusViewContent.current.style.display === '') {
+      plusViewContent.current.style.display = 'none';
+      setAText('...더보기');
+    } else {
+      setAText('...접기');
+      plusViewContent.current.style = {
+        display: ''
+      };
+    }
+  };
 
   return (
     <Card
@@ -93,8 +109,27 @@ const Budget = props => {
             className={classes.differenceValue}
             variant="body2"
           >
-            수업내용 부분입니다. 3학년 1학기 자바 활용 프로젝트기반
-            수업입니다.엄청 길면 더보기눌러서 더 볼수있습니다람쥐 ...더보기
+            수업내용 부분입니다. 3학년 1학기 자바 활용 프로젝트기반 수업입니다.
+            엄청 길면 더보기눌러서 더 볼수있습니다람쥐
+            <span
+              ref={plusViewContent}
+              style={{ display: 'none' }}
+            >
+              111수업내용 부분입니다. 3학년 1학기 자바 활용 프로젝트기반
+              수업입니다. 엄청 길면 더보기눌러서 더 볼수있습니다람쥐수업내용
+              부분입니다. 3학년 1학기 자바 활용 프로젝트기반 수업입니다. 엄청
+              길면 더보기눌러서 더 볼수있습니다람쥐수업내용 부분입니다. 3학년
+              1학기 자바 활용 프로젝트기반 수업입니다. 엄청 길면 더보기눌러서 더
+              볼수있습니다람쥐수업내용 부분입니다. 3학년 1학기 자바 활용
+              프로젝트기반 수업입니다. 엄청 길면 더보기눌러서 더
+              볼수있습니다람쥐
+            </span>
+            <a
+              href=""
+              onClick={plusViewContentHandle}
+            >
+              {aText}
+            </a>
           </Typography>
         </div>
       </CardContent>

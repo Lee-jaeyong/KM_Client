@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect,useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
@@ -24,7 +24,8 @@ const useStyles = makeStyles({
   },
 });
 
-export default function SimpleCard() {
+export default function SimpleCard(props) {
+  const {reportInfo} = props;
   const classes = useStyles();
   const bull = <span className={classes.bullet}>•</span>;
 
@@ -32,10 +33,12 @@ export default function SimpleCard() {
     <Card className={classes.root}>
       <CardContent>
         <Typography variant="h5" component="h2">
-          be{bull}nev{bull}o{bull}lent
+        {reportInfo ? reportInfo['name'] : null}
         </Typography>
         <Typography className={classes.pos} color="textSecondary">
-          adjective
+        {reportInfo ? reportInfo['useSubmitDates'] === 'NO' ? '기한 없음' : 
+          reportInfo['startDate'] + "일 부터 ~ "+ reportInfo['endDate'] + "일 까지": null
+        }
         </Typography>
         <Typography variant="body2" component="p">
           fileList
@@ -45,9 +48,9 @@ export default function SimpleCard() {
         </Typography>
         <Divider light  style={{marginTop:10}}/>
         <Typography variant="body2" component="p" style={{height:620,overflowY:"auto",marginTop:30}}>
-          well meaning and kindly.
+          <span style={{fontSize:17}}>{reportInfo ? reportInfo['content'] : null}</span>
           <br />
-          {'"a benevolent smile"'}
+          <br/>
           <br/>
           <br/>
           <br/>

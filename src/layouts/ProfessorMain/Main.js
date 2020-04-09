@@ -178,15 +178,6 @@ const Main = props => {
         userInfo={userInfo}
         variant={isDesktop ? 'persistent' : 'temporary'}
       />
-      {progressBarState ? (
-        <Backdrop
-          className={classes.backdrop}
-          open={open}
-          style={{ zIndex: 9999 }}
-        >
-          <CircularProgress color="inherit" />
-        </Backdrop>
-      ) : null}
       <main className={classes.content}>
         {children}
         {isRedirect ? <Redirect to={redirectURL} /> : null}

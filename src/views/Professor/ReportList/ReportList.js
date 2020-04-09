@@ -58,7 +58,7 @@ const ReportList = (props) => {
   const [replyModal,setReplyModal] = useState(false);
   const [addReportModal,setAddReportModal] = useState(false);
   const [readReportModal,setReadReportModal] = useState(false);
-  const [readReportInfo,setReadReportInfo] = useState({});
+  const [readReportInfo,setReadReportInfo] = useState();
 
   const handleOpen = () => {
     setOpen(true);

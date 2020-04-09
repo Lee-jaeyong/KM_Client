@@ -47,12 +47,13 @@ export default function ReportSubmitUserList(props) {
         <List>
             {userList ? userList.map((user,idx)=>{
                 return (
-                    <ListItem key={idx} button>
+                    <ListItem key={idx} button onClick={()=>props['showSubmitReport'](user['id'])}>
                         <ListItemIcon>
                         <Avatar alt={user['name']} src="/images/dlwodyd.jpg" />
                         </ListItemIcon>
-                            {user['name']}
-                        <ListItemText/>
+                        <ListItemText>
+                          {user['name']}
+                        </ListItemText>
                     </ListItem>
                 )
             }) : null}

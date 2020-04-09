@@ -2,7 +2,7 @@ import React, { useEffect,useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import Grid from '@material-ui/core/Grid';
-import CardActions from '@material-ui/core/CardActions';
+import Chip from '@material-ui/core/Chip';
 import CardContent from '@material-ui/core/CardContent';
 import Divider from '@material-ui/core/Divider';
 import Button from '@material-ui/core/Button';
@@ -12,6 +12,7 @@ import TextField from '@material-ui/core/TextField';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import SendIcon from '@material-ui/icons/Send';
 import ReportReply from './ReportReply';
+import ImageIcon from '@material-ui/icons/Image';
 
 const reportReply = [
   {seq:1,name:'윤지원',content:'안녕하세요 댓글한번 남깁니다.',date:'2020-01-01'},
@@ -50,16 +51,34 @@ export default function ReportSubmitList(props) {
     <Card className={classes.root}>
      <CardContent>
         <Typography className={classes.pos} color="textSecondary">
-        {reportInfo ? reportInfo['useSubmitDates'] === 'NO' ? '기한 없음' : 
-          reportInfo['startDate'] + "일 부터 ~ "+ reportInfo['endDate'] + "일 까지": null
-        }
+        {reportInfo ? reportInfo['date'] + "일 제출" : null} 
         </Typography>
-        <Typography variant="body2" component="p">
-          fileList
-        </Typography>
-        <Typography variant="body2" component="p">
-          imgList
-        </Typography>
+          {reportInfo ? reportInfo['fileList'] ? reportInfo['fileList'].map((file,id)=>{
+            return(
+              file['type'] === 'IMG' ? (
+                  <Chip
+                    style={{marginRight:5}}
+                    avatar={<ImageIcon/>}
+                    label={file['name']}
+                    clickable
+                    color="primary"
+                  />
+              ) : null
+            )
+          }): null : null}
+        {reportInfo ? reportInfo['fileList'] ? reportInfo['fileList'].map((file,id)=>{
+            return(
+              file['type'] === 'IMG' ? (
+                  <Chip
+                    style={{marginRight:5}}
+                    avatar={<ImageIcon/>}
+                    label={file['name']}
+                    clickable
+                    color="primary"
+                  />
+              ) : null
+            )
+          }): null : null}
         <Divider light  style={{marginTop:10}}/>
         <Typography variant="body2" component="p" style={{height:400,overflowY:"auto",marginTop:30}}>
           <span style={{fontSize:17}}>{reportInfo ? reportInfo['content'] : null}</span>

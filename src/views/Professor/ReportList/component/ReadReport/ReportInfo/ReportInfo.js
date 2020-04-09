@@ -75,7 +75,15 @@ export default function SimpleCard(props) {
           }): null : null}
         </Typography>
         <Divider light  style={{marginTop:10}}/>
-        <Typography variant="body2" component="p" style={{height:660,overflowY:"auto",marginTop:30}}>
+        <Typography variant="body2" component="p" 
+        style={
+          {
+            msOverflowStyle:"none",
+            height:660,
+            overflowY:"auto",
+            marginTop:30
+          }
+        }>
           <span style={{fontSize:17}}>{reportInfo ? reportInfo['content'] : null}</span>
           <br />
           <br/>

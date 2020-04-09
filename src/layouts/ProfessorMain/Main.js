@@ -83,7 +83,6 @@ const Main = props => {
   const shouldOpenSidebar = isDesktop ? true : openSidebar;
 
   function getResponse(res) {
-    console.log(res);
     if (res['_embedded'] !== undefined) {
       const classInfo = res['_embedded']['kM_classVOList'];
       if (classInfo.length > 0) {

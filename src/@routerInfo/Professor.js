@@ -13,16 +13,13 @@ import {
   SignIn as SignInView,
   NotFound as NotFoundView,
   ClassInfo as ClassInfoView,
-  AddReport as AddReportView,
   AddRefereceData as AddRefereceDataView,
   ReferenceDataList as ReferenceDataListView,
   AddNotice as AddNoticeView,
   NoticeList as NoticeListView,
-  UpdateClass as UpdateClassView,
   ReferenceDataInfo as ReferenceDataInfoView,
   UpdateRefereceData as UpdateRefereceDataView,
   UpdateReport as UpdateReportView,
-  NoticeInfo as NoticeInfoView
 } from '../views/Professor';
 
 import {
@@ -38,24 +35,6 @@ const Professor = () => {
         exact
         layout={MainLayout}
         path="/dashboard"
-      />
-      <ProfessorRoute
-        component={UserListView}
-        exact
-        layout={MainLayout}
-        path="/users"
-      />
-      <ProfessorRoute
-        component={AddReportView}
-        exact
-        layout={MainLayout}
-        path="/class/:idx/report/add"
-      />
-      <ProfessorRoute
-        component={UpdateReportView}
-        exact
-        layout={MainLayout}
-        path="/class/:idx/report/update"
       />
       <ProfessorRoute
         component={ReportListView}
@@ -94,12 +73,6 @@ const Professor = () => {
         path="/class/:idx/referenceDataList"
       />
       <ProfessorRoute
-        component={NoticeInfoView}
-        exact
-        layout={MainLayout}
-        path="/class/notice/:idx"
-      />
-      <ProfessorRoute
         component={AddNoticeView}
         exact
         layout={MainLayout}
@@ -116,12 +89,6 @@ const Professor = () => {
         exact
         layout={MainLayout}
         path="/class/:idx/QnA"
-      />
-      <ProfessorRoute
-        component={UpdateClassView}
-        exact
-        layout={MainLayout}
-        path="/class/:idx/update"
       />
       <ProfessorRoute
         component={IconsView}

@@ -3,7 +3,7 @@ import { makeStyles } from '@material-ui/styles';
 import { Grid } from '@material-ui/core';
 
 import * as SHOW_MESSAGE_ACTION from '@store/actions/MessageActions';
-
+import CustomJumbotron from '@common/component/CustomJumbotron';
 import {
   Budget,
   TotalUsers,
@@ -28,6 +28,9 @@ const Dashboard = () => {
   const dispatch = useDispatch();
   const storeData = useSelector(state => state['messageState']);
   const [prevStoreData, setPrevStoreData] = useState(storeData);
+  const [testContents, setTestContents] = useState(
+    '수업내용의 앞 부분입니다 이건 엄청 길지않아요 한 20자정도?//////수업내용의 뒷 부분입니다 이건 엄청 길어서 숨겨져있어요ㅎㅎㅎㅎ'
+  );
 
   useEffect(() => {}, []);
 
@@ -50,7 +53,12 @@ const Dashboard = () => {
           xl={12}
           xs={12}
         >
-          <Budget />
+          <CustomJumbotron
+            plusContents={testContents.substr(41)}
+            prevContents={testContents.substr(0, 40)}
+            professor="이재용"
+            title="JAVA 활용"
+          />
         </Grid>
 
         <Grid

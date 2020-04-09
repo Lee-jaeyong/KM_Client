@@ -92,11 +92,14 @@ export default function CustomJumbotron(props) {
           style={{ padding: 10 }}
         >
           <Grid item>
-            <MenuBookIcon style={{ marginRight: 10 }} />
+            <MenuBookIcon
+              fontSize="large"
+              style={{ marginRight: 10, position: 'relative', top: 5 }}
+            />
             <strong style={{ fontSize: 30 }}>{props.title}</strong>&nbsp; (교수
             : {props.professor})
           </Grid>
-          <Button>
+          <Button style={{ position: 'relative', top: 25 }}>
             <span>강의계획서</span>
             <GetAppIcon className={classes.icon} />
           </Button>

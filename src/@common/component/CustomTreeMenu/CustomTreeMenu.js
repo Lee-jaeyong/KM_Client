@@ -13,7 +13,6 @@ import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import ArrowRightIcon from '@material-ui/icons/ArrowRight';
 import { Link } from 'react-router-dom';
 import { Divider } from '@material-ui/core';
-import * as RedirectActions from '@store/actions/RedirectActions';
 import RemoveSharpIcon from '@material-ui/icons/RemoveSharp';
 
 const useTreeItemStyles = makeStyles(theme => ({
@@ -122,7 +121,6 @@ StyledTreeItem.propTypes = {
   color: PropTypes.string,
   labelIcon: PropTypes.elementType.isRequired,
   labelInfo: PropTypes.string,
-  labelText: PropTypes.string.isRequired
 };
 
 const useStyles = makeStyles({
@@ -135,7 +133,6 @@ const useStyles = makeStyles({
 
 export default function GmailTreeView(props) {
   const [selectExpanded, setSelectExpanded] = useState([]);
-  const dispatch = useDispatch();
   const { pages } = props;
   const classes = useStyles();
   const colorList = [
@@ -160,7 +157,15 @@ export default function GmailTreeView(props) {
           <StyledTreeItem
             key={idx}
             labelIcon={Label}
-            labelText={page['title']}
+            labelText={
+              <Link to={
+               props['student'] === 'true' ?  '/stu/class/' + page['classIdx']
+                :
+                '/class/' + page['classIdx']
+              }>
+              {page['title']}
+              </Link>
+            }
             nodeId={'' + idx}
             onClick={() => {
               if (selectExpanded[0] === '' + idx) {
@@ -168,14 +173,6 @@ export default function GmailTreeView(props) {
               } else {
                 setSelectExpanded(['' + idx]);
               }
-              dispatch(
-                RedirectActions.isRedirect(
-                  true,
-                  props['student'] === 'true'
-                    ? '/stu/class/' + page['classIdx']
-                    : '/class/' + page['classIdx']
-                )
-              );
             }}
           >
             {page['pageList'].map((pageInfo, _idx) => {

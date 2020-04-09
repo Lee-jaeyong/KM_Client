@@ -11,11 +11,10 @@ export default function ReportReply(props) {
                 <CardHeader
                   key={idx}
                   avatar={
-                    <Avatar aria-label="recipe">
-                    </Avatar>
+                    <Avatar/>
                   }
-                  title="Shrimp and Chorizo Paella"
-                  subheader="September 14, 2016"
+                  title={reply['name']}
+                  subheader={reply['content']}
                 />
             )
         }) : null}

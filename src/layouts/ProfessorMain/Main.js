@@ -91,19 +91,11 @@ const Main = props => {
           let pageData = [];
           if (classInfo[i]['selectMenu'].includes('REPORT')) {
             pageData.push({
-              pageName: '과제 등록',
-              href: '/class/' + classInfo[i]['seq'] + '/report/add'
-            });
-            pageData.push({
               pageName: '과제 목록',
               href: '/class/' + classInfo[i]['seq'] + '/reportList'
             });
           }
           if (classInfo[i]['selectMenu'].includes('NOTICE')) {
-            pageData.push({
-              pageName: '공지사항 등록',
-              href: '/class/' + classInfo[i]['seq'] + '/notice/add'
-            });
             pageData.push({
               pageName: '공지사항 목록',
               href: '/class/' + classInfo[i]['seq'] + '/noticeList'
@@ -111,18 +103,8 @@ const Main = props => {
           }
           if (classInfo[i]['selectMenu'].includes('REFERENCE')) {
             pageData.push({
-              pageName: '참고자료 등록',
-              href: '/class/' + classInfo[i]['seq'] + '/referenceData/add'
-            });
-            pageData.push({
               pageName: '참고자료 목록',
               href: '/class/' + classInfo[i]['seq'] + '/referenceDataList'
-            });
-          }
-          if (classInfo[i]['selectMenu'].includes('QnA')) {
-            pageData.push({
-              pageName: 'Q/A',
-              href: '/class/' + classInfo[i]['seq'] + '/QnA'
             });
           }
           let data = {
@@ -139,15 +121,15 @@ const Main = props => {
 
   useEffect(() => {}, [progressBarState]);
 
-  // useEffect(() => {
-  //   //토큰 테스트
-  //   const user = {
-  //     id: 'dlwodyd202',
-  //     pass: 'dlwodyd'
-  //   };
-  //   Oauth.getAccessToken(user);
-  //   axiosGet.getNotContainsData('/api/professor/class', getResponse);
-  // }, []);
+  useEffect(() => {
+    //토큰 테스트
+    const user = {
+      id: 'dlwodyd202',
+      pass: 'dlwodyd'
+    };
+    Oauth.getAccessToken(user);
+    axiosGet.getNotContainsData('/api/professor/class', getResponse);
+  }, []);
 
   useEffect(() => {
     dispatch(RedirectActions.isRedirect(false));

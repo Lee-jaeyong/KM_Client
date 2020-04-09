@@ -48,15 +48,15 @@ const EnhancedTableToolbar = (props) => {
       {type === 'signUpClassSuccess' ? 
       (
         <Tooltip title="수업 취소">
-          <IconButton>
-            <HighlightOffIcon onClick={props['toolbarBtnHandle']}/>
+          <IconButton onClick={props['toolbarBtnHandle']}>
+            <HighlightOffIcon/>
           </IconButton>
         </Tooltip>
       ) :
       (
         <Tooltip title="요청 승인">
-          <IconButton>
-           <LibraryAddIcon onClick={props['toolbarBtnHandle']}/>
+          <IconButton onClick={props['toolbarBtnHandle']}>
+           <LibraryAddIcon/>
           </IconButton>
         </Tooltip>
           )

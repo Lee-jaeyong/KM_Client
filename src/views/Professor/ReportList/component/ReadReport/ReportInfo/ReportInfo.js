@@ -1,11 +1,13 @@
-import React, { useEffect,useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import Card from '@material-ui/core/Card';
+import {Card,Chip,Avatar} from '@material-ui/core';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import Divider from '@material-ui/core/Divider';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
+import FileCopyIcon from '@material-ui/icons/FileCopy';
+import ImageIcon from '@material-ui/icons/Image';
 
 const useStyles = makeStyles({
   root: {
@@ -27,7 +29,9 @@ const useStyles = makeStyles({
 export default function SimpleCard(props) {
   const {reportInfo} = props;
   const classes = useStyles();
-  const bull = <span className={classes.bullet}>•</span>;
+
+  useEffect(()=>{
+  },[props['reportInfo']]);
 
   return (
     <Card className={classes.root}>
@@ -41,13 +45,37 @@ export default function SimpleCard(props) {
         }
         </Typography>
         <Typography variant="body2" component="p">
-          fileList
+          {reportInfo ? reportInfo['fileList'] ? reportInfo['fileList'].map((file,id)=>{
+            return(
+              file['type'] === 'FILE' ? (
+                  <Chip
+                    style={{marginRight:5}}
+                    avatar={<FileCopyIcon/>}
+                    label={file['name']}
+                    clickable
+                    color="primary"
+                  />
+              ) : null
+            )
+          }): null : null}
         </Typography>
         <Typography variant="body2" component="p">
-          imgList
+          {reportInfo ? reportInfo['fileList'] ? reportInfo['fileList'].map((file,id)=>{
+            return(
+              file['type'] === 'IMG' ? (
+                  <Chip
+                    style={{marginRight:5}}
+                    avatar={<ImageIcon/>}
+                    label={file['name']}
+                    clickable
+                    color="primary"
+                  />
+              ) : null
+            )
+          }): null : null}
         </Typography>
         <Divider light  style={{marginTop:10}}/>
-        <Typography variant="body2" component="p" style={{height:620,overflowY:"auto",marginTop:30}}>
+        <Typography variant="body2" component="p" style={{height:660,overflowY:"auto",marginTop:30}}>
           <span style={{fontSize:17}}>{reportInfo ? reportInfo['content'] : null}</span>
           <br />
           <br/>
@@ -58,10 +86,6 @@ export default function SimpleCard(props) {
           <img src="/images/dlwodyd.jpg"/>
         </Typography>
       </CardContent>
-      <CardActions>
-        <Button size="small">수 정</Button>
-        <Button size="small">삭 제</Button>
-      </CardActions>
     </Card>
   );
 }

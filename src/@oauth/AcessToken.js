@@ -14,6 +14,7 @@ export async function getAccessToken(user){
             'Content-Type': 'application/x-www-form-urlencoded'
         }
     }).then(res=>{
+        console.log(res['data']);
         accessToken(res['data']);
         setInterval(() => {
             getAccessToken(user);

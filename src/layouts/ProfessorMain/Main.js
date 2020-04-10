@@ -123,12 +123,12 @@ const Main = props => {
 
   useEffect(() => {
     //토큰 테스트
-    const user = {
-      id: 'dlwodyd202',
-      pass: 'dlwodyd'
-    };
-    Oauth.getAccessToken(user);
-    axiosGet.getNotContainsData('/api/professor/class', getResponse);
+    // const user = {
+    //   id: 'dlwodyd202',
+    //   pass: 'dlwodyd'
+    // };
+    // Oauth.getAccessToken(user);
+   // axiosGet.getNotContainsData('/api/professor/class', getResponse);
   }, []);
 
   useEffect(() => {
@@ -137,7 +137,7 @@ const Main = props => {
 
   useEffect(() => {
     if (isSideBarUpdate) {
-      axiosGet.getNotContainsData('/api/professor/class', getResponse);
+     // axiosGet.getNotContainsData('/api/professor/class', getResponse);
       dispatch(SideBarActions.isUpdate(false));
     }
   }, [isSideBarUpdate]);

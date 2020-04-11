@@ -60,6 +60,7 @@ export default function CustomJumbotron(props) {
   delete objProps.prevContents;
 
   const plusViewContent = useRef();
+  const prevViewContent = useRef();
 
   const { className, ...rest } = props;
   const [aText, setAText] = useState('...더보기');
@@ -70,9 +71,11 @@ export default function CustomJumbotron(props) {
   const plusViewContentHandle = event => {
     event.preventDefault();
     if (plusViewContent.current.style.display === '') {
+      prevViewContent.current.style.display = '';
       setAText('...더보기');
       setContentDisplay('none');
     } else {
+      prevViewContent.current.style.display = 'none';
       setAText('...접기');
       setContentDisplay('');
     }
@@ -106,7 +109,7 @@ export default function CustomJumbotron(props) {
         </Grid>
         <Divider style={{ marginTop: 10 }} />
         <div className={classes.difference}>
-          {props.prevContents}
+          <div ref={prevViewContent}>{props.prevContents}</div>
           <span
             ref={plusViewContent}
             style={{ display: contentDisplay }}

@@ -35,7 +35,7 @@ const StuReportList = props => {
   ]);
 
   const [testContents, setTestContents] = useState(
-    '수업내용의 앞 부분입니다 이건 엄청 길지않아요 한 20자정도?//////수업내용의 뒷 부분입니다 이건 엄청 길어서 숨겨져있어요ㅎㅎㅎㅎ'
+    '수업내용의 앞 부분입니다 이건 엄청 길지않아요 한 20자정도?수업내용의 앞 부분입니다 이건 엄청 길지않아요 한 20자정도?//////수업내용의 뒷 부분입니다 이건 엄청 길어서 숨겨져있어요ㅎㅎㅎㅎ수업내용의 뒷 부분입니다 이건 엄청 길어서 숨겨져있어요ㅎㅎㅎㅎ수업내용의 뒷 부분입니다 이건 엄청 길어서 숨겨져있어요ㅎㅎㅎㅎ수업내용의 뒷 부분입니다 이건 엄청 길어서 숨겨져있어요ㅎㅎㅎㅎ'
   );
 
   const testData = [
@@ -118,8 +118,8 @@ const StuReportList = props => {
           xs={10}
         >
           <CustomJumbotron
-            plusContents={testContents.substr(41)}
-            prevContents={testContents.substr(0, 40)}
+            plusContents={testContents}
+            prevContents={testContents.substr(0, 74)}
             professor="이재용"
             title="JAVA 활용"
           />
@@ -135,8 +135,19 @@ const StuReportList = props => {
           style={{ marginTop: 20 }}
           xs={10}
         >
-          <CustomListCard />
+          <CustomListCard
+            avatarContent="img"
+            date="2020. 04. 18"
+            fileName="프로젝트 제출양식.xlsm"
+            mainContent="드디어 대강 완성해가는구나 진짜 너무 노가다야 ui너무 힘들지만 이쁘다. 시간이없어 ㅠㅠ 얼른 해야되는데 으아아아앙"
+            replyCount="4"
+            writerName="박남일"
+          />
         </Grid>
+        <Grid
+          item
+          xs={1}
+        />
       </Grid>
     </div>
   );

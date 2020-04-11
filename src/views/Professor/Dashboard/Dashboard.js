@@ -88,6 +88,13 @@ const Dashboard = () => {
             onDisconnect={ () => { setChatConn(false)} }
             ref={(ref)=>{setClientRef(ref)}}
             />
+          <SockJsClient
+            url="http://localhost:8090/chat"
+            topics={["/topics/testchat/1"]}
+            onConnect={ () => { setChatConn(true)} }
+            onDisconnect={ () => { setChatConn(false)} }
+            ref={(ref)=>{setClientRef(ref)}}
+            />
         </Grid>
         <Grid item xs></Grid>
       </Grid>

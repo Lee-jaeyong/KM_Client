@@ -32,6 +32,7 @@ import * as axiosGet from '@axios/get';
 import * as axiosPut from '@axios/put';
 import uuid from 'uuid/v1';
 import Fade from '@material-ui/core/Fade';
+import ClassList from './component/ClassList/ClassList';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -104,12 +105,12 @@ const ClassInfo = props => {
   });
 
   const handleChange = (event, newValue) => {
-    if(newValue === 0)
+    if(newValue === 1)
     {
       setJoinUserList(mockData);
       setSignUpClassForStuPage(0);
     }
-    else if(newValue === 1){
+    else if(newValue === 2){
       setSignUpList(mockData);
       setJoinClassForStuPage(0);
     }
@@ -253,11 +254,19 @@ const ClassInfo = props => {
                     value={value}
                     onChange={handleChange}
                     aria-label="simple tabs example">
-                    <Tab label="수업 참여 인원" {...a11yProps(0)} />
-                    <Tab label="수업 신청 인원" {...a11yProps(1)} />
+                    <Tab label="수 업" {...a11yProps(0)} />
+                    <Tab label="수업 참여 인원" {...a11yProps(1)} />
+                    <Tab label="수업 신청 인원" {...a11yProps(2)} />
                   </Tabs>
               </div>
               <TabPanel value={value} index={0}>
+                <Fade in timeout={600}>
+                  <div>
+                    <ClassList style={{marginTop:10}}/>
+                  </div>
+                </Fade>
+              </TabPanel>
+              <TabPanel value={value} index={1}>
                 <Toolbar type={"signUpClassSuccess"} toolbarBtnHandle={signUpClassSuccessHandle}/>
                 {loaddingData ? (
                   <div>
@@ -272,7 +281,7 @@ const ClassInfo = props => {
                   </div>
                 </Fade>
               </TabPanel>
-              <TabPanel value={value} index={1}>
+              <TabPanel value={value} index={2}>
                 <Toolbar type={"signUpClassFaild"} toolbarBtnHandle={signUpClassFaildHandle}/>
                 {loaddingData ? (
                   <div>

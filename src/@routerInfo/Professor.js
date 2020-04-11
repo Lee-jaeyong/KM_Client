@@ -24,12 +24,19 @@ import {
 
 import {
   ProfessorMain as MainLayout,
-  Minimal as MinimalLayout
+  Minimal as MinimalLayout,
+  Login as LoginLayout
 } from '../layouts';
 
 const Professor = () => {
   return (
     <Switch>
+      <ProfessorRoute
+        component={DashboardView}
+        exact
+        layout={LoginLayout}
+        path="/login"
+      />
       <ProfessorRoute
         component={DashboardView}
         exact

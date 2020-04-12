@@ -69,12 +69,10 @@ const DialogTitle = withStyles(styles)(props => {
 });
 
 const DialogFooter = withStyles(styles)(props => {
-  const { children, onClose, ...other } = props;
   return (
     <MuiDialogTitle
       disableTypography
       style={{ padding: 1 }}
-      {...other}
     >
       <ListItem style={{ position: 'relative', bottom: 10 }}>
         <Grid container>
@@ -124,13 +122,6 @@ const DialogContent = withStyles(theme => ({
     padding: theme.spacing(2)
   }
 }))(MuiDialogContent);
-
-const DialogActions = withStyles(theme => ({
-  root: {
-    margin: 0,
-    padding: theme.spacing(1)
-  }
-}))(MuiDialogActions);
 
 export default function ReplyDialog(props) {
   const [open, setOpen] = useState(props['open']);

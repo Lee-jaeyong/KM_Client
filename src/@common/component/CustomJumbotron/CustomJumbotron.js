@@ -87,7 +87,7 @@ export default function CustomJumbotron(props) {
       {...objProps}
       className={clsx(classes.root, className)}
     >
-      <CardHeader style={{ backgroundColor: '#f3e5f5' }} />
+      <CardHeader style={{ backgroundColor: '#bbdefb' }} />
       <CardContent>
         <Grid
           container

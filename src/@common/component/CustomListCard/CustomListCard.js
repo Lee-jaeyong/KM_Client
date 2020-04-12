@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Avatar from '@material-ui/core/Avatar';
 import Typography from '@material-ui/core/Typography';
@@ -120,6 +120,7 @@ const useStyles = makeStyles(theme => ({
 export default function CustomListCard(props) {
   const classes = useStyles();
   const [openReplyDialog, setOpenReplyDialog] = useState(false);
+  const fileList = props.fileName;
 
   return (
     <Paper>
@@ -148,7 +149,25 @@ export default function CustomListCard(props) {
           item
           xs={12}
         >
-          <Chip
+          {fileList ? (
+            fileList.map((file, idx) => {
+              return (
+                <Chip
+                  avatar={<GetAppIcon />}
+                  key={idx}
+                  label={file}
+                  onClick={() => {
+                    alert('파일 다운로드;');
+                  }}
+                  size="small"
+                  variant="outlined"
+                />
+              );
+            })
+          ) : (
+            <h6>dfsf</h6>
+          )}
+          {/* <Chip
             avatar={<GetAppIcon />}
             label={props.fileName}
             onClick={() => {
@@ -156,7 +175,7 @@ export default function CustomListCard(props) {
             }}
             size="small"
             variant="outlined"
-          />
+          /> */}
         </Grid>
         <Grid
           className={classes.contentsCSS}
@@ -214,7 +233,7 @@ export default function CustomListCard(props) {
             style={{
               position: 'relative',
               bottom: 5,
-              backgroundColor: '#f3e5f5'
+              backgroundColor: '#bbdefb'
             }}
             variant="contained"
           >

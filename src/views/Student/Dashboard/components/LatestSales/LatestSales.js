@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { Bar } from 'react-chartjs-2';
@@ -13,7 +13,7 @@ import {
 } from '@material-ui/core';
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import ArrowRightIcon from '@material-ui/icons/ArrowRight';
-
+import RealTimeVideoDialog from '../RealTimeVideoDialog';
 import { data, options } from './chart';
 
 const useStyles = makeStyles(() => ({
@@ -29,7 +29,9 @@ const useStyles = makeStyles(() => ({
 
 const LatestSales = props => {
   const { className, ...rest } = props;
-
+  const [realTimeVideoDialogState, setRealTimeVideoDialogState] = useState(
+    false
+  );
   const classes = useStyles();
 
   return (
@@ -40,10 +42,13 @@ const LatestSales = props => {
       <CardHeader
         action={
           <Button
-            size="small"
-            variant="text"
+            color="primary"
+            onClick={() => {
+              setRealTimeVideoDialogState(true);
+            }}
+            variant="contained"
           >
-            Last 7 days <ArrowDropDownIcon />
+            수업참여하기
           </Button>
         }
         title="Latest Sales"
@@ -67,6 +72,12 @@ const LatestSales = props => {
           Overview <ArrowRightIcon />
         </Button>
       </CardActions>
+      <RealTimeVideoDialog
+        handleClose={() => {
+          setRealTimeVideoDialogState(false);
+        }}
+        open={realTimeVideoDialogState}
+      />
     </Card>
   );
 };

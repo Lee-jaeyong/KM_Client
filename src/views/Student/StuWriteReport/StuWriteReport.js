@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { makeStyles } from '@material-ui/styles';
+import Box from '@material-ui/core/Box';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -26,16 +27,14 @@ const useStyles = makeStyles(theme => ({
     padding: theme.spacing(6)
   },
   table: {
-    height: 173
+    height: 110
   },
   titleCell: {
-    textAlign: 'center',
-    backgroundColor: '#EBF7FF',
-    width: '10%'
+    backgroundColor: '#e3f2fd',
+    width: '15%'
   },
   contentCell: {
-    textAlign: 'center',
-    width: '40%'
+    width: '35%'
   }
 }));
 
@@ -58,7 +57,7 @@ const StuWriteReport = props => {
       new Editor({
         el: document.querySelector('#editorSection'),
         initialEditType: 'wysiwyg',
-        height: '300px',
+        height: '450px',
         toolbarItems: [
           'heading',
           'bold',
@@ -104,29 +103,64 @@ const StuWriteReport = props => {
         >
           <TableBody>
             <TableRow>
-              <TableCell className={classes.titleCell}>수업명</TableCell>
-              <TableCell className={classes.contentCell}>Spring 기초</TableCell>
-              <TableCell className={classes.titleCell}>담당 교수</TableCell>
-              <TableCell className={classes.contentCell}>박남일</TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell className={classes.titleCell}>시작 날짜</TableCell>
-              <TableCell className={classes.contentCell}>2020-03-01</TableCell>
-              <TableCell className={classes.titleCell}>마감 날짜</TableCell>
-              <TableCell className={classes.contentCell}>2020-03-08</TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell className={classes.titleCell}>파일 업로드</TableCell>
               <TableCell
-                className={classes.contentCell}
-                colSpan="3"
-                style={{ textAlign: 'left' }}
+                align="center"
+                className={classes.titleCell}
               >
-                <input type="file" />
+                수업명
+              </TableCell>
+              <TableCell
+                align="center"
+                className={classes.contentCell}
+              >
+                Spring 기초
+              </TableCell>
+              <TableCell
+                align="center"
+                className={classes.titleCell}
+              >
+                담당 교수
+              </TableCell>
+              <TableCell
+                align="center"
+                className={classes.contentCell}
+              >
+                박남일
               </TableCell>
             </TableRow>
             <TableRow>
-              <TableCell className={classes.titleCell}>이미지 업로드</TableCell>
+              <TableCell
+                align="center"
+                className={classes.titleCell}
+              >
+                시작 날짜
+              </TableCell>
+              <TableCell
+                align="center"
+                className={classes.contentCell}
+              >
+                2020-03-01
+              </TableCell>
+              <TableCell
+                align="center"
+                className={classes.titleCell}
+              >
+                마감 날짜
+              </TableCell>
+              <TableCell
+                align="center"
+                className={classes.contentCell}
+              >
+                2020-03-08
+              </TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell
+                align="center"
+                className={classes.titleCell}
+              >
+                파일 업로드
+              </TableCell>
               <TableCell
                 className={classes.contentCell}
                 colSpan="3"
@@ -138,10 +172,24 @@ const StuWriteReport = props => {
           </TableBody>
         </Table>
       </TableContainer>
+      <Paper elevation={0}>
+        <Box
+          component="div"
+          style={{
+            border: 2,
+            borderStyle: 'dashed',
+            marginTop: 20,
+            height: 100
+          }}
+        >
+          <Button />
+        </Box>
+      </Paper>
 
       <br />
       <Grid container>
         <Grid
+          item
           sm={12}
           xs={6}
         >
@@ -152,8 +200,12 @@ const StuWriteReport = props => {
             <div id="editorSection" />
           </Paper>
         </Grid>
-        <Grid xs={5} />
         <Grid
+          item
+          xs={5}
+        />
+        <Grid
+          item
           sm={2}
           xs={12}
         >
@@ -177,7 +229,10 @@ const StuWriteReport = props => {
             제출하기
           </Button>
         </Grid>
-        <Grid xs={5} />
+        <Grid
+          item
+          xs={5}
+        />
       </Grid>
     </div>
   );

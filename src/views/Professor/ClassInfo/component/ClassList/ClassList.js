@@ -26,7 +26,7 @@ const rows = [
   createData('Gingerbread', 356, 16.0, 49, 3.9),
 ];
 
-export default function DenseTable() {
+export default function DenseTable(props) {
   const classes = useStyles();
   const [startClassState,setStartClassState] = useState(false);
 
@@ -55,7 +55,7 @@ export default function DenseTable() {
         </TableBody>
       </Table>
     </TableContainer>
-    <StartClass open={startClassState} handleClose={()=>setStartClassState(false)}/>
+    <StartClass classInfo={props['classInfo']} open={startClassState} handleClose={()=>setStartClassState(false)}/>
     </div>
   );
 }

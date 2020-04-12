@@ -18,47 +18,17 @@ const useStyles = makeStyles(theme => ({
 const Dashboard = () => {
   const classes = useStyles();
   const [clientRef,setClientRef] = useState();
-  const dispatch = useDispatch();
   const storeData = useSelector(state => state['messageState']);
   const [prevStoreData, setPrevStoreData] = useState(storeData); 
   const [playState,setPlayState] = useState();
   const [chatConn,setChatConn] = useState(false);
 
   useEffect(() => {
-    let constraints = {
-      video:true,
-      audio : false
-    }
-    let realTimeImg = document.getElementById('realTimeImg');
-    navigator.mediaDevices.getUserMedia(constraints).then((stream)=>{
-      realTimeImg.srcObject = stream;
-      realTimeImg.play();
-    });
+
   }, []);
 
-  const sendMessage = (msg) => {
-      const s = {name: "이재용", session: "0", content: msg}
-      clientRef.sendMessage("/app/hello", JSON.stringify(s));
-  }
-
-  const play = () => {
-    setPlayState(setInterval(() => {
-      let video = document.getElementById('realTimeImg');
-      var canvas = document.createElement("canvas");
-      canvas.width = video.videoWidth;
-      canvas.height = video.videoHeight;
-      canvas.getContext('2d')
-            .drawImage(video, 0, 0, canvas.width, canvas.height);
-      sendMessage(canvas.toDataURL('image/jpeg'));
-    }, 100));
-  }
-
-  const noPlay = () =>{
-    clearInterval(playState);
-    setPlayState(null);
-  }
-
   const drawImg = (img) => {
+    console.log(img);
     document.getElementById("imgSource").innerHTML = '<img src="'+img+'"/>';
   }
 
@@ -67,34 +37,29 @@ const Dashboard = () => {
       setPrevStoreData(storeData);
     }
   }, [storeData]);
-
   return (
     <div className={classes.root}>
       <Grid container spacing={4}>
-        <button onClick={()=>play()}>클릭</button>
-        <button onClick={()=>noPlay()}>중지</button>
         <Grid item xs></Grid>
         <Grid item xs>
-          <video id="realTimeImg"/>
+          {/* <input onChange={(e)=>}/> */}
           <canvas id="serverImg"/>
           <div id="imgSource">
           </div>
           {/* <img src="/images/kyunminMain.png" style={{ width: 1000 }} /> */}
           <SockJsClient
             url="http://localhost:8090/chat"
-            topics={["/topics/testchat"]}
+            topics={["/topics/video/ABCDEFG"]}
             onMessage={(msg) => { drawImg(msg)}}
-            onConnect={ () => { setChatConn(true)} }
-            onDisconnect={ () => { setChatConn(false)} }
             ref={(ref)=>{setClientRef(ref)}}
-            />
-          <SockJsClient
+          />
+          {/* <SockJsClient
             url="http://localhost:8090/chat"
             topics={["/topics/testchat/1"]}
             onConnect={ () => { setChatConn(true)} }
             onDisconnect={ () => { setChatConn(false)} }
             ref={(ref)=>{setClientRef(ref)}}
-            />
+            /> */}
         </Grid>
         <Grid item xs></Grid>
       </Grid>

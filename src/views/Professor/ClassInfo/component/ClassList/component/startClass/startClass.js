@@ -13,6 +13,7 @@ import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import CloseIcon from '@material-ui/icons/Close';
 import Slide from '@material-ui/core/Slide';
+import SockJsClient from 'react-stomp';
 
 const useStyles = makeStyles((theme) => ({
   appBar: {
@@ -31,20 +32,13 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 export default function StartClass(props) {
   const classes = useStyles();
   const [open, setOpen] = useState(props['open']);
+  const [clientRef,setClientRef] = useState();
+  const [classStartState,setClassStartState] = useState(true);
 
   const handleClose = () => {
-    let constraints = {
-      video:true,
-      audio : false
-    }
-    let realTimeImg = document.getElementById('realTimeImg');
-    navigator.mediaDevices.getUserMedia(constraints).then((stream)=>{
-      realTimeImg.srcObject = null;
-      realTimeImg.pause();
-      stream.getTracks()[0].stop();
-    });
     props.handleClose();
     setOpen(false);
+    setClassStartState(false);
   };
 
   const showVideo = () => {
@@ -57,26 +51,46 @@ export default function StartClass(props) {
       realTimeImg.srcObject = stream;
       realTimeImg.play();
     });
+    clientRef.sendMessage("/app/create",props['classInfo']['code']);
+    play();
+  }
+
+  const play = () => {
+    setInterval(() => {
+      let video = document.getElementById('realTimeImg');
+      var canvas = document.createElement("canvas");
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+      canvas.getContext('2d')
+            .drawImage(video, 0, 0, canvas.width, canvas.height);
+      sendMessage(canvas.toDataURL('image/jpeg'));
+    }, 1000);
+  }
+
+  const sendMessage = (msg) => {
+    const s = {content:msg,classCode:'ABCDEFG'}
+    clientRef.sendMessage("/app/sendMessage", JSON.stringify(s));
   }
 
   const stopVideo = () =>{
+    setClassStartState(false);
+  }
+
+  const getMessage = (msg) => {
+    let node = document.createElement('li');
+    node.textContent = msg;
+    document.getElementById("messageArea").appendChild(node);
   }
 
   useEffect(()=>{
-    setOpen(props['open']);
+    if(props['open']){
+      setOpen(props['open']);
+      setClassStartState(true);
+    }
   },[props['open']]);
 
   useEffect(()=>{
-    // let constraints = {
-    //   video:true,
-    //   audio : false
-    // }
-    // let realTimeImg = document.getElementById('realTimeImg');
-    // alert(realTimeImg);
-    // // navigator.mediaDevices.getUserMedia(constraints).then((stream)=>{
-    // //   realTimeImg.srcObject = stream;
-    // //   realTimeImg.play();
-    // // });
+    console.log(props['classInfo']['code'])
   },[])
 
   return (
@@ -114,13 +128,21 @@ export default function StartClass(props) {
               </Grid>
             </Grid>
             <Grid item xl={4}>
-              <div>
-
-              </div>
+              <ul id="messageArea" style={{marginLeft : 30}}>
+                
+              </ul>
             </Grid>
           </Grid>
         </List>
       </Dialog>
+      {classStartState ? (
+        <SockJsClient
+          url="http://localhost:8090/chat"
+          topics={["/topics/"+props['classInfo']['code']]}
+          onMessage={(msg) => { getMessage(msg)}}
+          ref={(ref)=>{setClientRef(ref)}}
+        />
+      ) : null}
     </div>
   );
 }

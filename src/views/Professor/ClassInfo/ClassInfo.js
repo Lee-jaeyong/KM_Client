@@ -77,6 +77,7 @@ const ClassInfo = props => {
   const [classInfo,setClassInfo] = useState(
     {
       seq : 1,
+      code : 'ABCDEFG',
       name : "C언어",
       content : "C언어 수업은 ..... 진행됩니다.",
       type:'MAJOR',
@@ -262,7 +263,7 @@ const ClassInfo = props => {
               <TabPanel value={value} index={0}>
                 <Fade in timeout={600}>
                   <div>
-                    <ClassList style={{marginTop:10}}/>
+                    <ClassList classInfo={classInfo} style={{marginTop:10}}/>
                   </div>
                 </Fade>
               </TabPanel>
